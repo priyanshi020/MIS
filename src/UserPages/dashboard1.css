@@ -1,0 +1,75 @@
+.checkout-button,
+.checkin-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  border: 2px solid transparent; /* Add border styling */
+}
+
+
+
+.checkin-button:hover{
+    background-color: green;
+    color: white;
+}
+
+.checkout-button:hover{
+    background-color: red;
+    color:white;
+}
+
+.checkout-button {
+  /* background-color: red;
+  color: white; */
+  border-color:red;
+  color:red;
+}
+
+.checkin-button {
+  /* background-color: green;
+  color: white; */
+  border-color:green;
+  color:green;
+}
+
+
+
+.breakend-button,
+.breakstart-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  border: 2px solid transparent; /* Add border styling */
+}
+
+
+
+.breakstart-button:hover{
+    background-color: green;
+    color: white;
+}
+
+.breakend-button:hover{
+    background-color: red;
+    color:white;
+}
+
+.breakend-button {
+  /* background-color: red;
+  color: white; */
+  border-color:red;
+  color:red;
+}
+
+.breakstart-button {
+  /* background-color: green;
+  color: white; */
+  border-color:green;
+  color:green;
+}
