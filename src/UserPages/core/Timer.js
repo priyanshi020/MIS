@@ -57,8 +57,22 @@ const Timer = () => {
         console.log('Check-out response:', response.data);
       } catch (error) {
         console.error('Check-out failed:', error.message);
+      } finally {
+        // Toggle the Check In/Out state
+        setCheckInRunning(false);
+
+        // Set the local storage flag indicating checked out for the day
+        localStorage.setItem("checkedOut", "true");
       }
     } else {
+      // Check if the user has already checked out today
+      const hasCheckedOutToday = localStorage.getItem("checkedOut") === "true";
+
+      if (hasCheckedOutToday) {
+        // If already checked out, do nothing
+        return;
+      }
+
       // Check-in API call
       try {
         const response = await axios.post(`http://localhost:8080/bytesfarms/timesheet/checkin?userId=${userId}`, {
@@ -67,11 +81,11 @@ const Timer = () => {
         console.log('Check-in response:', response.data);
       } catch (error) {
         console.error('Check-in failed:', error.message);
+      } finally {
+        // Toggle the Check In/Out state
+        setCheckInRunning(true);
       }
     }
-
-    // Toggle the Check In/Out state
-    setCheckInRunning((prevState) => !prevState);
   };
 
   const handleBreakButtonClick = async () => {
@@ -111,12 +125,20 @@ const Timer = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  useEffect(() => {
+    // Check if the user has checked out today
+    const hasCheckedOutToday = localStorage.getItem("checkedOut") === "true";
+
+    // Disable the Check In button if the user has already checked out today
+    setCheckInRunning(!hasCheckedOutToday);
+  }, []);
+
   return (
     <div className="card mb-3 shadow shadow-lg" style={{ maxWidth: '400px' }}>
       <div className="row g-0">
         <h4 className="pt-3 pb-5 text-center">ATTENDANCE</h4>
         <div className="d-flex justify-content-around">
-          <button onClick={handleCheckButtonClick} className={isCheckInRunning ? 'checkout-button' : 'checkin-button'}>
+          <button onClick={handleCheckButtonClick} className={isCheckInRunning ? 'checkout-button' : 'checkin-button'} disabled={!isCheckInRunning}>
             {isCheckInRunning ? 'Check Out' : 'Check In'}
           </button>
           <button

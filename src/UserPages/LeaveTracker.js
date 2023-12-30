@@ -47,15 +47,14 @@ const LeaveTracker = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('hii')
+      
         const response = await axios.get(
           `http://localhost:8080/bytesfarms/leave/get?userId=${userId}`
         );
         setData(response.data); // Assuming the API response is an array
-          console.log('useridd',
-          userId)
+      
         const leaveRequestId = response.data.id;
-        console.log("yeh hu userdi h ", leaveRequestId);
+      
         localStorage.setItem("userId", leaveRequestId);
       } catch (error) {
         console.error("Error fetching data:", error);

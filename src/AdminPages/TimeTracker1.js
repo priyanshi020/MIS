@@ -5,14 +5,13 @@ import axios from "axios";
 
 const TimeTracker1 = () => { 
   const [data, setData] = useState([]);
-  console.log("data",data)
 
   useEffect(() => {
-    // Fetch data from your API endpoint using axios
+   
     axios
-      .get("http://localhost:8080/bytesfarms/user/getEmployees") // Replace 'YOUR_API_ENDPOINT' with the actual endpoint URL
+      .get("http://localhost:8080/bytesfarms/user/getEmployees")
       .then((response) => {
-        setData(response.data); // Update the state with the fetched data
+        setData(response.data); 
       })
       .catch((error) => {
         console.error("Error fetching data:", error.message);

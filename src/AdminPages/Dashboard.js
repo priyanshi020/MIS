@@ -55,9 +55,7 @@ const Dashboard = () => {
         <div className="col-md-12 ">
           <div className="d-flex justify-content-between mb-3">
             <h2 className="mb-3 col-md-2">DASHBOARD</h2>
-            <div>
-              <Add />
-            </div>
+           
           </div>
           <div className="d-flex">
           <div className=" col-md-3 ">
@@ -76,7 +74,7 @@ const Dashboard = () => {
                     </span>
                     <p
                       className="mt-1 mb-2"
-                      style={{ fontSize: '14px' ,fontWeight:'500' }}
+                      style={{ fontSize: '13px' ,fontWeight:'500' }}
                     >
                       Number of Employees
                     </p>
@@ -164,10 +162,10 @@ const Dashboard = () => {
                 <th scope="col">Name</th>
                 <th scope="col">Designation</th>
                 <th scope="col">Email Id</th>
-                <th scope="col">Contact No</th>
+              
 
-                <th className="text-right">
-                  <AddUser />
+                <th className="text-right " style={{width:'0px'}}>
+                  <Add />
                 </th>
               </tr>
             </thead>
@@ -175,10 +173,10 @@ const Dashboard = () => {
               {data.map((item) => (
                 <tr key={item.id}>
                   <td className="text-center">{item.id}</td>
-                  <td>{item.name}</td>
+                  <td>{item.username}</td>
                   <td>{item.designation}</td>
                   <td>{item.email}</td>
-                  <td>{item.contactNo}</td>
+                
 
                   <td className="text-right">
                     <IconButton aria-haspopup="true" onClick={handleMenuClick}>

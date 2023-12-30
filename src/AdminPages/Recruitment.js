@@ -193,7 +193,7 @@ const Recruitment = () => {
                 <td>{item.experience}</td>
                 <td>{item.requirements}</td>
                 <td>
-                  <IconButton
+                <IconButton
                     aria-haspopup="true"
                     onClick={(event) => handleMenuClick(event, item.id)}
                   >
@@ -214,52 +214,52 @@ const Recruitment = () => {
                     Update
                   </DialogTitle>
                   <DialogContent>
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      label=" Title"
-                      type="text"
-                      fullWidth
-                      variant="standard"
-                      name="name"
-                      value={Edittitle}
-                      onChange={handletitle}
-                    />
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="number"
-                      label=" Openings"
-                      type="number"
-                      fullWidth
-                      variant="standard"
-                      name="name"
-                      value={Editopening}
-                      onChange={handleopening}
-                    />
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="number"
-                      label="Experience"
-                      type="number"
-                      fullWidth
-                      variant="standard"
-                       value={Editexperience}
-                      onChange={handleexperience}
-                    />
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="number"
-                      label=" Requirement"
-                      type="text"
-                      fullWidth
-                      variant="standard"
-                      value={Editreq}
-                      onChange={handleReq}
-                    />
+                  <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Title"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        name="name"
+                        value={editData.title}
+                        onChange={(e) => setEditData({ ...editData, title: e.target.value })}
+                      />
+                     <TextField
+                        autoFocus
+                        margin="dense"
+                        id="number"
+                        label="Openings"
+                        type="number"
+                        fullWidth
+                        variant="standard"
+                        name="name"
+                        value={editData.openings}
+                        onChange={(e) => setEditData({ ...editData, openings: e.target.value })}
+                      />
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="number"
+                        label="Experience"
+                        type="number"
+                        fullWidth
+                        variant="standard"
+                        value={editData.experience}
+                        onChange={(e) => setEditData({ ...editData, experience: e.target.value })}
+                      />
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="number"
+                        label="Requirement"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        value={editData.requirements}
+                        onChange={(e) => setEditData({ ...editData, requirements: e.target.value })}
+                      />
                   </DialogContent>
                   <DialogActions>
                     <Button

@@ -50,12 +50,12 @@ function ViewTask({ userId }) {
         {/* <i className="fa fa-table"></i> */}
         View Task
       </button>
-      <Dialog open={open} onClose={handleClose} className="p-5">
+      <Dialog open={open} onClose={handleClose} className="p-5"  maxWidth="md">
         <DialogTitle style={{ fontSize: "25px", fontWeight: "600" }}>
           Task List
         </DialogTitle>
         <DialogContent>
-          <table class="    rounded-4 table table-responsive-md  ">
+          <table class="    rounded-4 table table-responsive-lg  ">
             <thead class="table-secondary text-center">
               <tr className="">
                 <th className="" style={{padding:'20px'}} >Date</th>
@@ -85,7 +85,7 @@ function ViewTask({ userId }) {
           </table>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} className="bg-dark text-white">
+          <Button onClick={handleClose} className=" text-white" style={{backgroundColor:"#1B1A47"}}>
             Cancel
           </Button>
         </DialogActions>

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import Sidebar1 from '../components/Sidebar1';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import Sidebar1 from "../components/Sidebar1";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Card, CardContent, CardMedia, Typography, Button } from '@mui/material';
+import axios from "axios";
 
 const Recruitment1 = () => {
   const [positions, setPositions] = useState([]);
@@ -24,9 +25,118 @@ const Recruitment1 = () => {
   return (
     <>
       <Sidebar1 />
-      <main className='m-5'>
+      <main className="m-5">
         <h3>Open Positions</h3>
-        <div className="row g-1">
+        <div className="container">
+          <div className="row">
+            {positions.map((position) => (
+              <div key={position.id} className="col-md-4 p-2">
+                <Card style={{ padding: "20px" }}>
+                  <div className="d-flex flex-column grid gap-3">
+                    <div
+                      className="d-flex col-md-12 "
+                      style={{ textAlign: "left" }}
+                    >
+                      <div className="d-flex flex-column justify-content-center col-md-8">
+                        <Typography
+                          gutterBottom
+                          variant="body2"
+                          style={{ fontSize: "15px", color: "gray" }}
+                        >
+                          {position.company}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          style={{ fontSize: "20px", fontWeight: "bold" }}
+                        >
+                          {position.desgination}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                         Indore, INDIA
+                        </Typography>
+                      </div>
+                      <div className="d-flex col-md-4">
+                        <CardMedia
+                          component="img"
+                          // image={card.imageUrl}
+                          style={{ height: "100%", width: "80%" }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="d-flex col-md-12 grid gap-4">
+                      <div className="col-md-2">
+                        <Button
+                          style={{
+                            fontSize: "8px",
+                            color: "black",
+                            backgroundColor: "lightgray",
+                            borderRadius: "12px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Full Time
+                        </Button>
+                      </div>
+                      <div className="col-md-2">
+                        <Button
+                          style={{
+                            fontSize: "8px",
+                            color: "black",
+                            backgroundColor: "lightgray",
+                            borderRadius: "12px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          On-Site
+                        </Button>
+                      </div>
+                      <div className="col-md-2">
+                        <Button
+                          style={{
+                            fontSize: "8px",
+                            color: "black",
+                            backgroundColor: "lightgray",
+                            borderRadius: "12px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          1-2 Year
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="d-flex col-md-11">
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        style={{ textAlign: "left" }}
+                      >
+                        {card.paragraph}
+                      </Typography>
+                    </div>
+                    <div className="d-flex justify-content-end">
+                      <Button
+                        variant="contained"
+                        style={{
+                          fontWeight: 600,
+                          fontSize: "15px",
+                          color: "white",
+                          background: "#9861DF",
+                          borderRadius: "30px",
+                          marginTop: "10px",
+                        }}
+                      >
+                        Apply Now
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* <div className="row g-1">
           {positions.map((position) => (
             <div className="col-md-4" key={position.id}>
               <div className="card m-2 shadow shadow-lg">
@@ -67,10 +177,10 @@ const Recruitment1 = () => {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
       </main>
     </>
   );
-}
+};
 
 export default Recruitment1;
