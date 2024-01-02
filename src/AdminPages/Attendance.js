@@ -22,7 +22,7 @@ const Attendance = () => {
       <Sidebar />
       <main
         className="m-5  "
-        style={{ marginLeft: "", backgroundColor: "#F4F7Fc" }}
+        style={{ marginLeft: "", backgroundColor: "#F0F5FD" }}
       >
         <h3 className="mb-3">TIMESHEET</h3>
         <table class="table rounded-4 " >

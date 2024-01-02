@@ -1,4 +1,4 @@
-import React, { useState, useEffect ,useCallback} from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Sidebar from "../components/Sidebar";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -17,26 +17,26 @@ const Recruitment = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
-  console.log("selectedItemId0",selectedItemId)
+  const [Edittitle, setEdittitle] = useState("");
+  const handletitle = (e) => {
+    setEdittitle(e.target.value);
+  };
 
-  const[Edittitle,setEdittitle]=useState("")
-  const handletitle =(e)=>{
-     setEdittitle(e.target.value);
-  }
-  const[Editreq,setEditreq]=useState("")
-  const handleReq =(e)=>{
-     setEditreq(e.target.value);
-  }
+  const [Editreq, setEditreq] = useState("");
+  const handleReq = (e) => {
+    setEditreq(e.target.value);
+  };
 
-  const[Editopening,setEditopening]=useState("")
-  const handleopening =(e)=>{
-     setEditopening(e.target.value);
-  }
+  const [Editopening, setEditopening] = useState("");
+  const handleopening = (e) => {
+    setEditopening(e.target.value);
+  };
 
-  const[Editexperience,setEditexperience]=useState("")
-  const handleexperience =(e)=>{
+  const [Editexperience, setEditexperience] = useState("");
+  const handleexperience = (e) => {
     setEditexperience(e.target.value);
-  }
+  };
+
   const [editData, setEditData] = useState({
     id: null,
     title: "",
@@ -46,7 +46,6 @@ const Recruitment = () => {
   });
 
   const handleJobAdded = (newJob) => {
-    // Update the data state by adding the new job
     setData((prevData) => [...prevData, newJob]);
     fetchData();
   };
@@ -67,13 +66,11 @@ const Recruitment = () => {
   };
 
   const handleMenuClick = (event, itemId) => {
-    console.log("Item ID selected for editing:", itemId);
     setAnchorEl(event.currentTarget);
     setSelectedItemId(itemId);
-  
-    // Find the selected item in the existing data
+
     const selectedItem = data.find((item) => item.id === itemId);
-  
+
     if (selectedItem) {
       setEditData({
         id: selectedItem.id,
@@ -82,29 +79,34 @@ const Recruitment = () => {
         experience: selectedItem.experience,
         requirements: selectedItem.requirements,
       });
-      setOpen(true); // Open the dialog for editing
+
+      setEdittitle(selectedItem.title);
+      setEditopening(selectedItem.openings);
+      setEditexperience(selectedItem.experience);
+      setEditreq(selectedItem.requirements);
+
+      setOpen(true);
     } else {
       console.error("Item not found for editing.");
     }
   };
-  
 
   const handleMenuClose = () => {
     setAnchorEl(null);
     setSelectedItemId(null);
   };
 
-  const handleEditClick = useCallback((itemId) => () => {
-    console.log("Edit clicked for item with ID:", itemId);
-    setSelectedItemId(itemId);
-    setOpen(true);
-  }, [handleMenuClose]); 
+  const handleEditClick = useCallback(
+    (itemId) => () => {
+      setSelectedItemId(itemId);
+      setOpen(true);
+    },
+    [handleMenuClose]
+  );
 
-  
-
-  const handleid=(item)=>{
-    setSelectedItemId(item)
-  }
+  const handleid = (item) => {
+    setSelectedItemId(item);
+  };
 
   const handleDeleteClick = () => {
     if (!selectedItemId) {
@@ -113,9 +115,7 @@ const Recruitment = () => {
       return;
     }
 
-    console.log("Selected Item ID:", selectedItemId);
     const apiUrl = `http://localhost:8080/bytesfarms/recruitment/positions/delete?id=${selectedItemId}`;
-    console.log("API URL:", apiUrl);
 
     axios
       .delete(apiUrl)
@@ -150,10 +150,11 @@ const Recruitment = () => {
     };
 
     axios
-      .put(`http://localhost:8080/bytesfarms/recruitment/positions/update?id=${selectedItemId}`, editData)
+      .put(
+        `http://localhost:8080/bytesfarms/recruitment/positions/update?id=${selectedItemId}`,
+        editData
+      )
       .then((response) => {
-        console.log("Edit API response:", response.data);
-        // Update the data after successful edit
         fetchData();
       })
       .catch((error) => {
@@ -161,7 +162,7 @@ const Recruitment = () => {
       })
       .finally(() => {
         handleMenuClose();
-        handleClose(); // Close the dialog
+        handleClose();
       });
   };
 
@@ -169,10 +170,10 @@ const Recruitment = () => {
     <>
       <Sidebar />
 
-      <main className="m-5">
+      <main className="m-5" style={{backgroundColor:'#F0F5FD'}}>
         <h3>Recruitment</h3>
-        <table class="table ">
-          <thead class="table-secondary">
+        <table className="table ">
+          <thead className="table-secondary">
             <tr>
               <th scope="col">S.No</th>
               <th scope="col">Title</th>
@@ -180,7 +181,7 @@ const Recruitment = () => {
               <th scope="col"> Experience</th>
               <th scope="col">Requirements</th>
               <th>
-              <AddJob onJobAdded={handleJobAdded} />
+                <AddJob onJobAdded={handleJobAdded} />
               </th>
             </tr>
           </thead>
@@ -193,7 +194,7 @@ const Recruitment = () => {
                 <td>{item.experience}</td>
                 <td>{item.requirements}</td>
                 <td>
-                <IconButton
+                  <IconButton
                     aria-haspopup="true"
                     onClick={(event) => handleMenuClick(event, item.id)}
                   >
@@ -205,7 +206,7 @@ const Recruitment = () => {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                   >
-                    <MenuItem  onClick={handleEditClick(item.id)}>Edit</MenuItem>
+                    <MenuItem onClick={handleEditClick(item.id)}>Edit</MenuItem>
                     <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
                   </Menu>
                 </td>
@@ -214,52 +215,52 @@ const Recruitment = () => {
                     Update
                   </DialogTitle>
                   <DialogContent>
-                  <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Title"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        name="name"
-                        value={editData.title}
-                        onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-                      />
-                     <TextField
-                        autoFocus
-                        margin="dense"
-                        id="number"
-                        label="Openings"
-                        type="number"
-                        fullWidth
-                        variant="standard"
-                        name="name"
-                        value={editData.openings}
-                        onChange={(e) => setEditData({ ...editData, openings: e.target.value })}
-                      />
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="number"
-                        label="Experience"
-                        type="number"
-                        fullWidth
-                        variant="standard"
-                        value={editData.experience}
-                        onChange={(e) => setEditData({ ...editData, experience: e.target.value })}
-                      />
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="number"
-                        label="Requirement"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={editData.requirements}
-                        onChange={(e) => setEditData({ ...editData, requirements: e.target.value })}
-                      />
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      label="Title"
+                      type="text"
+                      fullWidth
+                      variant="standard"
+                      name="name"
+                      value={Edittitle}
+                      onChange={handletitle}
+                    />
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="number"
+                      label="Openings"
+                      type="number"
+                      fullWidth
+                      variant="standard"
+                      name="name"
+                      value={Editopening}
+                      onChange={handleopening}
+                    />
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="number"
+                      label="Experience"
+                      type="number"
+                      fullWidth
+                      variant="standard"
+                      value={Editexperience}
+                      onChange={handleexperience}
+                    />
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="number"
+                      label="Requirement"
+                      type="text"
+                      fullWidth
+                      variant="standard"
+                      value={Editreq}
+                      onChange={handleReq}
+                    />
                   </DialogContent>
                   <DialogActions>
                     <Button

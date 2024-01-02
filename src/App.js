@@ -16,12 +16,15 @@ import Recruitment from './AdminPages/Recruitment';
 import Recruitment1 from './UserPages/Recruitment1';
 import Profile from './UserPages/Profile';
 import Time from './AdminPages/Time';
+import Recruitment2 from './components/Recruitment2';
+import LoginGuest from './components/LoginGuest'
 
 function App() {
   return (
     <>
     <Router>
       <Routes>
+        <Route path='/log' element={<LoginGuest/>}/>
         <Route path='/' element={<LoginForm/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>
         <Route path='/user-dashboard' element={<Dashboard1/>}/>
@@ -35,6 +38,7 @@ function App() {
         <Route path='/recruitment' element={<Recruitment/>}/>
         <Route path='/user-recruitment' element={<Recruitment1/>}/>
         <Route path='/profile' element={<Profile/>}/>
+        <Route path='/apply' element={<Recruitment2/>}/>
       </Routes>
 
     </Router>

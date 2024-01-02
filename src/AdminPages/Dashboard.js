@@ -13,45 +13,162 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { useCallback } from "react";
 
 import Add from "./core/Add";
 const Dashboard = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedItemId, setSelectedItemId] = useState(null);
+
+  console.log("selectedItemId0",selectedItemId)
+
+  const[EditName,setEditName]=useState("")
+  const handleName =(e)=>{
+     setEditName(e.target.value);
+  }
+  const[EditEmail,setEditEmail]=useState("")
+  const handleEmail =(e)=>{
+     setEditEmail(e.target.value);
+  }
+
+  
+  const [editData, setEditData] = useState({
+    id: null,
+    name: "",
+   
+    email: "",
+   
+  });
+
+  const handleUserAdded = (newUser) => {
+    // Update the data state by adding the new job
+    setData((prevData) => [...prevData, newUser]);
+    fetchData();
+  };
+
 
   useEffect(() => {
-    // Fetch data from your API endpoint using axios
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
     axios
-      .get("http://localhost:8080/bytesfarms/user/getEmployees") // Replace 'YOUR_API_ENDPOINT' with the actual endpoint URL
+      .get("http://localhost:8080/bytesfarms/user/getEmployees")
       .then((response) => {
-        setData(response.data); // Update the state with the fetched data
+        setData(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error.message);
       });
-  }, []); // Empty dependency array ensures that the effect runs only once after the initial render
-
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
   };
+
+
+
+  const handleMenuClick = (event, itemId) => {
+    console.log("Item ID selected for editing:", itemId);
+    setAnchorEl(event.currentTarget);
+    setSelectedItemId(itemId);
+  
+    // Find the selected item in the existing data
+    const selectedItem = data.find((item) => item.id === itemId);
+  
+    if (selectedItem) {
+      setEditData({
+        id: selectedItem.id,
+        name: selectedItem.username,
+        email: selectedItem.email,
+      
+      });
+      setEditName(selectedItem.username);
+      setEditEmail(selectedItem.email);
+      setOpen(true); // Open the dialog for editing
+    } else {
+      console.error("Item not found for editing.");
+    }
+  };
+  
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+    setSelectedItemId(null);
   };
 
-  const handleClick = () => {
+  const handleEditClick = useCallback((itemId) => () => {
+    console.log("Edit clicked for item with ID:", itemId);
+    setSelectedItemId(itemId);
     setOpen(true);
+  }, [handleMenuClose]); 
+
+  
+
+  const handleid=(item)=>{
+    setSelectedItemId(item)
+  }
+
+  const handleDeleteClick = () => {
+    if (!selectedItemId) {
+      console.error("No item selected for deletion.");
+      handleMenuClose();
+      return;
+    }
+
+    console.log("Selected Item ID:", selectedItemId);
+    const apiUrl = `http://localhost:8080/bytesfarms/user/delete?userId=${selectedItemId}`;
+    console.log("API URL:", apiUrl);
+
+    axios
+      .delete(apiUrl)
+      .then(() => {
+        fetchData();
+      })
+      .catch((error) => {
+        console.error("Error deleting item:", error.message);
+      })
+      .finally(() => {
+        handleMenuClose();
+      });
   };
 
   const handleClose = () => {
     setOpen(false);
+    setEditData({
+      id: null,
+      name: "",
+      email: "",
+      
+    });
   };
+
+  const handleEditApiCall = () => {
+    const editData = {
+      name: EditName,
+      email: EditEmail,
+     
+    };
+
+    axios
+      .put(`http://localhost:8080/bytesfarms/user/update?userId=${selectedItemId}`, editData)
+      .then((response) => {
+        console.log("Edit API response:", response.data);
+        // Update the data after successful edit
+        fetchData();
+      })
+      .catch((error) => {
+        console.error("Error editing item:", error.message);
+      })
+      .finally(() => {
+        handleMenuClose();
+        handleClose(); // Close the dialog
+      });
+  };
+
 
   return (
     <>
       <Sidebar />
-      <main className="m-5">
+      <main className="m-5" style={{backgroundColor:'#F0F5FD'}}>
         <div className="col-md-12 ">
           <div className="d-flex justify-content-between mb-3">
             <h2 className="mb-3 col-md-2">DASHBOARD</h2>
@@ -160,12 +277,13 @@ const Dashboard = () => {
               <tr>
                 <th  className='text-center' scope="col">S.No</th>
                 <th scope="col">Name</th>
-                <th scope="col">Designation</th>
+                {/* <th scope="col">Designation</th> */}
                 <th scope="col">Email Id</th>
               
 
                 <th className="text-right " style={{width:'0px'}}>
-                  <Add />
+             
+                  <Add onUserAdded={handleUserAdded}/>
                 </th>
               </tr>
             </thead>
@@ -174,12 +292,12 @@ const Dashboard = () => {
                 <tr key={item.id}>
                   <td className="text-center">{item.id}</td>
                   <td>{item.username}</td>
-                  <td>{item.designation}</td>
+                  {/* <td>{item.designation}</td> */}
                   <td>{item.email}</td>
                 
 
                   <td className="text-right">
-                    <IconButton aria-haspopup="true" onClick={handleMenuClick}>
+                    <IconButton aria-haspopup="true"   onClick={(event) => handleMenuClick(event, item.id)}>
                       <MoreVertIcon />
                     </IconButton>
                     <Menu
@@ -188,8 +306,8 @@ const Dashboard = () => {
                       open={Boolean(anchorEl)}
                       onClose={handleMenuClose}
                     >
-                      <MenuItem onClick={handleClick}>Edit</MenuItem>
-                      <MenuItem>Delete</MenuItem>
+                      <MenuItem  onClick={handleEditClick(item.id)}>Edit</MenuItem>
+                    <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
                     </Menu>
                   </td>
                   <Dialog open={open} onClose={handleClose} className="p-5 ">
@@ -217,10 +335,14 @@ const Dashboard = () => {
                                 class="form-control form-control-lg"
                                 placeholder="Name"
                                 style={{  fontSize: "16px", color: "#666666" }}
+                                // value={editData.name}
+                                // onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+                                value={EditName}
+                                onChange={handleName}
                               />
                             </div>
                           </div>
-                          <div class="col mb-4">
+                          {/* <div class="col mb-4">
                             <div data-mdb-input-init class="form-outline">
                               <label
                                 class="form-label fw-bold text-secondary"
@@ -237,8 +359,8 @@ const Dashboard = () => {
                                 style={{  fontSize: "16px", color: "#666666" }}
                               />
                             </div>
-                          </div>
-                        </div>
+                          </div> */}
+                       
                         <div className="">
                           <div data-mdb-input-init class="form-outline mb-4">
                             <label
@@ -254,10 +376,14 @@ const Dashboard = () => {
                               class="form-control form-control-lg"
                               placeholder="Email"
                               style={{  fontSize: "16px", color: "#666666" }}
+                              // value={editData.email}
+                              // onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+                              value={EditEmail}
+                              onChange={handleEmail}
                             />
                           </div>
-
-                          <div data-mdb-input-init class="form-outline mb-4">
+                          </div>
+                          {/* <div data-mdb-input-init class="form-outline mb-4">
                             <label
                               class="form-label fw-bold text-secondary"
                               for="form6Example1"
@@ -270,8 +396,10 @@ const Dashboard = () => {
                               class="form-control form-control-lg"
                               placeholder="Contact no"
                               style={{  fontSize: "16px", color: "#666666" }}
+                              value={editData.phone}
+                              onChange={(e) => setEditData({ ...editData, phone: e.target.value })}
                             />
-                          </div>
+                          </div> */}
                         </div>
                       </form>
                     </DialogContent>
@@ -279,6 +407,7 @@ const Dashboard = () => {
                       <Button
                         className=" text-white w-25 p-2"
                         style={{ backgroundColor: "#1B1A47" }}
+                        onClick={handleEditApiCall}
                       >
                         Edit
                       </Button>
@@ -295,7 +424,13 @@ const Dashboard = () => {
               ))}
             </tbody>
           </table>
+
+
+
         </div>
+
+
+        
       </main>
     </>
   );

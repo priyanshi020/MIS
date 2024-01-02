@@ -10,7 +10,7 @@ const Dashboard1 = () => {
   return (
     <>
       <Sidebar1 />
-      <main style={{ marginLeft: "30px", backgroundColor: "#F4F7Fc" }}>
+      <main style={{ marginLeft: "30px", backgroundColor: "#F0F5FD" }}> 
         <h3 className="m-3 pt-3 pb-3">DASHBOARD</h3>
         {/* Timer Card */}
         <div class="row row-cols-2 g-3">

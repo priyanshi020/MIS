@@ -106,7 +106,7 @@ const TimeTracker = () => {
   return (
     <>
       <Sidebar1 />
-      <main className="m-5">
+      <main className="m-5" style={{backgroundColor:'#F0F5FD'}}>
         <h3 className="mb-3">TIME TRACKER</h3>
         <div className=" d-flex justify-content-start">
           <Box sx={{ minWidth: 120 }}>

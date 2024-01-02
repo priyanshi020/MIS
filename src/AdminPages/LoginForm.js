@@ -75,14 +75,15 @@ export default function Mus() {
     
     const userId=response.data.id;
     console.log("yeh hu userdi h ",userId)
-    localStorage.setItem("userId", userId);
-
+    localStorage.setItem('userId', userId.toString());
+    
     if (userRole === 'Admin') {
       navigate('/dashboard');
     } 
     else if(userRole === 'Employee'){
       navigate('/user-dashboard');
     }
+    
     else {
       // Navigate to home or another page
  
@@ -161,6 +162,7 @@ export default function Mus() {
                       >
                         <Tab label="ADMIN" {...a11yProps(0)} />
                         <Tab label="USER" {...a11yProps(1)} />
+                        {/* <Tab label='GUEST' {...a11yProps(2)}/> */}
                       </Tabs>
                     </Box>
                     <CustomTabPanel value={value} index={0}>
@@ -305,6 +307,8 @@ export default function Mus() {
                         </button>{" "}
                       </form>
                     </CustomTabPanel>
+
+                   
                   </Box>
                 </div>
               </div>

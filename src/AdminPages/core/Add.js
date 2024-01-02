@@ -8,9 +8,15 @@ import DialogTitle from "@mui/material/DialogTitle";
 import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
 
-function AddUser() {
+function AddUser({ onUserAdded }) {
   const [open, setOpen] = React.useState(false);
- 
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
+  const admin = "admin";
+  const employee = "employee";
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -19,37 +25,37 @@ function AddUser() {
     setOpen(false);
   };
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password,setPassword]=useState("");
-  const [role, setRole] = useState(""); 
-  const admin = 'admin';
-  const employee = 'employee';
-  
-  const loginEndpoint = 'http://localhost:8080/bytesfarms/user/signup';
+  const loginEndpoint = "http://localhost:8080/bytesfarms/user/signup";
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = {
       username: name,
       email: email,
-      password:password,
-      role:{
-        roleName:role ,
+      password: password,
+      role: {
+        roleName: role,
       },
     };
-    axios.post(loginEndpoint, data)
-  .then(response => {
-    
-    console.log('Signup successful:', response.data);
-    
-  })
-  .catch(error => {
-    
-    console.error('Signup failed:', error.response.data);
-    
-  });
-    
+    try {
+      const response = axios.post(loginEndpoint, data);
+      console.log("User added successfully:", response.data);
+
+      onUserAdded(response.data);
+    } catch (error) {
+      console.error("Error adding user:", error.message);
+    }
+    //   axios.post(loginEndpoint, data)
+    // .then(response => {
+
+    //   console.log('Signup successful:', response.data);
+
+    // })
+    // .catch(error => {
+
+    //   console.error('Signup failed:', error.response.data);
+
+    // });
 
     setOpen(false);
   };
@@ -57,25 +63,25 @@ function AddUser() {
   return (
     <div className="container">
       <button
-                          className="btn btn-dark btn-lg w-100"
-                          onClick={handleClickOpen}
-                          type="submit"
-                          style={{
-                            transition: "background-color 0.3s",
-                            backgroundColor: "#1B1A47",
-                            color: "white",
-                          }}
-                          onMouseOver={(e) => {
-                            e.target.style.backgroundColor = "white";
-                            e.target.style.color = "#1B1A47";
-                          }}
-                          onMouseOut={(e) => {
-                            e.target.style.backgroundColor = "#1B1A47";
-                            e.target.style.color = "white";
-                          }}
-                        >
-                          Add
-                        </button>
+        className="btn btn-dark btn-lg w-100"
+        onClick={handleClickOpen}
+        type="submit"
+        style={{
+          transition: "background-color 0.3s",
+          backgroundColor: "#1B1A47",
+          color: "white",
+        }}
+        onMouseOver={(e) => {
+          e.target.style.backgroundColor = "white";
+          e.target.style.color = "#1B1A47";
+        }}
+        onMouseOut={(e) => {
+          e.target.style.backgroundColor = "#1B1A47";
+          e.target.style.color = "white";
+        }}
+      >
+        Add
+      </button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle style={{ fontSize: "30px", fontWeight: "600" }}>
           Add User
@@ -93,8 +99,6 @@ function AddUser() {
             onChange={(e) => setName(e.target.value)}
           />
 
-
-
           <TextField
             autoFocus
             margin="dense"
@@ -107,21 +111,19 @@ function AddUser() {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-         
-
           <TextField
             autoFocus
             margin="dense"
             id="password"
             label="Password"
             // type={showPassword ? "text" : "password"}
-            type='text'
+            type="text"
             fullWidth
             variant="standard"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-         <TextField
+          <TextField
             id="role"
             select
             label="Role"
@@ -135,10 +137,18 @@ function AddUser() {
           </TextField>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} className=" text-white" style={{backgroundColor:"#1B1A47"}}>
+          <Button
+            onClick={handleClose}
+            className=" text-white"
+            style={{ backgroundColor: "#1B1A47" }}
+          >
             Cancel
           </Button>
-          <Button onClick={handleSubmit} className=" text-white" style={{backgroundColor:"#1B1A47"}}>
+          <Button
+            onClick={handleSubmit}
+            className=" text-white"
+            style={{ backgroundColor: "#1B1A47" }}
+          >
             Add
           </Button>
         </DialogActions>

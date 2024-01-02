@@ -8,7 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { MenuItem } from "@mui/material";
 import axios from "axios";
 
-function AddUser() {
+function AddUser({onApplyLeave}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -37,31 +37,53 @@ function AddUser() {
   }, []);
 
   const loginEndpoint = `http://localhost:8080/bytesfarms/leave/apply?userId=${userId}`;
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const data = {
-      // name: name,
+  const handleSubmit = async () => {
+    const dataToAdd = {
       leaveType: leaveType,
-      startDate: startDate,
-      endDate: endDate,
-      description:description,
+           startDate: startDate,
+           endDate: endDate,
+           description:description,
     };
 
-    axios.post(loginEndpoint, data)
-    .then(response => {
-      
-      console.log('Signup successful:', response.data);
-      
-    })
-    .catch(error => {
-      
-      console.error('Signup failed:', error.response.data);
-      
-    });
+    try {
+      // Add the job
+      const response = await axios.post(loginEndpoint, dataToAdd);
+      console.log("Job added successfully:", response.data);
+
+      // Notify the parent component about the added job
+      onApplyLeave(response.data);
+
+    } catch (error) {
+      console.error("Error adding job:", error.message);
+    }
 
     setOpen(false);
   };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const data = {
+      
+  //     leaveType: leaveType,
+  //     startDate: startDate,
+  //     endDate: endDate,
+  //     description:description,
+  //   };
+
+  //   axios.post(loginEndpoint, data)
+  //   .then(response => {
+      
+  //     console.log('Applied successful:', response.data);
+  //     onApplyLeave(response.data);
+      
+  //   })
+  //   .catch(error => {
+      
+  //     console.error(' Failed:', error.response.data);
+      
+  //   });
+
+  //   setOpen(false);
+  // };
 
   return (
     <div className="container">

@@ -6,7 +6,7 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 const Calender = () => {
   return (
     <div
-    class="card mb-3 shadow shadow-lg"
+    class="card mb-3 rounded-4 shadow shadow-lg"
     style={{ maxWidth: "380px" }}
   >
     <div class="row g-0 ">

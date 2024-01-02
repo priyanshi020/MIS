@@ -4,86 +4,114 @@ import axios from 'axios';
 
 const Attendance1 = () => {
   const[data,setData]=useState();
-  const [userId, setUserId] = useState("");
+  
+  const storedUserId = localStorage.getItem('userId');
+  const userId = storedUserId ? parseInt(storedUserId, 10) : null;
+ 
 
   useEffect(() => {
-    // Retrieve the user ID from local storage
-    const storedUserId = localStorage.getItem("userId");
+    const fetchData = async () => {
+      try {
+        // Fetch data using the user ID from state
 
-    if (storedUserId) {
-      // Set the user ID in the component state
-      setUserId(storedUserId);
-    }
-  }, []);
+        
+        const response = await axios.get(
+          `http://localhost:8080/bytesfarms/timesheet/totalhours?userId=${userId}`
+        );
 
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = () => {
-    axios
-      .get( `http://localhost:8080/bytesfarms/timesheet/totalhours?userId=${userId}`)
-      .then((response) => {
+        // Assuming the API response is an array
         setData(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error.message);
-      });
-  };
+
+       
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [userId]);
+
+
+
+
+
+
+ 
+
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+
+  // const fetchData = () => {
+  //   axios
+  //     .get( `http://localhost:8080/bytesfarms/timesheet/totalhours?userId=${userId}`)
+  //     .then((response) => {
+  //       setData(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error.message);
+  //     });
+  // };
 
   
   return (
     <>
     <Sidebar1/>
-    <main className='m-5'>
+    <main className='m-5' style={{backgroundColor:'#F0F5FD'}}>
         <h3 className='mb-3'>ATTENDANCE</h3>
-       
-        <table class="    rounded-4 table table-responsive-lg  ">
-            <thead class="table-secondary text-center">
-              <tr className="">
-                
-                <th className="" style={{padding:'20px'}} >Day</th>
-                <th className="" style={{padding:'20px'}}>month </th>
-                <th className="" style={{padding:'20px'}}>year </th>
-                <th className="" style={{padding:'20px'}}>Check In </th>
-                <th className="" style={{padding:'20px'}}>Check Out </th>
-               <th>Break Start</th>
-                <th className="" style={{padding:'20px'}}>Status </th>
-                
-               
-
-              </tr>
-            </thead>
-           {data ? (
-  <tbody className="text-center">
-    {data.map((item) => (
-      <tr key={item.date}>
-      
-        <td className="text-center">{item.day}</td>
-        <td>{item.month}</td>
-        <td>{item.year}</td>
-        <td>{item.checkInTime}</td>
-        <td>{item.checkOutTime}</td>
-        {item.breaks.map((breakItem, index) => (
-      <React.Fragment key={breakItem.id}>
-        <td>{breakItem.breakStartTime}</td>
-        <td>{breakItem.breakEndTime || 'N/A'}</td>
-        {index === item.breaks.length - 1 && (
-          <td>{item.status}</td>
-        )}
-      </React.Fragment>
-    ))}
-        <td>{item.status}</td>
-        
-      </tr>
-    ))}
-  </tbody>
-) : (
-  <p>Loading...</p>
-)}
-
-          </table>
+        <div style={{borderRadius:'20px'}}>
+        <table className="rounded-4 table table-bordered table-striped">
+                <thead className="table-secondary text-center">
+                  <tr>
+                    <th style={{ padding: "20px" }}>Day</th>
+                    <th style={{ padding: "20px" }}>Month </th>
+                    <th style={{ padding: "20px" }}>Year </th>
+                    <th style={{ padding: "20px" }}>Check In </th>
+                    <th style={{ padding: "20px" }}>Check Out </th>
+                    <th style={{ padding: "20px" }}>Break Start</th>
+                    <th style={{ padding: "20px" }}>Break End </th>
+                    <th style={{ padding: "20px" }}>Status </th>
+                  </tr>
+                </thead>
+                {data ? (
+                  <tbody className="text-center">
+                    {data.map((item) => (
+                      <tr key={item.date}>
+                        <td className="text-center">{item.day}</td>
+                        <td>{item.month}</td>
+                        <td>{item.year}</td>
+                        <td>{item.checkInTime}</td>
+                        <td>{item.checkOutTime}</td>
+                        {/* Display all break starts in a separate column */}
+                        <td>
+                          {item.breaks.map((breakItem, index) => (
+                            <React.Fragment key={breakItem.id}>
+                              {index > 0 && ", "}
+                              {breakItem.breakStartTime}
+                            </React.Fragment>
+                          ))}
+                        </td>
+                        {/* Display all break ends in a separate column */}
+                        <td>
+                          {item.breaks.map((breakItem, index) => (
+                            <React.Fragment key={breakItem.id}>
+                              {index > 0 && ", "}
+                              {breakItem.breakEndTime || "N/A"}
+                            </React.Fragment>
+                          ))}
+                        </td>
+                        <td>{item.status}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                ) : (
+                  <tr>
+                    <td colSpan="8">Loading...</td>
+                  </tr>
+                )}
+              </table>
+              </div>
     </main>
     </>
   )

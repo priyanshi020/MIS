@@ -4,6 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Card, CardContent, CardMedia, Typography, Button } from '@mui/material';
 import axios from "axios";
 
+const FixedHeightCard = ({ children }) => (
+  <Card style={{ padding: '20px', height: '350px', overflow: 'hidden' }}>
+    {children}
+  </Card>
+);
+
+
 const Recruitment1 = () => {
   const [positions, setPositions] = useState([]);
 
@@ -23,53 +30,45 @@ const Recruitment1 = () => {
   };
 
   return (
-    <>
+    <div style={{backgroundColor:'#F0F5FD'}}>
       <Sidebar1 />
-      <main className="m-5">
+      <main className="m-5" >
         <h3>Open Positions</h3>
         <div className="container">
-          <div className="row">
+          <div className="row rounded-4 ">
             {positions.map((position) => (
               <div key={position.id} className="col-md-4 p-2">
-                <Card style={{ padding: "20px" }}>
+                <FixedHeightCard>
+                
                   <div className="d-flex flex-column grid gap-3">
                     <div
                       className="d-flex col-md-12 "
                       style={{ textAlign: "left" }}
                     >
-                      <div className="d-flex flex-column justify-content-center col-md-8">
-                        <Typography
-                          gutterBottom
-                          variant="body2"
-                          style={{ fontSize: "15px", color: "gray" }}
-                        >
-                          {position.company}
-                        </Typography>
+                      <div className="d-flex flex-column justify-content-center col-md-12">
+                       
                         <Typography
                           variant="body2"
-                          color="text.secondary"
+                          color=""
                           style={{ fontSize: "20px", fontWeight: "bold" }}
                         >
-                          {position.desgination}
+                          {position.title}
                         </Typography>
+                        <div className="d-flex">
+                          <img src='/assets/Frame.png' alt='icon'/>
                         <Typography variant="body2" color="text.secondary">
                          Indore, INDIA
                         </Typography>
+                        </div>
                       </div>
-                      <div className="d-flex col-md-4">
-                        <CardMedia
-                          component="img"
-                          // image={card.imageUrl}
-                          style={{ height: "100%", width: "80%" }}
-                        />
-                      </div>
+
                     </div>
 
                     <div className="d-flex col-md-12 grid gap-4">
-                      <div className="col-md-2">
+                      <div className="col-md-3 p-0">
                         <Button
                           style={{
-                            fontSize: "8px",
+                            fontSize: "10px",
                             color: "black",
                             backgroundColor: "lightgray",
                             borderRadius: "12px",
@@ -79,10 +78,10 @@ const Recruitment1 = () => {
                           Full Time
                         </Button>
                       </div>
-                      <div className="col-md-2">
+                      <div className="col-md-3 p-0">
                         <Button
                           style={{
-                            fontSize: "8px",
+                            fontSize: "10px",
                             color: "black",
                             backgroundColor: "lightgray",
                             borderRadius: "12px",
@@ -92,46 +91,64 @@ const Recruitment1 = () => {
                           On-Site
                         </Button>
                       </div>
-                      <div className="col-md-2">
+                      <div className="col-md-3 p-0">
                         <Button
                           style={{
-                            fontSize: "8px",
+                            fontSize: "10px",
                             color: "black",
                             backgroundColor: "lightgray",
                             borderRadius: "12px",
                             fontWeight: "bold",
                           }}
                         >
-                          1-2 Year
+                        {position.experience}   years
                         </Button>
                       </div>
                     </div>
-                    <div className="d-flex col-md-11">
+                    <div className="d-flex col-md-11 h-50">
                       <Typography
                         variant="body2"
                         color="text.secondary"
                         style={{ textAlign: "left" }}
-                      >
-                        {card.paragraph}
+                      >{position.requirements}
+                        {/* {card.paragraph} */}
                       </Typography>
                     </div>
-                    <div className="d-flex justify-content-end">
+                    <div className="d-flex justify-content-between">
+                   <div className="ml-2">
+                        <Button
+                        variant="contained"
+                        style={{
+                          fontWeight: 'bold',
+                          fontSize: "9px",
+                          color: "black",
+                          background: "lightgray",
+                          borderRadius: "30px",
+                          marginTop: "10px",
+                        }}
+                      >
+                        Number of Openings - {position.openings}
+                      </Button>
+                      </div>
+                      <div>
                       <Button
                         variant="contained"
                         style={{
                           fontWeight: 600,
-                          fontSize: "15px",
+                          fontSize: "11px",
                           color: "white",
-                          background: "#9861DF",
+                          background: "#1B1A47",
                           borderRadius: "30px",
                           marginTop: "10px",
                         }}
                       >
                         Apply Now
                       </Button>
+                      </div>
                     </div>
                   </div>
-                </Card>
+                
+                </FixedHeightCard>
               </div>
             ))}
           </div>
@@ -179,7 +196,7 @@ const Recruitment1 = () => {
           ))}
         </div> */}
       </main>
-    </>
+    </div>
   );
 };
 

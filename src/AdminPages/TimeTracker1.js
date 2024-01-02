@@ -22,7 +22,7 @@ const TimeTracker1 = () => {
   return (
     <>
       <Sidebar />
-      <main className="m-5">
+      <main className="m-5" style={{backgroundColor:'#F0F5FD'}}>
         <h3 className="mb-3">Time Tracker</h3>
         
          <table class="table rounded-4 " >

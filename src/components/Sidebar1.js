@@ -81,6 +81,12 @@ const Sidebar1 = () => {
               </a>
               {/* <a className="text-white text-decoration-none font-weight-500 cursor-pointer mt-auto">LOGOUT</a> */}
             </div>
+            <div className="list-group list-group-flush " style={{marginTop:'300px'}}>
+            <Link to="/" className="p-2 m-2 ripple active bg">
+                {/* <FontAwesomeIcon icon={faBuilding} className="fa-fw me-3" /> */}
+                <span>LOG OUT</span>
+              </Link>
+            </div>
           </div>
         </nav>
 
