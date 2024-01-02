@@ -186,9 +186,9 @@ const Recruitment = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
+            {data.map((item,index) => (
               <tr key={item.id}>
-                <td>{item.id}</td>
+                <td>{index+1}</td>
                 <td>{item.title}</td>
                 <td>{item.openings}</td>
                 <td>{item.experience}</td>

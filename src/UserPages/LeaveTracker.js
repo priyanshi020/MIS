@@ -1,194 +1,253 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import Sidebar from '../components/Sidebar';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContentText from '@mui/material/DialogContentText';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import { styled } from '@mui/system';
-import { TextField } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Sidebar1 from "../components/Sidebar1";
+import ApplyLeave from "./core/ApplyLeave";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import axios from "axios";
 
-const localizer = momentLocalizer(moment);
+const LeaveTracker = () => {
+  const [data, setData] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  // const [userId, setUserId] = useState("");
 
-// Define custom styles using the styled utility
-const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
-  backgroundColor: theme.palette.primary.main,
-  color: theme.palette.primary.contrastText,
-}));
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-const CustomDialogContent = styled(DialogContent)(({ theme }) => ({
-  marginBottom: theme.spacing(2),
-}));
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
-const CustomFormControl = styled(FormControl)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-  width: '100%',
-}));
+  const handleLeave = (newUser) => {
+    // Update the data state by adding the new job
+    setData((prevData) => [...prevData, newUser]);
+    fetchData();
+  };
 
-const LeaveTracker1 = () => {
-  const [events, setEvents] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [status, setStatus] = useState('');
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const storedUserId = localStorage.getItem('userId');
+const userId = storedUserId ? parseInt(storedUserId, 10) : null;
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       console.log('hii')
+  //       const response = await axios.get(
+  //         `http://localhost:8080/bytesfarms/leave/get?userId=${userId}`
+  //       );
+  //       setData(response.data); // Assuming the API response is an array
+  //         console.log('useridd',
+  //         userId)
+  //       const leaveRequestId = response.data.id;
+  //       console.log("yeh hu userdi h ", leaveRequestId);
+  //       localStorage.setItem("userId", leaveRequestId);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
-    // Make a GET request to your API endpoint
-    fetch('http://localhost:8080/bytesfarms/leave/get?userId=0')
-      .then((response) => response.json())
-      .then((data) => {
-        // Process the API response data and format it for the calendar
-        const formattedEvents = data.map((event) => ({
-          id: event.id,
-          title: `${event.leaveType} - ${event.user.username}`,
-          start: new Date(event.startDate),
-          end: new Date(event.endDate),
-          description: event.description,
-          status: event.status,
-        }));
-
-        // Update the events state with the formatted data
-        setEvents(formattedEvents);
-      })
-      .catch((error) => console.error('Error fetching data:', error));
+    fetchData();
   }, []);
 
-  const handleEventClick = (event) => {
-    setSelectedEvent(event);
-    setIsModalOpen(true);
-    setStatus(event.status);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleStatusUpdate = () => {
-    fetch(`http://localhost:8080/bytesfarms/leave/updateStatus/${selectedEvent.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ status }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setEvents((prevEvents) =>
-          prevEvents.map((event) =>
-            event.id === selectedEvent.id ? { ...event, status: data.status } : event
-          )
-        );
-        setIsModalOpen(false);
+  const fetchData = () => {
+    axios
+      .get( `http://localhost:8080/bytesfarms/leave/get?userId=${userId}`)
+      .then((response) => {
+        setData(response.data);
       })
-      .catch((error) => console.error('Error updating status:', error));
+      .catch((error) => {
+        console.error("Error fetching data:", error.message);
+      });
   };
 
   return (
     <>
-      <Sidebar />
-      <main className='m-5' style={{ backgroundColor: '#F0F5FD' }}>
-        <h3 className='mb-3'>Leave Calendar</h3>
-        <BigCalendar
-          events={events}
-          localizer={localizer}
-          components={{
-            eventWrapper: ({ event, children }) => (
-              <div
-                onContextMenu={(e) => {
-                  alert(`${event.title} is clicked.`);
-                  e.preventDefault();
-                }}
-                onClick={() => handleEventClick(event)}
-              >
-                {children}
+      <Sidebar1 />
+      <main className="m-5">
+        <h3>Leaves</h3>
+        <div className="row ">
+          <div className="col-md-2" style={{ width: "225px" }}>
+            <div
+              className="card m-2 p-2 rounded-4 shadow shadow-lg"
+              style={{ maxWidth: "280px" }}
+            >
+              <div className="row g-0">
+                <h5 className="pt-3 pb-4 text-center">Casual Leave</h5>
+                <div className="text-center">
+                  <img src="/assets/leave/casual.png" alt="leave" />
+                </div>
+                <h6 className="text-center text-secondary pt-4">
+                  Available: 20
+                  <br />
+                </h6>
+                <h6 className="text-center text-secondary pb-4">
+                  Booked &nbsp; &nbsp;: 00
+                </h6>
               </div>
-            ),
-          }}
-          style={{ height: 500 }}
-        />
+            </div>
+          </div>
+          <div className="col-md-2" style={{ width: "225px" }}>
+            <div
+              className="card m-2 p-2 rounded-4 shadow shadow-lg"
+              style={{ maxWidth: "280px" }}
+            >
+              <div className="row g-0">
+                <h5 className="pt-3 pb-4 text-center">Sick Leave</h5>
+                <div className="text-center">
+                  <img
+                    src="/assets/leave/sick.png"
+                    alt="leave"
+                    style={{ height: "50px" }}
+                  />
+                </div>
+                <h6 className="text-center text-secondary pt-4">
+                  Available: 20
+                  <br />
+                </h6>
+                <h6 className="text-center text-secondary pb-4">
+                  Booked &nbsp; &nbsp;: 00
+                </h6>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-2" style={{ width: "225px" }}>
+            <div
+              className="card m-2  p-2 rounded-4 shadow shadow-lg"
+              style={{ maxWidth: "280px" }}
+            >
+              <div className="row g-0">
+                <h5 className="pt-3 pb-3 text-center"> Leave Without Pay</h5>
+                <div className="text-center">
+                  <img src="/assets/leave/lwp.png" alt="leave" />
+                </div>
+                <h6 className="text-center text-secondary pt-3">
+                  Available: 20
+                  <br />
+                </h6>
+                <h6 className="text-center text-secondary pb-3">
+                  Booked &nbsp; &nbsp;: 00
+                </h6>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-2" style={{ width: "225px" }}>
+            <div
+              className="card m-2 p-2 rounded-4 shadow shadow-lg"
+              style={{ maxWidth: "280px" }}
+            >
+              <div className="row g-0">
+                <h5 className="pt-3 pb-4 text-center">Earned Leave</h5>
+                <div className="text-center">
+                  <img src="/assets/leave/earned.png" alt="leave" />
+                </div>
+                <h6 className="text-center text-secondary pt-4">
+                  Available: 20
+                  <br />
+                </h6>
+                <h6 className="text-center text-secondary pb-4">
+                  Booked &nbsp; &nbsp;: 00
+                </h6>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div
+              className="card m-2 p-2 rounded-4 shadow shadow-lg"
+              style={{ maxWidth: "280px" }}
+            >
+              <div className="row g-0">
+                <div className="text-center mt-3">
+                  <img
+                    src="/assets/leave/upload.png"
+                    alt="leave"
+                    style={{ height: "65px" }}
+                  />
+                </div>
+                <h5 className="text-center mt-3 ">Submit your leave</h5>
+                <h5 className="text-center  mb-3">application here</h5>
+                <div className="text-center mb-3">
+                  <ApplyLeave onApplyLeave={handleLeave} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        {/* Leave Details Modal */}
-        <Dialog open={isModalOpen} onClose={handleModalClose}>
-        <DialogTitle style={{ fontSize: "30px", fontWeight: "600" }}>
-        {selectedEvent?.title}
-        </DialogTitle>
-        <DialogContent>
-        <DialogContentText id="alert-dialog-description" sx={{fontSize:'20px'}}>
-        Description: {selectedEvent?.description}
-          </DialogContentText>
-          <DialogContentText id="alert-dialog-description" sx={{fontSize:'20px'}}>
-        Status: {selectedEvent?.status}
-          </DialogContentText>
-          
-          <TextField
-            id="role"
-            select
-            label="Update Status"
-            fullWidth
-            variant="standard"
-           
-          >
-            <MenuItem >Pending</MenuItem>
-            <MenuItem >Approved</MenuItem>
-            <MenuItem >Rejected</MenuItem>
+        <div className="container pt-4">
+          <table class="table ">
+            <thead class="table-secondary ">
+              <tr>
+                <th scope="col">Leave Type</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col"> description</th>
+                <th scope="col">Status </th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.leaveType}</td>
+                  <td>{item.startDate}</td>
+                  <td>{item.endDate}</td>
+                  <td>{item.description}</td>
 
-          </TextField>
-        </DialogContent>
-        <DialogActions>
-          <Button
-         
-            className=" text-white"
-            style={{ backgroundColor: "#1B1A47" }}
-          >
-            Cancel
-          </Button>
-          <Button
-            
-            className=" text-white"
-            style={{ backgroundColor: "#1B1A47" }}
-          >
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
-        {/* <Dialog open={isModalOpen} onClose={handleModalClose}>
-          <CustomDialogTitle>{selectedEvent?.title}</CustomDialogTitle>
-          <CustomDialogContent>
-            <p>Description: {selectedEvent?.description}</p>
-            <p>Status: {selectedEvent?.status}</p>
-            <CustomFormControl>
-              <InputLabel htmlFor='status'>Update Status</InputLabel>
-              <Select
-                id='status'
-                value={status}
-                label='Update Status'
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <MenuItem value='Pending'>Pending</MenuItem>
-                <MenuItem value='Approved'>Approved</MenuItem>
-                <MenuItem value='Rejected'>Rejected</MenuItem>
-              </Select>
-            </CustomFormControl>
-          </CustomDialogContent>
-          <DialogActions>
-            <Button variant='contained' onClick={handleStatusUpdate} color='primary'>
-              Update Status
-            </Button>
-            <Button variant='contained' onClick={handleModalClose} color='secondary'>
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog> */}
+                  <td>
+                    <button
+                      type="button"
+                      className={`btn ${
+                        item.status === "Approved"
+                          ? "btn-outline-success"
+                          : "btn-outline-danger"
+                      }`}
+                      style={{ minWidth: "100px" }}
+                    >
+                      {item.status}
+                    </button>
+                  </td>
+                  <td>
+                    <IconButton aria-haspopup="true" onClick={handleMenuClick}>
+                      <MoreVertIcon />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorEl}
+                      keepMounted
+                      open={Boolean(anchorEl)}
+                      onClose={handleMenuClose}
+                    >
+                      {/* <MenuItem onClick={handleClick}>Edit</MenuItem> */}
+                      <MenuItem>Delete</MenuItem>
+                    </Menu>
+                  </td>
+                  
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </main>
     </>
   );
 };
 
-export default LeaveTracker1;
+export default LeaveTracker;

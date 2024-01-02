@@ -38,9 +38,9 @@ const TimeTracker1 = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((item) => (
+              {data.map((item,index) => (
                 <tr key={item.id}>
-                  <td className="text-center">{item.id}</td>
+                  <td className="text-center">{index+1}</td>
                   <td>{item.username}</td>
                 
                   <td>{item.email}</td>

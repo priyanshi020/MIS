@@ -7,6 +7,8 @@ import TaskList from "./core/TaskList";
 import Chart from "./core/Chart";
 import Meeting from "./core/Meeting";
 const Dashboard1 = () => {
+  const storedUserId = localStorage.getItem('userId');
+const userId = storedUserId ? parseInt(storedUserId, 10) : null;
   return (
     <>
       <Sidebar1 />
@@ -28,9 +30,18 @@ const Dashboard1 = () => {
             <TaskList />
           </div>
 
-          <div className="col col-md-8">
-            <Chart />
-             
+          <div className="col col-md-4">
+            {/* <Chart /> */}
+            <div class="card mb-4 shadow shadow-lg ">
+          <div class="card-body text-center">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+              class="rounded-circle img-fluid" style={{width: "150px"}}/>
+            <h5 class="my-3">John SMith</h5>
+            <p class="text-muted mb-1">Full Stack Developer</p>
+            {/* <p class="text-muted mb-4">bytesfarms</p> */}
+           
+          </div>
+        </div>
           </div>
 
           <div className="col col-md-6">{/* <Meeting/> */}</div>

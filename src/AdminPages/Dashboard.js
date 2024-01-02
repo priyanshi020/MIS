@@ -288,28 +288,25 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((item) => (
-                <tr key={item.id}>
-                  <td className="text-center">{item.id}</td>
-                  <td>{item.username}</td>
-                  {/* <td>{item.designation}</td> */}
-                  <td>{item.email}</td>
-                
-
-                  <td className="text-right">
-                    <IconButton aria-haspopup="true"   onClick={(event) => handleMenuClick(event, item.id)}>
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={Boolean(anchorEl)}
-                      onClose={handleMenuClose}
-                    >
-                      <MenuItem  onClick={handleEditClick(item.id)}>Edit</MenuItem>
-                    <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
-                    </Menu>
-                  </td>
+            {data.map((item, index) => (
+    <tr key={item?.id}>
+      <td className="text-center">{index + 1}</td>
+      <td>{item && item.username}</td>
+      <td>{item && item.email}</td>
+      <td className="text-right">
+        <IconButton aria-haspopup="true" onClick={(event) => handleMenuClick(event, item?.id)}>
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={handleEditClick(item?.id)}>Edit</MenuItem>
+          <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
+        </Menu>
+      </td>
                   <Dialog open={open} onClose={handleClose} className="p-5 ">
                     <DialogTitle
                       className="text-center"
@@ -383,23 +380,7 @@ const Dashboard = () => {
                             />
                           </div>
                           </div>
-                          {/* <div data-mdb-input-init class="form-outline mb-4">
-                            <label
-                              class="form-label fw-bold text-secondary"
-                              for="form6Example1"
-                            >
-                              CONTACT NO.
-                            </label>
-                            <input
-                              type="phone"
-                              id="form6Example6"
-                              class="form-control form-control-lg"
-                              placeholder="Contact no"
-                              style={{  fontSize: "16px", color: "#666666" }}
-                              value={editData.phone}
-                              onChange={(e) => setEditData({ ...editData, phone: e.target.value })}
-                            />
-                          </div> */}
+                        
                         </div>
                       </form>
                     </DialogContent>

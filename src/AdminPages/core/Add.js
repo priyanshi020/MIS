@@ -28,7 +28,7 @@ function AddUser({ onUserAdded }) {
   const loginEndpoint = "http://localhost:8080/bytesfarms/user/signup";
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     const data = {
       username: name,
       email: email,
