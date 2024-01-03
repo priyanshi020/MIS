@@ -16,20 +16,25 @@ import { Button } from '@mui/material';
 const localizer = momentLocalizer(moment);
 
 const LeaveTracker1 = () => {
+
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [status, setStatus] = useState('');
+  const approved='Approved';
+  const rejected='Rejected'
 
   useEffect(() => {
-    // Make a GET request to your API endpoint
-    fetch('http://localhost:8080/bytesfarms/leave/get?userId=0')
+    // Make a GET request to your API endpoint for fetching leave data
+    fetch('http://localhost:8080/bytesfarms/leave/get?userId=0')  // Replace 'YOUR_GET_LEAVE_API_ENDPOINT' with the actual endpoint
       .then((response) => response.json())
       .then((data) => {
         // Process the API response data and format it for the calendar
         const formattedEvents = data.map((event) => ({
           id: event.id,
           title: `${event.leaveType} - ${event.user.username}`,
+          username: `${event.user.username}`,
+          leaveType: `${event.leaveType}`,
           start: new Date(event.startDate),
           end: new Date(event.endDate),
           description: event.description,
@@ -53,7 +58,8 @@ const LeaveTracker1 = () => {
   };
 
   const handleStatusUpdate = () => {
-    fetch(`http://localhost:8080/bytesfarms/leave/updateStatus/${selectedEvent.id}`, {
+    // Make a PUT request to your API endpoint for updating leave status
+    fetch(`http://localhost:8080/bytesfarms/leave/update?leaveRequestId=${selectedEvent.id}` , {  // Replace 'YOUR_UPDATE_STATUS_API_ENDPOINT' with the actual endpoint
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -69,7 +75,10 @@ const LeaveTracker1 = () => {
         );
         setIsModalOpen(false);
       })
-      .catch((error) => console.error('Error updating status:', error));
+      .catch((error) =>{ console.error('Error updating status:', error)
+    setIsModalOpen(false);
+    });
+      
   };
 
   return (
@@ -99,83 +108,66 @@ const LeaveTracker1 = () => {
         {/* Leave Details Modal */}
 
         <Dialog  open={isModalOpen}
-          onRequestClose={handleModalClose}>
-        <DialogTitle style={{ fontSize: "28x", fontWeight: "600" }}>
-        {selectedEvent?.title}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{paddingTop:'10px', fontSize:'20px'}}>Description: {selectedEvent?.description}</DialogContentText>
-          <DialogContentText sx={{padding:'10px 0px 10px 0px', fontSize:'20px'}}>Status: {selectedEvent?.setStatus}</DialogContentText>
+          onRequestClose={handleModalClose}    fullWidth
+          maxWidth="sm" 
+          onExited={handleModalClose}>
+          <DialogTitle style={{ fontSize: "30x", fontWeight: "600" }}>
+          {selectedEvent?.username}
+          </DialogTitle>
+          <div className="col-md-3  ml-2  ">
+                          <Button
+                            style={{
+                              padding:'8px',
+                              fontSize: "15px",
+                              color: "black",
+                              backgroundColor: "#FEDEED",
+                              borderRadius: "21px",
+                              fontWeight: "bold",
+                            }}
+                          >
+                          {selectedEvent?.leaveType}
+                          </Button>
+                        </div>
+          <DialogContent>
+            <DialogContentText sx={{ fontSize:'20px'}}>Description: </DialogContentText>
+            <DialogContentText sx={{paddingTop:'3px', paddingBottom: '15px' ,fontSize:'18px',color:'black'}}>{selectedEvent?.description}</DialogContentText>
+            {/* <DialogContentText sx={{padding:'10px 0px 10px 0px', fontSize:'20px'}}>Status: {selectedEvent?.setStatus}</DialogContentText> */}
 
+            
           
-         
-
-         
-          <TextField
-            id="role"
-            select
-            label="Role"
-            fullWidth
-            variant="standard"
-            // value={role}
-            // onChange={(e) => setRole(e.target.value)}
-          >
-            <MenuItem >Admin</MenuItem>
-            <MenuItem >User</MenuItem>
-          </TextField>
-        </DialogContent>
+            <TextField
+              id="role"
+              select
+              label="Status"
+              fullWidth
+              variant="standard"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <MenuItem value={approved}>Approved</MenuItem>
+              <MenuItem value={rejected}>Rejected</MenuItem>
+            </TextField>
+          </DialogContent>
         <DialogActions>
-          <Button
-            onClick={handleModalClose}
-            className=" text-white"
-            style={{ backgroundColor: "#1B1A47" }}
-          >
-            Cancel
-          </Button>
+         
           <Button
             onClick={handleStatusUpdate}
             className=" text-white"
             style={{ backgroundColor: "#1B1A47" }}
           >
-            Add
+            Update
+          </Button>
+          <Button
+            onClick={handleModalClose}
+            className=" "
+            style={{ color: "#1B1A47",backgroundColor:'white' , borderColor:'#1B1A47' }}
+          >
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
 
-{/* <Modal
-          isOpen={isModalOpen}
-          onRequestClose={handleModalClose}
-          contentLabel='Leave Details'
-          style={{
-            content: {
-              top: '50%',
-              left: '50%',
-              right: 'auto',
-              bottom: 'auto',
-              marginRight: '-50%',
-              transform: 'translate(-50%, -50%)',
-              backgroundColor:'gray'
-            },
-          }}
-        >
-          <h2>{selectedEvent?.title}</h2>
-          <p>Description: {selectedEvent?.description}</p>
-          <p>Status: {selectedEvent?.status}</p>
-          <div>
-            <label htmlFor='status'>Update Status:</label>
-            <select
-              id='status'
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-            >
-              <option value='Pending'>Pending</option>
-              <option value='Approved'>Approved</option>
-              <option value='Rejected'>Rejected</option>
-            </select>
-          </div>
-          <button onClick={handleStatusUpdate}>Update Status</button>
-          <button onClick={handleModalClose}>Close</button>
-        </Modal>         */}
+
       </main>
     </>
   );

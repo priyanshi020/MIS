@@ -206,7 +206,7 @@ export default function Mus() {
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
                           >
-                            <option value="guest">Guest</option>
+                            <option value={guest}>Guest</option>
                           </select>
                         </div>
                        

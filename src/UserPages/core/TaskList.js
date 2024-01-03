@@ -22,9 +22,9 @@ const TaskList = () => {
       setTasks(updatedTasks);
     };
   return (
-    <div className="mb-3 shadow shadow-lg" style={{ maxWidth: "400px" }}>
+    <div className="mb-3 shadow shadow-lg rounded-5" style={{ maxWidth: "400px" }}>
     <div className="row g-0">
-      <div className="card" style={{ borderRadius: "15px", height: '388px' }}>
+      <div className="card rounded-4" style={{ height: '388px' }}>
         <div className="card-body p-3">
           <h4 className="mb-3 text-center pb-3">DAILY TASK</h4>
 

@@ -130,6 +130,7 @@ const Dashboard = () => {
         handleMenuClose();
       });
   };
+  
 
   const handleClose = () => {
     setOpen(false);
@@ -168,7 +169,8 @@ const Dashboard = () => {
   return (
     <>
       <Sidebar />
-      <main className="m-5" style={{backgroundColor:'#F0F5FD'}}>
+      <main className="" style={{backgroundColor:'#F0F5FD'}}>
+        <div className="m-5">
         <div className="col-md-12 ">
           <div className="d-flex justify-content-between mb-3">
             <h2 className="mb-3 col-md-2">DASHBOARD</h2>
@@ -272,7 +274,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="container pt-5">
-          <table class="table rounded-4 " >
+          <table class="table  " style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 50px'}} >
             <thead class="table-secondary p-2">
               <tr>
                 <th  className='text-center' scope="col">S.No</th>
@@ -390,7 +392,7 @@ const Dashboard = () => {
                         style={{ backgroundColor: "#1B1A47" }}
                         onClick={handleEditApiCall}
                       >
-                        Edit
+                        Update
                       </Button>
                       <Button
                         onClick={handleClose}
@@ -410,7 +412,7 @@ const Dashboard = () => {
 
         </div>
 
-
+        </div>
         
       </main>
     </>
