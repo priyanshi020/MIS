@@ -83,8 +83,9 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
   return (
     <>
       <Sidebar1 />
-      <main className="m-5">
-        <h3>Leaves</h3>
+      <main className="" style={{backgroundColor:'#F0F5FD'}}>
+        <div className="m-5">
+        <h3 className="m-3">Leaves</h3>
         <div className="row ">
           <div className="col-md-2" style={{ width: "225px" }}>
             <div
@@ -194,13 +195,13 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
         </div>
 
         <div className="container pt-4">
-          <table class="table ">
+          <table class="table " style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 50px'}} >
             <thead class="table-secondary ">
               <tr>
                 <th scope="col">Leave Type</th>
                 <th scope="col">Start Date</th>
                 <th scope="col">End Date</th>
-                <th scope="col"> description</th>
+                <th scope="col"> Description</th>
                 <th scope="col">Status </th>
                 <th></th>
               </tr>
@@ -245,7 +246,7 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
               ))}
             </tbody>
           </table>
-        </div>
+        </div></div>
       </main>
     </>
   );

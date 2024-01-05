@@ -44,7 +44,7 @@ function ViewAttendance({ userId }) {
         >
           View Attendance
         </button>
-        <Dialog open={open} onClose={handleClose} className="p-5" maxWidth="md">
+        <Dialog open={open} onClose={handleClose} className="p-5" fullWidth maxWidth="lg">
           <DialogTitle style={{ fontSize: "25px", fontWeight: "600" }}>
             Attendance List
           </DialogTitle>

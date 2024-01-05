@@ -84,7 +84,8 @@ const LeaveTracker1 = () => {
   return (
     <>
       <Sidebar />
-      <main className='m-5' style={{ backgroundColor: '#F0F5FD' }}>
+      <main className='' style={{ backgroundColor: '#F0F5FD' }}>
+        <div className='m-5'>
         <h3 className='mb-3'>Leave Calendar</h3>
         <BigCalendar
           events={events}
@@ -167,7 +168,7 @@ const LeaveTracker1 = () => {
         </DialogActions>
       </Dialog>
 
-
+      </div>
       </main>
     </>
   );

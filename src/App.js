@@ -17,7 +17,8 @@ import Recruitment1 from './UserPages/Recruitment1';
 import Profile from './UserPages/Profile';
 import Time from './AdminPages/Time';
 import Recruitment2 from './components/Recruitment2';
-import LoginGuest from './components/LoginGuest'
+import LoginGuest from './components/LoginGuest';
+import Mus from './components/Mus';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
         <Route path='/user-recruitment' element={<Recruitment1/>}/>
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/apply' element={<Recruitment2/>}/>
+        <Route path='/mus' element={<Mus />}/>
       </Routes>
 
     </Router>

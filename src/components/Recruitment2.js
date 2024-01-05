@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar1 from "../components/Sidebar1";
 import { Button, Card, Typography } from '@mui/material';
 import axios from "axios";
+import ApplyNow from "./ApplyNow";
 
 const Recruitment2 = () => {
   const [positions, setPositions] = useState([]);
@@ -146,7 +147,7 @@ const Recruitment2 = () => {
                       >
                         Number of Openings - {position.openings}
                       </Button>
-                      <div>
+                      {/* <div>
                         <input
                           type="file"
                           accept=".pdf"
@@ -171,7 +172,8 @@ const Recruitment2 = () => {
                             Apply Now
                           </Button>
                         </label>
-                      </div>
+                      </div> */}
+                      <ApplyNow jobPositionId={position.id}/>
                     </div>
                   </div>
                 </Card>

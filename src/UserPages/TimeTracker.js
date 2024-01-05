@@ -220,7 +220,7 @@ const TimeTracker = () => {
     <>
       <Sidebar1 />
       <main className="m-5" style={{ backgroundColor: "#F0F5FD" }}>
-        <h3 className="mb-3">TIME TRACKER</h3>
+        <h3 className="m-3">TIME TRACKER</h3>
         <div className=" d-flex justify-content-start">
           <Box sx={{ minWidth: 120 }}>
             <FormControl
@@ -268,15 +268,17 @@ const TimeTracker = () => {
           </Box>
 
           <form className="d-flex   mb-4" style={{ marginLeft: "20px" }}>
-            <div className="form-outline flex-fill ml-2">
-              <input
+            <div >
+            <TextField id="standard-basic" label="Your Task" variant="standard"  value={taskInput}
+                onChange={handleTaskInputChange} />
+              {/* <input
                 type="text"
                 placeholder="Your Task"
                 id="form3"
                 className="form-control form-control-lg"
                 value={taskInput}
                 onChange={handleTaskInputChange}
-              />
+              /> */}
             </div>
             <div className="form-outline flex-fill ml-2">
               <input
@@ -288,6 +290,28 @@ const TimeTracker = () => {
                 onChange={handleTimeInputChange}
               />
             </div>
+            <Box sx={{ minWidth: 120 }}>
+            <FormControl
+              sx={{
+                width: 200,
+                marginLeft: 2,
+                "& .MuiInputBase-root": { height: "46px" },
+              }}
+            >
+              <InputLabel id="demo-simple-select-label">Select Role</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={role}
+                label="Age"
+                onChange={handleRoleChange}
+              >
+                <MenuItem value={10}>Started</MenuItem>
+                <MenuItem value={20}>Backend</MenuItem>
+                <MenuItem value={30}>Salesforce</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
             <div className="form-outline flex-fill ml-2">
               <select
                 id="statusInput"
@@ -301,14 +325,20 @@ const TimeTracker = () => {
                 <option>Completed</option>
               </select>
             </div>
-
-            <button
+            <Button
+            onClick={handleAddTask}
+            className=" text-white"
+            style={{ backgroundColor: "#1B1A47" }}
+          >
+            Add
+          </Button>
+            {/* <button
               type="submit"
               className="btn btn-primary btn-md ms-2"
               onClick={handleAddTask}
             >
               Add
-            </button>
+            </button> */}
           </form>
         </div>
         <ul className="list-group mb-0">

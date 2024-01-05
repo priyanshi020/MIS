@@ -59,31 +59,7 @@ function AddUser({onApplyLeave}) {
 
     setOpen(false);
   };
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   const data = {
-      
-  //     leaveType: leaveType,
-  //     startDate: startDate,
-  //     endDate: endDate,
-  //     description:description,
-  //   };
-
-  //   axios.post(loginEndpoint, data)
-  //   .then(response => {
-      
-  //     console.log('Applied successful:', response.data);
-  //     onApplyLeave(response.data);
-      
-  //   })
-  //   .catch(error => {
-      
-  //     console.error(' Failed:', error.response.data);
-      
-  //   });
-
-  //   setOpen(false);
-  // };
+  
 
   return (
     <div className="container">

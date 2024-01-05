@@ -58,10 +58,11 @@ const Attendance1 = () => {
   return (
     <>
     <Sidebar1/>
-    <main className='m-5' style={{backgroundColor:'#F0F5FD'}}>
-        <h3 className='mb-3'>ATTENDANCE</h3>
+    <main className='' style={{backgroundColor:'#F0F5FD'}}>
+      <div className='m-5'>
+        <h3 className='m-3'>ATTENDANCE</h3>
         <div style={{borderRadius:'20px'}}>
-        <table className="rounded-4 table table-bordered table-striped">
+        <table className="rounded-4 table table-bordered table-striped" style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 50px'}}>
                 <thead className="table-secondary text-center">
                   <tr>
                     <th style={{ padding: "20px" }}>Day</th>
@@ -111,8 +112,9 @@ const Attendance1 = () => {
                   </tr>
                 )}
               </table>
-              </div>
+              </div> </div>
     </main>
+   
     </>
   )
 }

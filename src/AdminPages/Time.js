@@ -12,6 +12,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { TimeField } from "@mui/x-date-pickers/TimeField";
 
 const TimeTracker = () => {
   const [project, setProject] = React.useState("");
@@ -21,12 +25,11 @@ const TimeTracker = () => {
   const [statusInput, setStatusInput] = useState("");
   const [tasks, setTasks] = useState([]);
   const [elapsedTimes, setElapsedTimes] = useState([]);
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [submitTask, setSubmitTask] = useState([]);
   const [timers, setTimers] = useState([]);
+  const storedUserId = localStorage.getItem("userId");
+  const userId = storedUserId ? parseInt(storedUserId, 10) : null;
 
   useEffect(() => {
-    // Initialize timers and elapsedTimes arrays with default values
     const initialTimers = tasks.map(() => false);
     const initialElapsedTimes = tasks.map(() => 0);
 
@@ -35,14 +38,12 @@ const TimeTracker = () => {
   }, [tasks]);
 
   useEffect(() => {
-    // Update elapsed time for each task independently
     const interval = setInterval(() => {
       setElapsedTimes((prevElapsedTimes) =>
         prevElapsedTimes.map((time, index) => (timers[index] ? time + 1 : time))
       );
     }, 1000);
 
-    // Cleanup the interval on component unmount
     return () => clearInterval(interval);
   }, [timers]);
 
@@ -59,7 +60,6 @@ const TimeTracker = () => {
   };
 
   const handleButtonClick = (index) => {
-    // Toggle the timer status for the specific task at the given index
     const newTimers = [...timers];
     newTimers[index] = !newTimers[index];
     setTimers(newTimers);
@@ -70,7 +70,13 @@ const TimeTracker = () => {
   };
 
   const handleTimeInputChange = (event) => {
-    setTimeInput(event.target.value);
+    let enteredTime = event.target.value;
+
+    // Convert 12-hour time to 24-hour time
+    const date = new Date("2000-01-01 " + enteredTime);
+    const formattedTime = date.toLocaleTimeString("en-US", { hour12: false });
+
+    setTimeInput(formattedTime);
   };
 
   const handleStatusInputChange = (event) => {
@@ -81,17 +87,21 @@ const TimeTracker = () => {
     event.preventDefault();
 
     if (taskInput.trim() !== "" && timeInput.trim() !== "") {
-      setTasks((prevTasks) => [
-        ...prevTasks,
-        {
-          task: taskInput,
-          time: timeInput,
-          status: statusInput || "In Progress",
-        },
-      ]);
+      const newTask = {
+        task: taskInput,
+        time: timeInput,
+        status: statusInput || "In Progress",
+      };
+
+      setTasks((prevTasks) => [...prevTasks, newTask]);
       setTaskInput("");
       setTimeInput("");
       setStatusInput("");
+
+      // Add a new timer for the new task
+      setTimers((prevTimers) => [...prevTimers, false]);
+      // Add a new elapsed time for the new task
+      setElapsedTimes((prevElapsedTimes) => [...prevElapsedTimes, 0]);
     }
   };
 
@@ -99,7 +109,6 @@ const TimeTracker = () => {
     const updatedTasks = tasks.filter((_, i) => i !== index);
     setTasks(updatedTasks);
 
-    // Clear the timer and elapsed time for the removed task
     setTimers((prevTimers) => {
       const newTimers = [...prevTimers];
       newTimers.splice(index, 1);
@@ -131,40 +140,82 @@ const TimeTracker = () => {
     }
   };
 
-  const handleSubmit = () => {
-    // Submit the headings to the admin
-    setSubmitTask([...tasks.map((task) => task.heading)]);
+  const handleSubmit = (index) => {
+    const taskToSubmit = tasks[index];
+
+    const submittedData = {
+      taskDescription: taskToSubmit.task,
+      expectedTime: taskToSubmit.time,
+      actualTime: formatTime(elapsedTimes[index]),
+      status: taskToSubmit.status.toUpperCase(),
+    };
+
     // Perform your submission logic here (e.g., API call)
+    fetch(`http://localhost:8080/bytesfarms/tasks/create?userId=${userId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(submittedData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("API response:", data);
+        // Handle the API response as needed
+      })
+      .catch((error) => {
+        console.error("API error:", error);
+        // Handle the API error
+      });
+
+    // Remove the submitted task from the tasks array
+    const updatedTasks = tasks.filter((_, i) => i !== index);
+    setTasks(updatedTasks);
+
+    // Remove the corresponding timer
+    setTimers((prevTimers) => {
+      const newTimers = [...prevTimers];
+      newTimers.splice(index, 1);
+      return newTimers;
+    });
+
+    // Remove the corresponding elapsed time
+    setElapsedTimes((prevElapsedTimes) => {
+      const newElapsedTimes = [...prevElapsedTimes];
+      newElapsedTimes.splice(index, 1);
+      return newElapsedTimes;
+    });
   };
+
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
-  const handleMenuClick = (event, itemId) => {
-    console.log("Item ID selected for editing:", itemId);
+  const handleMenuClick = (event, index) => {
+    console.log("Item Index selected for editing:", index);
     setAnchorEl(event.currentTarget);
-
-    setOpen(true); // Open the dialog for editing
+    setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
     <>
       <Sidebar1 />
-      <main className="m-5" style={{ backgroundColor: "#F0F5FD" }}>
+      <main className="" style={{ backgroundColor: "#F0F5FD" }}>
+        <div className='m-5'>
         <h3 className="mb-3">TIME TRACKER</h3>
         <div className=" d-flex justify-content-start">
           <Box sx={{ minWidth: 120 }}>
             <FormControl
-              sx={{ width: 200, "& .MuiInputBase-root": { height: "46px" } }}
+              sx={{ width: 180, "& .MuiInputBase-root": { height: "46px" } }}
             >
-              <InputLabel id="demo-simple-select-label">
-                Select Project
-              </InputLabel>
+              <InputLabel id="demo-simple-select-label">Project</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -183,12 +234,12 @@ const TimeTracker = () => {
           <Box sx={{ minWidth: 120 }}>
             <FormControl
               sx={{
-                width: 200,
-                marginLeft: 2,
+                width: 180,
+                marginLeft: 4,
                 "& .MuiInputBase-root": { height: "46px" },
               }}
             >
-              <InputLabel id="demo-simple-select-label">Select Role</InputLabel>
+              <InputLabel id="demo-simple-select-label">Role</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -204,18 +255,39 @@ const TimeTracker = () => {
           </Box>
 
           {/* tasklist */}
-          <form className="d-flex   mb-4" style={{ marginLeft: "20px" }}>
-            <div className="form-outline flex-fill ml-2">
-              <input
-                type="text"
-                placeholder="Your Task"
-                id="form3"
-                className="form-control form-control-lg"
-                value={taskInput}
-                onChange={handleTaskInputChange}
-              />
-            </div>
-            <div className="form-outline flex-fill ml-2">
+          <form className="d-flex   ml-5 mb-5">
+            <TextField
+              id="standard-basic"
+              label="Your Task"
+              variant="standard"
+              value={taskInput}
+              onChange={handleTaskInputChange}
+            />
+
+            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["TimeField"]}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["TimeField"]}>
+              <TimeField
+          label="Format without meridiem"
+          value={timeInput}
+          onChange={handleTimeInputChange}
+          InputLabelProps={{ style: { color: 'gray' } }}
+          InputProps={{
+            style: {
+              borderColor: 'gray',
+              // Adjust the size of the field (you can use fontSize or width/height)
+              width: '200px', // Adjust the width as needed
+            },
+          }}
+          format="HH:mm"
+        />
+              </DemoContainer>
+            </LocalizationProvider>
+              </DemoContainer>
+            </LocalizationProvider> */}
+
+            <div className="form-outline flex-fill ml-5">
               <input
                 type="time"
                 placeholder="Expected Time"
@@ -225,9 +297,32 @@ const TimeTracker = () => {
                 onChange={handleTimeInputChange}
               />
             </div>
-            <div className="form-outline flex-fill ml-2">
+            <Box sx={{ minWidth: 120 }}>
+              <FormControl
+                sx={{
+                  width: 180,
+                  marginLeft: 4,
+                  "& .MuiInputBase-root": { height: "46px" },
+                }}
+              >
+                <InputLabel id="demo-simple-select-label"> Status</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={statusInput}
+                  label="Age"
+                  onChange={handleStatusInputChange}
+                >
+                  <MenuItem >Started</MenuItem>
+                  <MenuItem >In Progress</MenuItem>
+                  <MenuItem >Completed</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            {/* <div className="form-outline flex-fill ml-2">
               <select
                 id="statusInput"
+                placeholder="status"
                 className="form-control form-control-lg"
                 value={statusInput}
                 onChange={handleStatusInputChange}
@@ -236,15 +331,22 @@ const TimeTracker = () => {
                 <option>started</option>
                 <option>completed</option>
               </select>
-            </div>
-
-            <button
+            </div> */}
+            <Button
+            type="submit"
+              onClick={handleAddTask}
+              className=" text-white ml-5"
+              style={{ backgroundColor: "#1B1A47", height: "46px" , width:'200px' }}
+            >
+              Add
+            </Button>
+            {/* <button
               type="submit"
-              className="btn btn-primary btn-md ms-2"
+              className="btn btn-primary btn-md ms-3"
               onClick={handleAddTask}
             >
               Add
-            </button>
+            </button> */}
           </form>
         </div>
         <ul className="list-group mb-0">
@@ -254,20 +356,12 @@ const TimeTracker = () => {
               className="list-group-item d-flex justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom rounded-0 mb-2"
             >
               <div className="d-flex align-items-center">
-                {/* <input
-                  className="form-check-input me-2"
-                  placeholder=""
-                  type="checkbox"
-                  value=""
-                  aria-label="..."
-                /> */}
                 <h6>{task.task}</h6>
               </div>
               <h6 className="text-center">{task.time}</h6>
               <div className="text-center">
                 {formatTime(elapsedTimes[index])} Hrs
               </div>
-
               <button
                 onClick={() => handleButtonClick(index)}
                 className={timers[index] ? "checkout-button" : "checkin-button"}
@@ -290,11 +384,14 @@ const TimeTracker = () => {
               <button
                 type="button"
                 className="btn btn-outline-primary btn-lg font-weight-bold"
-                onClick={() => handleStatusUpdate(index)}
+                onClick={() => handleSubmit(index)}
               >
                 Submit
               </button>
-              <IconButton aria-haspopup="true" onClick={handleMenuClick}>
+              <IconButton
+                aria-haspopup="true"
+                onClick={(event) => handleMenuClick(event, index)}
+              >
                 <MoreVertIcon />
               </IconButton>
               <Menu
@@ -303,20 +400,13 @@ const TimeTracker = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
-                {/* <MenuItem onClick={handleEditClick(item?.id)}>Edit</MenuItem> */}
                 <MenuItem>Edit</MenuItem>
                 <MenuItem onClick={() => handleRemoveTask(index)}>
                   Delete
                 </MenuItem>
               </Menu>
-
-              <Dialog open={open} onClose={handleClose} className="p-5 ">
-                {/* <DialogTitle
-                      className="text-center"
-                      style={{ fontSize: "30px", fontWeight: "600" }}
-                    >
-                      Edit
-                    </DialogTitle> */}
+              <Dialog open={open} onClose={handleClose} className="p-5 "  fullWidth
+          maxWidth="sm" >
                 <DialogContent>
                   <TextField
                     id="role"
@@ -325,7 +415,6 @@ const TimeTracker = () => {
                     fullWidth
                     variant="standard"
                     value={role}
-                    // onChange={(e) => setRole(e.target.value)}
                   >
                     <MenuItem>In Progress</MenuItem>
                     <MenuItem>Completed</MenuItem>
@@ -335,17 +424,14 @@ const TimeTracker = () => {
                   <Button
                     className=" text-white w-25 p-2"
                     style={{ backgroundColor: "#1B1A47" }}
-                    // onClick={handleEditApiCall}
                   >
                     Update
                   </Button>
-                 
                 </DialogActions>
               </Dialog>
-             
             </li>
           ))}
-        </ul>
+        </ul></div>
       </main>
     </>
   );

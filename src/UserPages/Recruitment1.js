@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar1 from "../components/Sidebar1";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Card, CardContent, CardMedia, Typography, Button } from '@mui/material';
+import ApplyNow from "../components/ApplyNow";
 import axios from "axios";
 
 const FixedHeightCard = ({ children }) => (
@@ -33,7 +34,7 @@ const Recruitment1 = () => {
     <div style={{backgroundColor:'#F0F5FD'}}>
       <Sidebar1 />
       <main className="m-5" >
-        <h3>Open Positions</h3>
+        <h3 className="m-3">Open Positions</h3>
         <div className="container">
           <div className="row rounded-4 ">
             {positions.map((position) => (
@@ -105,13 +106,13 @@ const Recruitment1 = () => {
                         </Button>
                       </div>
                     </div>
-                    <div className="d-flex col-md-11 h-50">
+                    <div className="d-flex col-md-11 " style={{height:'100px'}}>
                       <Typography
                         variant="body2"
                         color="text.secondary"
-                        style={{ textAlign: "left" }}
+                        style={{ textAlign: "left", overflow: "hidden" }}
                       >{position.requirements}
-                        {/* {card.paragraph} */}
+                      
                       </Typography>
                     </div>
                     <div className="d-flex justify-content-between">
@@ -131,7 +132,7 @@ const Recruitment1 = () => {
                       </Button>
                       </div>
                       <div>
-                      <Button
+                      {/* <Button
                         variant="contained"
                         style={{
                           fontWeight: 600,
@@ -143,7 +144,8 @@ const Recruitment1 = () => {
                         }}
                       >
                         Apply Now
-                      </Button>
+                      </Button> */}
+                      <ApplyNow jobPositionId={position.id}/>
                       </div>
                     </div>
                   </div>
