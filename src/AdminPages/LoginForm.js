@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
+import HRPopupForm from "./core/HRPopForm";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,6 +48,7 @@ function a11yProps(index) {
 export default function Mus() {
   const [value, setValue] = React.useState(0);
   const [showPassword, setShowPassword] = useState(false);
+  const [isHRPopupOpen, setHRPopupOpen] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -83,6 +85,9 @@ export default function Mus() {
     else if(userRole === 'Employee'){
       navigate('/user-dashboard');
     }
+    else if(userRole === 'HR'){
+      setHRPopupOpen(true);
+    }
     
     else {
       // Navigate to home or another page
@@ -103,6 +108,10 @@ export default function Mus() {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+  const handleCloseHRPopup = () => {
+    // Close HR pop-up form
+    setHRPopupOpen(false);
   };
 
   return (
@@ -316,7 +325,7 @@ export default function Mus() {
           </div>
         </div>
       </div>
-     
+      {isHRPopupOpen && <HRPopupForm onClose={handleCloseHRPopup} />}
     </section>
   );
 }

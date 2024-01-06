@@ -27,7 +27,7 @@ const TimeTracker1 = () => {
       <Sidebar />
       <main className="" style={{backgroundColor:'#F0F5FD'}}>
         <div className="m-5">
-        <h3 className="mb-3">Time Tracker</h3>
+        <h3 className="m-3 pt-3 pb-3">Time Tracker</h3>
         
          <table class="table rounded-4 " style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 50px'}}>
             <thead class="table-secondary p-2">

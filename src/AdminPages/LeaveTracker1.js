@@ -86,7 +86,7 @@ const LeaveTracker1 = () => {
       <Sidebar />
       <main className="" style={{ backgroundColor: "#F0F5FD" }}>
         <div className="m-5">
-          <h3 className="mb-3">Leave Calendar</h3>
+          <h3 className="m-3 pt-3 pb-3">Leave Calendar</h3>
           <BigCalendar
             events={events}
             localizer={localizer}

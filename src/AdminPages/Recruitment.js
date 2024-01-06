@@ -14,7 +14,9 @@ import Button from "@mui/material/Button";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddJob from "./core/AddJob";
+import PdfViewer from "../components/PdfViewer";
 import axios from "axios";
+import { SettingsApplications } from "@mui/icons-material";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -98,8 +100,6 @@ const Recruitment = () => {
       .get("http://localhost:8080/bytesfarms/recruitment/positions")
       .then((response) => {
         setData(response.data);
-        const jobPositionId=response.data.id;
-        localStorage.setItem('jobPositionId', jobPositionId.toString());
       })
       .catch((error) => {
         console.error("Error fetching data:", error.message);
@@ -217,12 +217,12 @@ const Recruitment = () => {
 
       <main className="" style={{ backgroundColor: "#F0F5FD" }}>
         <div className="m-5">
-          <h3>Recruitment</h3>
+          <h3 className="m-3 pt-3 pb-3">Recruitment</h3>
           <Box sx={{ width: "100%" }}>
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "left",
                 borderBottom: 1,
                 borderColor: "divider",
               }}
@@ -233,12 +233,12 @@ const Recruitment = () => {
                 aria-label="basic tabs example  "
                 sx={{
                   "& .MuiTabs-indicator": {
-                    backgroundColor: "orange",
+                    backgroundColor: "#1B1A47",
                   },
                   "& .MuiTab-root": {
                     color: "black !important",
                     "&:hover": {
-                      color: "orange",
+                      color: "#1B1A47",
                     },
                   },
                 }}
@@ -259,11 +259,26 @@ const Recruitment = () => {
               >
                 <thead className="table-secondary p-2">
                   <tr>
-                    <th scope="col" className="text-center " style={{padding:'20px'}}>S.No</th>
-                    <th scope="col" className="" style={{padding:'20px'}}>Title</th>
-                    <th scope="col" style={{padding:'20px'}}>Openings</th>
-                    <th scope="col" style={{padding:'20px'}}> Experience</th>
-                    <th scope="col" style={{padding:'20px'}}>Requirements</th>
+                    <th
+                      scope="col"
+                      className="text-center "
+                      style={{ padding: "20px" }}
+                    >
+                      S.No
+                    </th>
+                    <th scope="col" className="" style={{ padding: "20px" }}>
+                      Title
+                    </th>
+                    <th scope="col" style={{ padding: "20px" }}>
+                      Openings
+                    </th>
+                    <th scope="col" style={{ padding: "20px" }}>
+                      {" "}
+                      Experience
+                    </th>
+                    <th scope="col" style={{ padding: "20px" }}>
+                      Requirements
+                    </th>
                     <th>
                       <AddJob onJobAdded={handleJobAdded} />
                     </th>
@@ -372,7 +387,44 @@ const Recruitment = () => {
                 </tbody>
               </table>
             </CustomTabPanel>
-            <CustomTabPanel value={value} index={1}></CustomTabPanel>
+            <CustomTabPanel value={value} index={1}>
+              <table
+                class="table rounded-4 "
+                style={{
+                  borderRadius: "16px",
+                  overflow: "hidden",
+                  boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px",
+                }}
+              >
+                <thead class="table-secondary p-2">
+                  <tr>
+                    <th
+                      className="text-center"
+                      scope="col"
+                      style={{ padding: "20px" }}
+                    >
+                      S.No
+                    </th>
+                    <th scope="col" style={{ padding: "20px" }}>
+                      Title
+                    </th>
+                    {/* <th style={{padding:'20px'}}>Email</th> */}
+                    <th style={{ padding: "20px" }}>Attendance</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data &&
+                    data.map((application, index) => (
+                      <tr key={application.id}>
+                        <td className="text-center">{index + 1}</td>
+                        <td>{application.title}</td>
+                        {/* <td>{item.email}</td> */}
+                        <td> <PdfViewer jobId={application.id} /> </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </CustomTabPanel>
           </Box>
         </div>
       </main>

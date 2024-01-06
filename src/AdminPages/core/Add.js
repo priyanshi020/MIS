@@ -52,7 +52,7 @@ function AddUser({ onUserAdded }) {
   return (
     <div className="container">
       <button
-        className="btn btn-dark btn-lg w-100"
+        className="btn btn-dark btn-sm-3 w-100"
         onClick={handleClickOpen}
         type="submit"
         style={{

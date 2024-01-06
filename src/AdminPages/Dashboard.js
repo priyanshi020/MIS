@@ -152,10 +152,10 @@ const Dashboard = () => {
       <Sidebar />
       <main className="" style={{ backgroundColor: "#F0F5FD" }}>
         <div className="m-5">
-          <div className="col-md-12 ">
-            <div className="d-flex justify-content-between mb-3">
-              <h2 className="mb-3 col-md-2">DASHBOARD</h2>
-            </div>
+         
+            
+              <h2 className="m-3 pt-3 pb-3">DASHBOARD</h2>
+           
             <div className="d-flex">
               <div className=" col-md-3 ">
                 <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
@@ -274,7 +274,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-          </div>
+          
           <div className="container pt-5">
             <table
               class="table  "

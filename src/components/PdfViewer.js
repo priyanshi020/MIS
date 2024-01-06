@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { saveAs } from 'file-saver';
 
-const PdfViewer = () => {
+const PdfViewer = ({jobId}) => {
+  const [open,setOpen]=useState(false);
   const [applications, setApplications] = useState([]);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/bytesfarms/resume/get?jobPositionId=43');
+        const response = await fetch(`http://localhost:8080/bytesfarms/resume/get?jobPositionId=${jobId}`);
         const data = await response.json();
         setApplications(data);
       } catch (error) {
