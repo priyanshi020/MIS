@@ -24,6 +24,8 @@ const Recruitment1 = () => {
       .get("http://localhost:8080/bytesfarms/recruitment/positions")
       .then((response) => {
         setPositions(response.data);
+        const jobPositionId=response.data.id;
+        localStorage.setItem('jobPositionId', jobPositionId.toString());
       })
       .catch((error) => {
         console.error("Error fetching data:", error.message);
@@ -31,17 +33,18 @@ const Recruitment1 = () => {
   };
 
   return (
-    <div style={{backgroundColor:'#F0F5FD'}}>
+    <div >
       <Sidebar1 />
-      <main className="m-5" >
-        <h3 className="m-3">Open Positions</h3>
+      <main className="" style={{backgroundColor:'#F0F5FD'}} >
+        <div className="m-5">
+        <h3 className="m-3 pt-3 pb-3">Open Positions</h3>
         <div className="container">
-          <div className="row rounded-4 ">
+          <div className="row  " >
             {positions.map((position) => (
-              <div key={position.id} className="col-md-4 p-2">
-                <FixedHeightCard>
+              <div key={position.id} className="col-md-4 p-2 ">
+                <FixedHeightCard >
                 
-                  <div className="d-flex flex-column grid gap-3">
+                  <div className="d-flex flex-column grid gap-3  ">
                     <div
                       className="d-flex col-md-12 "
                       style={{ textAlign: "left" }}
@@ -51,7 +54,7 @@ const Recruitment1 = () => {
                         <Typography
                           variant="body2"
                           color=""
-                          style={{ fontSize: "20px", fontWeight: "bold" }}
+                          style={{ fontSize: "18px", fontWeight: "bold" }}
                         >
                           {position.title}
                         </Typography>
@@ -65,8 +68,8 @@ const Recruitment1 = () => {
 
                     </div>
 
-                    <div className="d-flex col-md-12 grid gap-4">
-                      <div className="col-md-3 p-0">
+                    <div className="d-flex justify-content-around col-md-12 grid gap-2" style={{marginLeft:'22px'}}>
+                      <div className="col-md-4 p-0">
                         <Button
                           style={{
                             fontSize: "10px",
@@ -79,7 +82,7 @@ const Recruitment1 = () => {
                           Full Time
                         </Button>
                       </div>
-                      <div className="col-md-3 p-0">
+                      <div className="col-md-4 p-0">
                         <Button
                           style={{
                             fontSize: "10px",
@@ -92,7 +95,7 @@ const Recruitment1 = () => {
                           On-Site
                         </Button>
                       </div>
-                      <div className="col-md-3 p-0">
+                      <div className="col-md-4 p-0">
                         <Button
                           style={{
                             fontSize: "10px",
@@ -106,7 +109,7 @@ const Recruitment1 = () => {
                         </Button>
                       </div>
                     </div>
-                    <div className="d-flex col-md-11 " style={{height:'100px'}}>
+                    <div className="d-flex col-md-11 " style={{height:'120px',marginLeft:'19px'}}>
                       <Typography
                         variant="body2"
                         color="text.secondary"
@@ -116,14 +119,14 @@ const Recruitment1 = () => {
                       </Typography>
                     </div>
                     <div className="d-flex justify-content-between">
-                   <div className="ml-2">
+                   <div className="ml-2 mt-2">
                         <Button
                         variant="contained"
                         style={{
                           fontWeight: 'bold',
-                          fontSize: "9px",
+                          fontSize: "8px",
                           color: "black",
-                          background: "lightgray",
+                          background: "#F0F5FD",
                           borderRadius: "30px",
                           marginTop: "10px",
                         }}
@@ -197,6 +200,7 @@ const Recruitment1 = () => {
             </div>
           ))}
         </div> */}
+        </div>
       </main>
     </div>
   );

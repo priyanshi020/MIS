@@ -219,8 +219,9 @@ const TimeTracker = () => {
   return (
     <>
       <Sidebar1 />
-      <main className="m-5" style={{ backgroundColor: "#F0F5FD" }}>
-        <h3 className="m-3">TIME TRACKER</h3>
+      <main className="" style={{ backgroundColor: "#F0F5FD" }}>
+        <div className="m-5">
+        <h3 className="m-5">TIME TRACKER</h3>
         <div className=" d-flex justify-content-start">
           <Box sx={{ minWidth: 120 }}>
             <FormControl
@@ -374,9 +375,22 @@ const TimeTracker = () => {
                 {task.status}
               </button>
               <button
+        variant="outlined"
+        onClick={() => handleStatusUpdate(index)}
+        id="addbutton"
+        className="btn btn-primary btn-sm-3 rounded-3  "
+        style={{ backgroundColor: "#1B1A47" }}
+        type="button"
+        title="Add"
+      >
+        {/* <i className="fa fa-table"></i> */}
+        Apply Leave
+      </button>
+              <button
                 type="button"
                 className="btn btn-outline-primary btn-lg font-weight-bold"
                 onClick={() => handleStatusUpdate(index)}
+                style={{ backgroundColor: "#1B1A47" }}
               >
                 Submit
               </button>
@@ -432,6 +446,7 @@ const TimeTracker = () => {
             </li>
           ))}
         </ul>
+        </div>
       </main>
     </>
   );

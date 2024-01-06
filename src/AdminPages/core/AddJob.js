@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -14,7 +14,6 @@ function AddJob({ onJobAdded }) {
   const [experience, setExperience] = useState(0);
   const [requirements, setRequirements] = useState("");
   const [data, setData] = useState([]);
-
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,13 +31,13 @@ function AddJob({ onJobAdded }) {
     };
 
     try {
-      // Add the job
-      const response = await axios.post("http://localhost:8080/bytesfarms/recruitment/positions/add", dataToAdd);
+      const response = await axios.post(
+        "http://localhost:8080/bytesfarms/recruitment/positions/add",
+        dataToAdd
+      );
       console.log("Job added successfully:", response.data);
 
-      // Notify the parent component about the added job
       onJobAdded(response.data);
-
     } catch (error) {
       console.error("Error adding job:", error.message);
     }

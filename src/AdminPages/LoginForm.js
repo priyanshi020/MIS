@@ -116,7 +116,7 @@ export default function Mus() {
       }}
     >
        <ToastContainer />
-      <div className="container  py-5 h-100">
+      <div className="container  py-5 h-25" style={{overflow:'hidden'}}>
         <div className="row d-flex justify-content-center align-items-center h-100 ">
           <div className="col-12 col-md-8 col-lg-6 col-xl-5  ">
             <div
@@ -136,7 +136,7 @@ export default function Mus() {
                     </h4>
                   </div>
                   <Box sx={{ width: "100%" }}>
-                    <Box
+                    {/* <Box
                       sx={{
                         display: "flex",
                         justifyContent: "center",
@@ -162,9 +162,9 @@ export default function Mus() {
                       >
                         <Tab label="ADMIN" {...a11yProps(0)} />
                         <Tab label="USER" {...a11yProps(1)} />
-                        {/* <Tab label='GUEST' {...a11yProps(2)}/> */}
+                       
                       </Tabs>
-                    </Box>
+                    </Box> */}
                     <CustomTabPanel value={value} index={0}>
                       <form onSubmit={handleSubmit}>
                         <div className="form-outline form-black mb-4 d-flex flex-column align-items-start">
@@ -177,13 +177,13 @@ export default function Mus() {
                           <input
                             type="email"
                             id="typeEmailX"
-                            placeholder="example@gmail.com"
+                            placeholder="Enter Your Email"
                             className="form-control form-control-md"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                           />
                         </div>
-                        <div className="form-outline form-black  d-flex flex-column align-items-start">
+                        <div className="form-outline form-black mb-5 d-flex flex-column align-items-start">
                           <label
                             className="form-label text-dark mb-2"
                             htmlFor="typePasswordX"
@@ -209,11 +209,11 @@ export default function Mus() {
                             ></i>
                           </div>
                         </div>
-                        <p className="small mb-5 pb-lg-2 text-end">
+                        {/* <p className="small mb-5 pb-lg-2 text-end">
                           <a className="text-dark-50" href="#!">
                             Forgot password?
                           </a>
-                        </p>
+                        </p> */}
                         <button
                           className="btn btn-dark btn-lg w-50"
                           type="submit"

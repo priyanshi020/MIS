@@ -70,7 +70,7 @@ const Sidebar1 = () => {
                 <FontAwesomeIcon icon={faCalendar} className="fa-fw me-3" />
                 <span>Leave Tracker</span>
               </Link>
-              <Link to="/user-time-tracker" className="p-2 ripple active bg">
+              <Link to="/time" className="p-2 ripple active bg">
                 <FontAwesomeIcon icon={faBuilding} className="fa-fw me-3" />
                 <span>Time Tracker</span>
               </Link>
@@ -81,10 +81,11 @@ const Sidebar1 = () => {
               </a>
               {/* <a className="text-white text-decoration-none font-weight-500 cursor-pointer mt-auto">LOGOUT</a> */}
             </div>
-            <div className="list-group list-group-flush " style={{marginTop:'300px'}}>
+            <div className="list-group list-group-flush " style={{marginTop:'355px'}}>
             <Link to="/" className="p-2 m-2 ripple active bg">
                 {/* <FontAwesomeIcon icon={faBuilding} className="fa-fw me-3" /> */}
-                <span>LOG OUT</span>
+                <img src="/assets/logout-icon.png" alt='logout'/>
+                <span className="ml-1">LOG OUT</span>
               </Link>
             </div>
           </div>
@@ -144,9 +145,7 @@ const Sidebar1 = () => {
 
       <main style={{ backgroundColor:'#F4F7Fc'}}>
       <div className="container  ">
-          {/* Your Content Here */}
-         
-          {/* Add more cards or content as needed */}
+          {/* content */}
         </div>
       </main>
     </>

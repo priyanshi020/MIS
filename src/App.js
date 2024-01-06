@@ -19,6 +19,7 @@ import Time from './AdminPages/Time';
 import Recruitment2 from './components/Recruitment2';
 import LoginGuest from './components/LoginGuest';
 import Mus from './components/Mus';
+import PdfViewer from './components/PdfViewer';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
     
     <Router>
       <Routes>
+        <Route path ='/adi' element={<PdfViewer/>}/>
         <Route path='/log' element={<LoginGuest/>}/>
         <Route path='/' element={<LoginForm/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>

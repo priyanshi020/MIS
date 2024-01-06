@@ -72,7 +72,6 @@ const TimeTracker = () => {
   const handleTimeInputChange = (event) => {
     let enteredTime = event.target.value;
 
-    // Convert 12-hour time to 24-hour time
     const date = new Date("2000-01-01 " + enteredTime);
     const formattedTime = date.toLocaleTimeString("en-US", { hour12: false });
 
@@ -98,9 +97,7 @@ const TimeTracker = () => {
       setTimeInput("");
       setStatusInput("");
 
-      // Add a new timer for the new task
       setTimers((prevTimers) => [...prevTimers, false]);
-      // Add a new elapsed time for the new task
       setElapsedTimes((prevElapsedTimes) => [...prevElapsedTimes, 0]);
     }
   };
@@ -150,7 +147,6 @@ const TimeTracker = () => {
       status: taskToSubmit.status.toUpperCase(),
     };
 
-    // Perform your submission logic here (e.g., API call)
     fetch(`http://localhost:8080/bytesfarms/tasks/create?userId=${userId}`, {
       method: "POST",
       headers: {
@@ -161,25 +157,20 @@ const TimeTracker = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("API response:", data);
-        // Handle the API response as needed
       })
       .catch((error) => {
         console.error("API error:", error);
-        // Handle the API error
       });
 
-    // Remove the submitted task from the tasks array
     const updatedTasks = tasks.filter((_, i) => i !== index);
     setTasks(updatedTasks);
 
-    // Remove the corresponding timer
     setTimers((prevTimers) => {
       const newTimers = [...prevTimers];
       newTimers.splice(index, 1);
       return newTimers;
     });
 
-    // Remove the corresponding elapsed time
     setElapsedTimes((prevElapsedTimes) => {
       const newElapsedTimes = [...prevElapsedTimes];
       newElapsedTimes.splice(index, 1);
@@ -208,63 +199,63 @@ const TimeTracker = () => {
     <>
       <Sidebar1 />
       <main className="" style={{ backgroundColor: "#F0F5FD" }}>
-        <div className='m-5'>
-        <h3 className="mb-3">TIME TRACKER</h3>
-        <div className=" d-flex justify-content-start">
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl
-              sx={{ width: 180, "& .MuiInputBase-root": { height: "46px" } }}
-            >
-              <InputLabel id="demo-simple-select-label">Project</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={project}
-                label="Age"
-                onChange={handleProjectChange}
+        <div className="m-5">
+          <h3 className="m-3 pt-3 pb-3">TIME TRACKER</h3>
+          <div className=" d-flex justify-content-start">
+            <Box sx={{ minWidth: 120 }}>
+              <FormControl
+                sx={{ width: 180, "& .MuiInputBase-root": { height: "46px" } }}
               >
-                <MenuItem value={10}>Continuum</MenuItem>
-                <MenuItem value={20}>Nexum</MenuItem>
-                <MenuItem value={30}>DMC</MenuItem>
-                <MenuItem value={40}>CargoSprint</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+                <InputLabel id="demo-simple-select-label">Project</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={project}
+                  label="Age"
+                  onChange={handleProjectChange}
+                >
+                  <MenuItem value={10}>Continuum</MenuItem>
+                  <MenuItem value={20}>Nexum</MenuItem>
+                  <MenuItem value={30}>DMC</MenuItem>
+                  <MenuItem value={40}>CargoSprint</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
 
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl
-              sx={{
-                width: 180,
-                marginLeft: 4,
-                "& .MuiInputBase-root": { height: "46px" },
-              }}
-            >
-              <InputLabel id="demo-simple-select-label">Role</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={role}
-                label="Age"
-                onChange={handleRoleChange}
+            <Box sx={{ minWidth: 120 }}>
+              <FormControl
+                sx={{
+                  width: 180,
+                  marginLeft: 4,
+                  "& .MuiInputBase-root": { height: "46px" },
+                }}
               >
-                <MenuItem value={10}>Frontend</MenuItem>
-                <MenuItem value={20}>Backend</MenuItem>
-                <MenuItem value={30}>Salesforce</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+                <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={role}
+                  label="Age"
+                  onChange={handleRoleChange}
+                >
+                  <MenuItem value={10}>Frontend</MenuItem>
+                  <MenuItem value={20}>Backend</MenuItem>
+                  <MenuItem value={30}>Salesforce</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
 
-          {/* tasklist */}
-          <form className="d-flex   ml-5 mb-5">
-            <TextField
-              id="standard-basic"
-              label="Your Task"
-              variant="standard"
-              value={taskInput}
-              onChange={handleTaskInputChange}
-            />
+            {/* tasklist */}
+            <form className="d-flex   ml-5 mb-5">
+              <TextField
+                id="standard-basic"
+                label="Your Task"
+                variant="standard"
+                value={taskInput}
+                onChange={handleTaskInputChange}
+              />
 
-            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["TimeField"]}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["TimeField"]}>
@@ -287,151 +278,156 @@ const TimeTracker = () => {
               </DemoContainer>
             </LocalizationProvider> */}
 
-            <div className="form-outline flex-fill ml-5">
-              <input
-                type="time"
-                placeholder="Expected Time"
-                id="form3"
-                className="form-control form-control-lg"
-                value={timeInput}
-                onChange={handleTimeInputChange}
-              />
-            </div>
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl
-                sx={{
-                  width: 180,
-                  marginLeft: 4,
-                  "& .MuiInputBase-root": { height: "46px" },
-                }}
-              >
-                <InputLabel id="demo-simple-select-label"> Status</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={statusInput}
-                  label="Age"
-                  onChange={handleStatusInputChange}
+              <div className="form-outline flex-fill ml-5">
+                <input
+                  type="time"
+                  placeholder="Expected Time"
+                  id="form3"
+                  className="form-control form-control-lg"
+                  value={timeInput}
+                  onChange={handleTimeInputChange}
+                />
+              </div>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl
+                  sx={{
+                    width: 180,
+                    marginLeft: 4,
+                    "& .MuiInputBase-root": { height: "46px" },
+                  }}
                 >
-                  <MenuItem >Started</MenuItem>
-                  <MenuItem >In Progress</MenuItem>
-                  <MenuItem >Completed</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-            {/* <div className="form-outline flex-fill ml-2">
-              <select
-                id="statusInput"
-                placeholder="status"
-                className="form-control form-control-lg"
-                value={statusInput}
-                onChange={handleStatusInputChange}
-              >
-                <option>in progress</option>
-                <option>started</option>
-                <option>completed</option>
-              </select>
-            </div> */}
-            <Button
-            type="submit"
-              onClick={handleAddTask}
-              className=" text-white ml-5"
-              style={{ backgroundColor: "#1B1A47", height: "46px" , width:'200px' }}
-            >
-              Add
-            </Button>
-            {/* <button
-              type="submit"
-              className="btn btn-primary btn-md ms-3"
-              onClick={handleAddTask}
-            >
-              Add
-            </button> */}
-          </form>
-        </div>
-        <ul className="list-group mb-0">
-          {tasks.map((task, index) => (
-            <li
-              key={index}
-              className="list-group-item d-flex justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom rounded-0 mb-2"
-            >
-              <div className="d-flex align-items-center">
-                <h6>{task.task}</h6>
-              </div>
-              <h6 className="text-center">{task.time}</h6>
-              <div className="text-center">
-                {formatTime(elapsedTimes[index])} Hrs
-              </div>
-              <button
-                onClick={() => handleButtonClick(index)}
-                className={timers[index] ? "checkout-button" : "checkin-button"}
-              >
-                {timers[index] ? "Timer Off" : "Timer On"}
-              </button>
-              <button
-                type="button"
-                className={`btn ${
-                  task.status === "in progress"
-                    ? "btn-outline-success"
-                    : task.status === "started"
-                    ? "btn-outline-warning"
-                    : "btn-outline-danger"
-                }`}
-                style={{ minWidth: "100px" }}
-              >
-                {task.status}
-              </button>
-              <button
-                type="button"
-                className="btn btn-outline-primary btn-lg font-weight-bold"
-                onClick={() => handleSubmit(index)}
-              >
-                Submit
-              </button>
-              <IconButton
-                aria-haspopup="true"
-                onClick={(event) => handleMenuClick(event, index)}
-              >
-                <MoreVertIcon />
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-              >
-                <MenuItem>Edit</MenuItem>
-                <MenuItem onClick={() => handleRemoveTask(index)}>
-                  Delete
-                </MenuItem>
-              </Menu>
-              <Dialog open={open} onClose={handleClose} className="p-5 "  fullWidth
-          maxWidth="sm" >
-                <DialogContent>
-                  <TextField
-                    id="role"
-                    select
-                    label="Role"
-                    fullWidth
-                    variant="standard"
-                    value={role}
+                  <InputLabel id="demo-simple-select-label"> Status</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={statusInput}
+                    label="Age"
+                    onChange={handleStatusInputChange}
                   >
+                    <MenuItem>Started</MenuItem>
                     <MenuItem>In Progress</MenuItem>
                     <MenuItem>Completed</MenuItem>
-                  </TextField>
-                </DialogContent>
-                <DialogActions className="justify-content-start p-3">
-                  <Button
-                    className=" text-white w-25 p-2"
-                    style={{ backgroundColor: "#1B1A47" }}
-                  >
-                    Update
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </li>
-          ))}
-        </ul></div>
+                  </Select>
+                </FormControl>
+              </Box>
+
+              <Button
+                type="submit"
+                onClick={handleAddTask}
+                className=" text-white ml-5"
+                style={{
+                  backgroundColor: "#1B1A47",
+                  height: "46px",
+                  width: "200px",
+                }}
+              >
+                Add
+              </Button>
+            </form>
+          </div>
+          <ul className="list-group mb-0">
+            {tasks.map((task, index) => (
+              <li
+                key={index}
+                className="list-group-item d-flex justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom rounded-0 mb-2"
+              >
+                <div className="d-flex align-items-center">
+                  <h6>{task.task}</h6>
+                </div>
+                <h6 className="text-center">{task.time}</h6>
+                <div className="text-center">
+                  {formatTime(elapsedTimes[index])} Hrs
+                </div>
+                <button
+                  onClick={() => handleButtonClick(index)}
+                  className={
+                    timers[index] ? "checkout-button" : "checkin-button"
+                  }
+                >
+                  {timers[index] ? "Timer Off" : "Timer On"}
+                </button>
+                <button
+                  type="button"
+                  className={`btn ${
+                    task.status === "in progress"
+                      ? "btn-outline-success"
+                      : task.status === "started"
+                      ? "btn-outline-warning"
+                      : "btn-outline-danger"
+                  }`}
+                  style={{ minWidth: "100px" }}
+                >
+                  {task.status}
+                </button>
+                <Button
+                type="submit"
+                onClick={() => handleSubmit(index)}
+                className=" text-white ml-5"
+                style={{
+                  backgroundColor: "#1B1A47",
+                  height: "46px",
+                  width: "100px",
+                }}
+              >
+                Submit
+              </Button>
+                {/* <button
+                  type="button"
+                  className="btn btn-outline-primary btn-lg font-weight-bold"
+                  onClick={() => handleSubmit(index)}
+                >
+                  Submit
+                </button> */}
+                <IconButton
+                  aria-haspopup="true"
+                  onClick={(event) => handleMenuClick(event, index)}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                >
+                  <MenuItem>Edit</MenuItem>
+                  <MenuItem onClick={() => handleRemoveTask(index)}>
+                    Delete
+                  </MenuItem>
+                </Menu>
+                <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  className="p-5 "
+                  fullWidth
+                  maxWidth="sm"
+                >
+                  <DialogContent>
+                    <TextField
+                      id="role"
+                      select
+                      label="Role"
+                      fullWidth
+                      variant="standard"
+                      value={role}
+                    >
+                      <MenuItem>In Progress</MenuItem>
+                      <MenuItem>Completed</MenuItem>
+                    </TextField>
+                  </DialogContent>
+                  <DialogActions className="justify-content-start p-3">
+                    <Button
+                      className=" text-white w-25 p-2"
+                      style={{ backgroundColor: "#1B1A47" }}
+                    >
+                      Update
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </li>
+            ))}
+          </ul>
+        </div>
       </main>
     </>
   );

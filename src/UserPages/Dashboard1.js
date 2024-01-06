@@ -35,7 +35,8 @@ const Dashboard1 = () => {
   return (
     <>
       <Sidebar1 />
-      <main style={{ marginLeft: "30px", backgroundColor: "#F0F5FD" }}> 
+      <main style={{ backgroundColor: "#F0F5FD" }}> 
+      <div className="m-5">
         <h3 className="m-3 pt-3 pb-3">DASHBOARD</h3>
         
         {/* Timer Card */}
@@ -44,9 +45,30 @@ const Dashboard1 = () => {
             <Timer />
           </div>
 
+          
+
+
+
           {/* Calender  card */}
           <div className="col col-md-4">
             <Calender />
+          </div>
+
+          {/* User Profile Card */}
+          <div className="col col-md-4">
+            <div className="card mb-4 rounded-3 shadow shadow-lg " style={{height:'384px'}}>
+              <div className="card-body text-center mb-5">
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                  alt="avatar"
+                  className="rounded-circle img-fluid "
+                  style={{ width: "150px" }}
+                />
+                {/* <h5 className="my-3">{userName}</h5> */}
+                <h5 className="my-3 mt-5 " style={{fontSize:'20px'}} >{userName}</h5>
+                <p className="text-muted mb-1 text-lg" style={{fontSize:'20px'}}>Full Stack Developer</p>
+              </div>
+            </div>
           </div>
 
           {/* Tasklist */}
@@ -54,27 +76,11 @@ const Dashboard1 = () => {
             <TaskList />
           </div>
 
-          {/* User Profile Card */}
-          <div className="col col-md-4">
-            <div className="card mb-4 rounded-4 shadow shadow-lg ">
-              <div className="card-body text-center">
-                <img
-                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-                  alt="avatar"
-                  className="rounded-circle img-fluid"
-                  style={{ width: "150px" }}
-                />
-                {/* <h5 className="my-3">{userName}</h5> */}
-                <h5 className="my-3">{userName}</h5>
-                <p className="text-muted mb-1">Full Stack Developer</p>
-              </div>
-            </div>
-          </div>
-
           {/* Meeting */}
           <div className="col col-md-6">
             <Meeting />
           </div>
+        </div>
         </div>
       </main>
     </>

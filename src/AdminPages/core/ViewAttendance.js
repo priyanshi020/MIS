@@ -21,7 +21,9 @@ function ViewAttendance({ userId }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/bytesfarms/timesheet/totalhours?userId=${userId}`);
+        const response = await axios.get(
+          `http://localhost:8080/bytesfarms/timesheet/totalhours?userId=${userId}`
+        );
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error.message);
@@ -39,12 +41,19 @@ function ViewAttendance({ userId }) {
           onClick={handleClickOpen}
           id="addbutton"
           className="btn btn-primary btn-sm-3 rounded-3 "
+          style={{ backgroundColor: "#1B1A47", color: "white" }}
           type="button"
           title="View Attendance"
         >
           View Attendance
         </button>
-        <Dialog open={open} onClose={handleClose} className="p-5" fullWidth maxWidth="lg">
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          className="p-5"
+          fullWidth
+          maxWidth="lg"
+        >
           <DialogTitle style={{ fontSize: "25px", fontWeight: "600" }}>
             Attendance List
           </DialogTitle>
@@ -72,7 +81,7 @@ function ViewAttendance({ userId }) {
                         <td>{item.year}</td>
                         <td>{item.checkInTime}</td>
                         <td>{item.checkOutTime}</td>
-                        {/* Display all break starts in a separate column */}
+
                         <td>
                           {item.breaks.map((breakItem, index) => (
                             <React.Fragment key={breakItem.id}>
@@ -81,7 +90,7 @@ function ViewAttendance({ userId }) {
                             </React.Fragment>
                           ))}
                         </td>
-                        {/* Display all break ends in a separate column */}
+
                         <td>
                           {item.breaks.map((breakItem, index) => (
                             <React.Fragment key={breakItem.id}>
@@ -103,7 +112,11 @@ function ViewAttendance({ userId }) {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} className="text-white" style={{ backgroundColor: "#1B1A47" }}>
+            <Button
+              onClick={handleClose}
+              className="text-white"
+              style={{ backgroundColor: "#1B1A47" }}
+            >
               Cancel
             </Button>
           </DialogActions>
@@ -114,9 +127,3 @@ function ViewAttendance({ userId }) {
 }
 
 export default ViewAttendance;
-
-
-
-
-
-

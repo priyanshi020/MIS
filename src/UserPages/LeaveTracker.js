@@ -85,9 +85,9 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
       <Sidebar1 />
       <main className="" style={{backgroundColor:'#F0F5FD'}}>
         <div className="m-5">
-        <h3 className="m-3">Leaves</h3>
-        <div className="row ">
-          <div className="col-md-2" style={{ width: "225px" }}>
+        <h3 className="m-3 pt-3 pb-3">Leaves</h3>
+        <div className="d-flex justify-content-around ">
+          <div className="col-md-3" style={{ width: "225px" }}>
             <div
               className="card m-2 p-2 rounded-4 shadow shadow-lg"
               style={{ maxWidth: "280px" }}
@@ -107,7 +107,7 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
               </div>
             </div>
           </div>
-          <div className="col-md-2" style={{ width: "225px" }}>
+          <div className="col-md-3" style={{ width: "225px" }}>
             <div
               className="card m-2 p-2 rounded-4 shadow shadow-lg"
               style={{ maxWidth: "280px" }}
@@ -131,7 +131,7 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
               </div>
             </div>
           </div>
-          <div className="col-md-2" style={{ width: "225px" }}>
+          <div className="col-md-3" style={{ width: "225px" }}>
             <div
               className="card m-2  p-2 rounded-4 shadow shadow-lg"
               style={{ maxWidth: "280px" }}
@@ -151,7 +151,7 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
               </div>
             </div>
           </div>
-          <div className="col-md-2" style={{ width: "225px" }}>
+          <div className="col-md-3" style={{ width: "225px" }}>
             <div
               className="card m-2 p-2 rounded-4 shadow shadow-lg"
               style={{ maxWidth: "280px" }}
@@ -174,7 +174,7 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
           <div className="col-md-3">
             <div
               className="card m-2 p-2 rounded-4 shadow shadow-lg"
-              style={{ maxWidth: "280px" }}
+              style={{ maxWidth: "250px" }}
             >
               <div className="row g-0">
                 <div className="text-center mt-3">

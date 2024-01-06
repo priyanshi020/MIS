@@ -75,16 +75,16 @@ const Sidebar = () => {
                 <span>Time Tracker</span>
               </Link>
 
-              <a href="#" className="p-2 ripple active bg">
+              {/* <a href="#" className="p-2 ripple active bg">
                 <FontAwesomeIcon icon={faUsers} className="fa-fw me-3" />
                 <span>Onboarding and Exit</span>
-              </a>
+              </a> */}
               {/* <a className="text-white text-decoration-none font-weight-500 cursor-pointer mt-auto">LOGOUT</a> */}
             </div>
-            <div className="list-group list-group-flush " style={{marginTop:'300px'}}>
+            <div className="list-group list-group-flush " style={{marginTop:'390px'}}>
             <Link to="/" className="p-2 m-2 ripple active bg">
-                {/* <FontAwesomeIcon icon={faBuilding} className="fa-fw me-3" /> */}
-                <span>LOG OUT</span>
+            <img src="/assets/logout-icon.png" alt='logout'/>
+                <span className="ml-1">LOG OUT</span>
               </Link>
             </div>
           </div>

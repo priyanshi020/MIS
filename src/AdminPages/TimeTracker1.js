@@ -32,11 +32,11 @@ const TimeTracker1 = () => {
          <table class="table rounded-4 " style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 50px'}}>
             <thead class="table-secondary p-2">
               <tr>
-                <th  className='text-center' scope="col">S.No</th>
-                <th scope="col">Name</th>
+                <th  className='text-center' scope="col" style={{padding:'20px'}}>S.No</th>
+                <th scope="col" style={{padding:'20px'}}>Name</th>
                 
-                <th scope="col">Email Id</th>
-              <th>Task List</th>
+                <th scope="col" style={{padding:'20px'}}>Email Id</th>
+              <th style={{padding:'20px'}}>Task List</th>
 
               
               </tr>

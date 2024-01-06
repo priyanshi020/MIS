@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -8,10 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import AddUser from "../components/AddUser";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
-import { faUsers } from "@fortawesome/free-solid-svg-icons";
+
 import axios from "axios";
 import { useCallback } from "react";
 
@@ -22,32 +18,27 @@ const Dashboard = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
-  console.log("selectedItemId0",selectedItemId)
+  console.log("selectedItemId0", selectedItemId);
 
-  const[EditName,setEditName]=useState("")
-  const handleName =(e)=>{
-     setEditName(e.target.value);
-  }
-  const[EditEmail,setEditEmail]=useState("")
-  const handleEmail =(e)=>{
-     setEditEmail(e.target.value);
-  }
+  const [EditName, setEditName] = useState("");
+  const handleName = (e) => {
+    setEditName(e.target.value);
+  };
+  const [EditEmail, setEditEmail] = useState("");
+  const handleEmail = (e) => {
+    setEditEmail(e.target.value);
+  };
 
-  
   const [editData, setEditData] = useState({
     id: null,
     name: "",
-   
     email: "",
-   
   });
 
   const handleUserAdded = (newUser) => {
-    // Update the data state by adding the new job
     setData((prevData) => [...prevData, newUser]);
     fetchData();
   };
-
 
   useEffect(() => {
     fetchData();
@@ -64,48 +55,40 @@ const Dashboard = () => {
       });
   };
 
-
-
   const handleMenuClick = (event, itemId) => {
     console.log("Item ID selected for editing:", itemId);
     setAnchorEl(event.currentTarget);
     setSelectedItemId(itemId);
-  
-    // Find the selected item in the existing data
+
     const selectedItem = data.find((item) => item.id === itemId);
-  
+
     if (selectedItem) {
       setEditData({
         id: selectedItem.id,
         name: selectedItem.username,
         email: selectedItem.email,
-      
       });
       setEditName(selectedItem.username);
       setEditEmail(selectedItem.email);
-      setOpen(true); // Open the dialog for editing
+      setOpen(true);
     } else {
       console.error("Item not found for editing.");
     }
   };
-  
 
   const handleMenuClose = () => {
     setAnchorEl(null);
     setSelectedItemId(null);
   };
 
-  const handleEditClick = useCallback((itemId) => () => {
-    console.log("Edit clicked for item with ID:", itemId);
-    setSelectedItemId(itemId);
-    setOpen(true);
-  }, [handleMenuClose]); 
-
-  
-
-  const handleid=(item)=>{
-    setSelectedItemId(item)
-  }
+  const handleEditClick = useCallback(
+    (itemId) => () => {
+      console.log("Edit clicked for item with ID:", itemId);
+      setSelectedItemId(itemId);
+      setOpen(true);
+    },
+    [handleMenuClose]
+  );
 
   const handleDeleteClick = () => {
     if (!selectedItemId) {
@@ -130,7 +113,6 @@ const Dashboard = () => {
         handleMenuClose();
       });
   };
-  
 
   const handleClose = () => {
     setOpen(false);
@@ -138,7 +120,6 @@ const Dashboard = () => {
       id: null,
       name: "",
       email: "",
-      
     });
   };
 
@@ -146,14 +127,15 @@ const Dashboard = () => {
     const editData = {
       name: EditName,
       email: EditEmail,
-     
     };
 
     axios
-      .put(`http://localhost:8080/bytesfarms/user/update?userId=${selectedItemId}`, editData)
+      .put(
+        `http://localhost:8080/bytesfarms/user/update?userId=${selectedItemId}`,
+        editData
+      )
       .then((response) => {
         console.log("Edit API response:", response.data);
-        // Update the data after successful edit
         fetchData();
       })
       .catch((error) => {
@@ -161,30 +143,33 @@ const Dashboard = () => {
       })
       .finally(() => {
         handleMenuClose();
-        handleClose(); // Close the dialog
+        handleClose(); 
       });
   };
-
 
   return (
     <>
       <Sidebar />
-      <main className="" style={{backgroundColor:'#F0F5FD'}}>
+      <main className="" style={{ backgroundColor: "#F0F5FD" }}>
         <div className="m-5">
-        <div className="col-md-12 ">
-          <div className="d-flex justify-content-between mb-3">
-            <h2 className="mb-3 col-md-2">DASHBOARD</h2>
-           
-          </div>
-          <div className="d-flex">
-          <div className=" col-md-3 ">
-                  <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
-                   <img src='/assets/dashboard/emp.png' alt="emp" className="mr-3" style={{width:'62px'}} />
-                    <div className="d-flex  row">
+          <div className="col-md-12 ">
+            <div className="d-flex justify-content-between mb-3">
+              <h2 className="mb-3 col-md-2">DASHBOARD</h2>
+            </div>
+            <div className="d-flex">
+              <div className=" col-md-3 ">
+                <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
+                  <img
+                    src="/assets/dashboard/emp.png"
+                    alt="emp"
+                    className="mr-3"
+                    style={{ width: "62px",height:'62px' }}
+                  />
+                  <div className="d-flex  row">
                     <span
                       className="d-block mb-2"
                       style={{
-                        fontSize: "32px",
+                        fontSize: "31px",
                         fontWeight: "700",
                         lineHeight: "28px",
                       }}
@@ -192,23 +177,28 @@ const Dashboard = () => {
                       30
                     </span>
                     <p
-                      className="mt-1 mb-2"
-                      style={{ fontSize: '13px' ,fontWeight:'500' }}
+                      className="mt-1 mb-3"
+                      style={{ fontSize: "11px", fontWeight: "500" }}
                     >
                       Number of Employees
                     </p>
-                    </div>
                   </div>
                 </div>
+              </div>
 
-                <div className=" col-md-3 ">
+              <div className=" col-md-3 ">
                 <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
-                   <img src='/assets/dashboard/proj.png' alt="emp" className="mr-3" style={{width:'62px'}} />
-                    <div className="d-flex  row">
+                  <img
+                    src="/assets/dashboard/proj.png"
+                    alt="emp"
+                    className="mr-3"
+                    style={{ width: "60px" ,height:'60px'}}
+                  />
+                  <div className="d-flex  row">
                     <span
                       className="d-block mb-2"
                       style={{
-                        fontSize: "32px",
+                        fontSize: "31px",
                         fontWeight: "700",
                         lineHeight: "28px",
                       }}
@@ -217,17 +207,22 @@ const Dashboard = () => {
                     </span>
                     <p
                       className="mt-1 mb-2"
-                      style={{ fontSize: '14px' ,fontWeight:'500' }}
+                      style={{ fontSize: "14px", fontWeight: "500" }}
                     >
                       Number of Project
                     </p>
-                    </div>
                   </div>
                 </div>
-                <div className=" col-md-3 ">
+              </div>
+              <div className=" col-md-3 ">
                 <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
-                   <img src='/assets/dashboard/pre.png' alt="emp" className="mr-3" style={{width:'62px'}} />
-                    <div className="d-flex  row">
+                  <img
+                    src="/assets/dashboard/pre.png"
+                    alt="emp"
+                    className="mr-3"
+                    style={{ width: "62px",height:'62px' }}
+                  />
+                  <div className="d-flex  row">
                     <span
                       className="d-block mb-2"
                       style={{
@@ -240,17 +235,25 @@ const Dashboard = () => {
                     </span>
                     <p
                       className="mt-1 mb-2"
-                      style={{ fontSize: '14px' ,fontWeight:'500' }}
+                      style={{ fontSize: "14px", fontWeight: "500" }}
                     >
                       Present Today
                     </p>
-                    </div>
                   </div>
                 </div>
-                <div className=" col-md-3 ">
-                <div className="d-flex   p-3  shadow shadow-lg rounded-4 " style={{backgroundColor: "#1B1A47"}}>
-                   <img src='/assets/dashboard/abs.png' alt="emp" className="mr-3" style={{width:'62px'}} />
-                    <div className="d-flex  row">
+              </div>
+              <div className=" col-md-3 ">
+                <div
+                  className="d-flex   p-3  shadow shadow-lg rounded-4 "
+                  style={{ backgroundColor: "#1B1A47" }}
+                >
+                  <img
+                    src="/assets/dashboard/abs.png"
+                    alt="emp"
+                    className="mr-3"
+                    style={{ width: "62px",height:'62px' }}
+                  />
+                  <div className="d-flex  row">
                     <span
                       className="d-block mb-2 text-white"
                       style={{
@@ -263,157 +266,147 @@ const Dashboard = () => {
                     </span>
                     <p
                       className="mt-1 mb-2 text-white"
-                      style={{ fontSize: '14px' ,fontWeight:'500' }}
+                      style={{ fontSize: "14px", fontWeight: "500" }}
                     >
                       Absent Today
                     </p>
-                    </div>
                   </div>
                 </div>
-          
+              </div>
+            </div>
+          </div>
+          <div className="container pt-5">
+            <table
+              class="table  "
+              style={{
+                borderRadius: "16px",
+                overflow: "hidden",
+                boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px",
+              }}
+            >
+              <thead class="table-secondary p-2">
+                <tr>
+                  <th className="text-center" scope="col">
+                    S.No
+                  </th>
+                  <th scope="col">Name</th>
+
+                  <th scope="col">Email Id</th>
+
+                  <th className="text-right " style={{ width: "0px" }}>
+                    <Add onUserAdded={handleUserAdded} />
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item, index) => (
+                  <tr key={item?.id}>
+                    <td className="text-center">{index + 1}</td>
+                    <td>{item && item.username}</td>
+                    <td>{item && item.email}</td>
+                    <td className="text-right">
+                      <IconButton
+                        aria-haspopup="true"
+                        onClick={(event) => handleMenuClick(event, item?.id)}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={Boolean(anchorEl)}
+                        onClose={handleMenuClose}
+                      >
+                        <MenuItem onClick={handleEditClick(item?.id)}>
+                          Edit
+                        </MenuItem>
+                        <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
+                      </Menu>
+                    </td>
+                    <Dialog open={open} onClose={handleClose} className="p-5 ">
+                      <DialogTitle
+                        className="text-center"
+                        style={{ fontSize: "30px", fontWeight: "600" }}
+                      >
+                        Edit
+                      </DialogTitle>
+                      <DialogContent>
+                        <form>
+                          <div class="row ">
+                            <div class="col mb-4">
+                              <div data-mdb-input-init class="form-outline">
+                                <label
+                                  class="form-label fw-bold text-secondary"
+                                  for="form6Example1"
+                                >
+                                  {" "}
+                                  NAME
+                                </label>
+                                <input
+                                  type="text"
+                                  id="form6Example1"
+                                  class="form-control form-control-lg"
+                                  placeholder="Name"
+                                  style={{ fontSize: "16px", color: "#666666" }}
+                                  value={EditName}
+                                  onChange={handleName}
+                                />
+                              </div>
+                            </div>
+                            
+
+                            <div className="">
+                              <div
+                                data-mdb-input-init
+                                class="form-outline mb-4"
+                              >
+                                <label
+                                  class="form-label fw-bold text-secondary"
+                                  for="form6Example1"
+                                >
+                                  {" "}
+                                  EMAIL
+                                </label>
+                                <input
+                                  type="email"
+                                  id="form6Example5"
+                                  class="form-control form-control-lg"
+                                  placeholder="Email"
+                                  style={{ fontSize: "16px", color: "#666666" }}
+                                  value={EditEmail}
+                                  onChange={handleEmail}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      </DialogContent>
+                      <DialogActions className="justify-content-start p-3">
+                        <Button
+                          className=" text-white w-25 p-2"
+                          style={{ backgroundColor: "#1B1A47" }}
+                          onClick={handleEditApiCall}
+                        >
+                          Update
+                        </Button>
+                        <Button
+                          onClick={handleClose}
+                          className="  w-25 p-2 fw-bold"
+                          style={{
+                            color: "#1B1A47",
+                            backgroundColor: "#E7E7E7",
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-        <div className="container pt-5">
-          <table class="table  " style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 50px'}} >
-            <thead class="table-secondary p-2">
-              <tr>
-                <th  className='text-center' scope="col">S.No</th>
-                <th scope="col">Name</th>
-                {/* <th scope="col">Designation</th> */}
-                <th scope="col">Email Id</th>
-              
-
-                <th className="text-right " style={{width:'0px'}}>
-             
-                  <Add onUserAdded={handleUserAdded}/>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-            {data.map((item, index) => (
-    <tr key={item?.id}>
-      <td className="text-center">{index + 1}</td>
-      <td>{item && item.username}</td>
-      <td>{item && item.email}</td>
-      <td className="text-right">
-        <IconButton aria-haspopup="true" onClick={(event) => handleMenuClick(event, item?.id)}>
-          <MoreVertIcon />
-        </IconButton>
-        <Menu
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-        >
-          <MenuItem onClick={handleEditClick(item?.id)}>Edit</MenuItem>
-          <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
-        </Menu>
-      </td>
-                  <Dialog open={open} onClose={handleClose} className="p-5 ">
-                    <DialogTitle
-                      className="text-center"
-                      style={{ fontSize: "30px", fontWeight: "600" }}
-                    >
-                      Edit
-                    </DialogTitle>
-                    <DialogContent>
-                      <form>
-                        <div class="row ">
-                          <div class="col mb-4">
-                            <div data-mdb-input-init class="form-outline">
-                              <label
-                                class="form-label fw-bold text-secondary"
-                                for="form6Example1"
-                              >
-                                {" "}
-                                NAME
-                              </label>
-                              <input
-                                type="text"
-                                id="form6Example1"
-                                class="form-control form-control-lg"
-                                placeholder="Name"
-                                style={{  fontSize: "16px", color: "#666666" }}
-                                // value={editData.name}
-                                // onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-                                value={EditName}
-                                onChange={handleName}
-                              />
-                            </div>
-                          </div>
-                          {/* <div class="col mb-4">
-                            <div data-mdb-input-init class="form-outline">
-                              <label
-                                class="form-label fw-bold text-secondary"
-                                for="form6Example1"
-                              >
-                                {" "}
-                                DESIGNATION
-                              </label>
-                              <input
-                                type="text"
-                                id="form6Example2"
-                                class="form-control form-control-lg"
-                                placeholder="Designation"
-                                style={{  fontSize: "16px", color: "#666666" }}
-                              />
-                            </div>
-                          </div> */}
-                       
-                        <div className="">
-                          <div data-mdb-input-init class="form-outline mb-4">
-                            <label
-                              class="form-label fw-bold text-secondary"
-                              for="form6Example1"
-                            >
-                              {" "}
-                              EMAIL
-                            </label>
-                            <input
-                              type="email"
-                              id="form6Example5"
-                              class="form-control form-control-lg"
-                              placeholder="Email"
-                              style={{  fontSize: "16px", color: "#666666" }}
-                              // value={editData.email}
-                              // onChange={(e) => setEditData({ ...editData, email: e.target.value })}
-                              value={EditEmail}
-                              onChange={handleEmail}
-                            />
-                          </div>
-                          </div>
-                        
-                        </div>
-                      </form>
-                    </DialogContent>
-                    <DialogActions className="justify-content-start p-3">
-                      <Button
-                        className=" text-white w-25 p-2"
-                        style={{ backgroundColor: "#1B1A47" }}
-                        onClick={handleEditApiCall}
-                      >
-                        Update
-                      </Button>
-                      <Button
-                        onClick={handleClose}
-                        className="  w-25 p-2 fw-bold"
-                        style={{ color: "#1B1A47", backgroundColor: "#E7E7E7" }}
-                      >
-                        Cancel
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-
-
-        </div>
-
-        </div>
-        
       </main>
     </>
   );

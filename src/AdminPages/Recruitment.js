@@ -49,7 +49,6 @@ function a11yProps(index) {
   };
 }
 
-
 const Recruitment = () => {
   const [value, setValue] = React.useState(0);
   const [data, setData] = useState([]);
@@ -99,6 +98,8 @@ const Recruitment = () => {
       .get("http://localhost:8080/bytesfarms/recruitment/positions")
       .then((response) => {
         setData(response.data);
+        const jobPositionId=response.data.id;
+        localStorage.setItem('jobPositionId', jobPositionId.toString());
       })
       .catch((error) => {
         console.error("Error fetching data:", error.message);
@@ -216,156 +217,164 @@ const Recruitment = () => {
 
       <main className="" style={{ backgroundColor: "#F0F5FD" }}>
         <div className="m-5">
-        <h3>Recruitment</h3>
-        <Box sx={{ width: "100%" }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              borderBottom: 1,
-              borderColor: "divider",
-            }}
-          >
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="basic tabs example  "
+          <h3>Recruitment</h3>
+          <Box sx={{ width: "100%" }}>
+            <Box
               sx={{
-                "& .MuiTabs-indicator": {
-                  backgroundColor: "orange",
-                },
-                "& .MuiTab-root": {
-                  color: "black !important",
-                  "&:hover": {
-                    color: "orange",
-                  },
-                },
+                display: "flex",
+                justifyContent: "center",
+                borderBottom: 1,
+                borderColor: "divider",
               }}
             >
-              <Tab label="Open Positions" {...a11yProps(0)} />
-              <Tab label="Candidate" {...a11yProps(1)} />
-              {/* <Tab label='GUEST' {...a11yProps(2)}/> */}
-            </Tabs>
-          </Box>
-          <CustomTabPanel value={value} index={0}>
-            <table className="table " style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 50px'}}>
-              <thead className="table-secondary">
-                <tr>
-                  <th scope="col">S.No</th>
-                  <th scope="col">Title</th>
-                  <th scope="col">Openings</th>
-                  <th scope="col"> Experience</th>
-                  <th scope="col">Requirements</th>
-                  <th>
-                    <AddJob onJobAdded={handleJobAdded} />
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => (
-                  <tr key={item.id}>
-                    <td>{index + 1}</td>
-                    <td>{item.title}</td>
-                    <td>{item.openings}</td>
-                    <td>{item.experience}</td>
-                    <td>{item.requirements}</td>
-                    <td>
-                      <IconButton
-                        aria-haspopup="true"
-                        onClick={(event) => handleMenuClick(event, item.id)}
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                      <Menu
-                        anchorEl={anchorEl}
-                        keepMounted
-                        open={Boolean(anchorEl)}
-                        onClose={handleMenuClose}
-                      >
-                        <MenuItem onClick={handleEditClick(item.id)}>
-                          Edit
-                        </MenuItem>
-                        <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
-                      </Menu>
-                    </td>
-                    <Dialog open={open} onClose={handleClose}>
-                      <DialogTitle
-                        style={{ fontSize: "30px", fontWeight: "600" }}
-                      >
-                        Update
-                      </DialogTitle>
-                      <DialogContent>
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="name"
-                          label="Title"
-                          type="text"
-                          fullWidth
-                          variant="standard"
-                          name="name"
-                          value={Edittitle}
-                          onChange={handletitle}
-                        />
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="number"
-                          label="Openings"
-                          type="number"
-                          fullWidth
-                          variant="standard"
-                          name="name"
-                          value={Editopening}
-                          onChange={handleopening}
-                        />
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="number"
-                          label="Experience"
-                          type="number"
-                          fullWidth
-                          variant="standard"
-                          value={Editexperience}
-                          onChange={handleexperience}
-                        />
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="number"
-                          label="Requirement"
-                          type="text"
-                          fullWidth
-                          variant="standard"
-                          value={Editreq}
-                          onChange={handleReq}
-                        />
-                      </DialogContent>
-                      <DialogActions>
-                        <Button
-                          onClick={handleClose}
-                          className="bg-dark text-white"
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          className="bg-dark text-white"
-                          onClick={handleEditApiCall}
-                        >
-                          Edit
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                aria-label="basic tabs example  "
+                sx={{
+                  "& .MuiTabs-indicator": {
+                    backgroundColor: "orange",
+                  },
+                  "& .MuiTab-root": {
+                    color: "black !important",
+                    "&:hover": {
+                      color: "orange",
+                    },
+                  },
+                }}
+              >
+                <Tab label="Open Positions" {...a11yProps(0)} />
+                <Tab label="Candidate" {...a11yProps(1)} />
+                {/* <Tab label='GUEST' {...a11yProps(2)}/> */}
+              </Tabs>
+            </Box>
+            <CustomTabPanel value={value} index={0}>
+              <table
+                className="table "
+                style={{
+                  borderRadius: "16px",
+                  overflow: "hidden",
+                  boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px",
+                }}
+              >
+                <thead className="table-secondary p-2">
+                  <tr>
+                    <th scope="col" className="text-center " style={{padding:'20px'}}>S.No</th>
+                    <th scope="col" className="" style={{padding:'20px'}}>Title</th>
+                    <th scope="col" style={{padding:'20px'}}>Openings</th>
+                    <th scope="col" style={{padding:'20px'}}> Experience</th>
+                    <th scope="col" style={{padding:'20px'}}>Requirements</th>
+                    <th>
+                      <AddJob onJobAdded={handleJobAdded} />
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
-
-          </CustomTabPanel>
-        </Box></div>
+                </thead>
+                <tbody>
+                  {data.map((item, index) => (
+                    <tr key={item.id}>
+                      <td className="text-center">{index + 1}</td>
+                      <td>{item.title}</td>
+                      <td>{item.openings}</td>
+                      <td>{item.experience}</td>
+                      <td>{item.requirements}</td>
+                      <td>
+                        <IconButton
+                          aria-haspopup="true"
+                          onClick={(event) => handleMenuClick(event, item.id)}
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          anchorEl={anchorEl}
+                          keepMounted
+                          open={Boolean(anchorEl)}
+                          onClose={handleMenuClose}
+                        >
+                          <MenuItem onClick={handleEditClick(item.id)}>
+                            Edit
+                          </MenuItem>
+                          <MenuItem onClick={handleDeleteClick}>
+                            Delete
+                          </MenuItem>
+                        </Menu>
+                      </td>
+                      <Dialog open={open} onClose={handleClose}>
+                        <DialogTitle
+                          style={{ fontSize: "30px", fontWeight: "600" }}
+                        >
+                          Update
+                        </DialogTitle>
+                        <DialogContent>
+                          <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            label="Title"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            name="name"
+                            value={Edittitle}
+                            onChange={handletitle}
+                          />
+                          <TextField
+                            autoFocus
+                            margin="dense"
+                            id="number"
+                            label="Openings"
+                            type="number"
+                            fullWidth
+                            variant="standard"
+                            name="name"
+                            value={Editopening}
+                            onChange={handleopening}
+                          />
+                          <TextField
+                            autoFocus
+                            margin="dense"
+                            id="number"
+                            label="Experience"
+                            type="number"
+                            fullWidth
+                            variant="standard"
+                            value={Editexperience}
+                            onChange={handleexperience}
+                          />
+                          <TextField
+                            autoFocus
+                            margin="dense"
+                            id="number"
+                            label="Requirement"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={Editreq}
+                            onChange={handleReq}
+                          />
+                        </DialogContent>
+                        <DialogActions>
+                          <Button
+                            onClick={handleClose}
+                            className="bg-dark text-white"
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            className="bg-dark text-white"
+                            onClick={handleEditApiCall}
+                          >
+                            Edit
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={1}></CustomTabPanel>
+          </Box>
+        </div>
       </main>
     </>
   );

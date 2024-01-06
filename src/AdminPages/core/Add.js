@@ -45,17 +45,6 @@ function AddUser({ onUserAdded }) {
     } catch (error) {
       console.error("Error adding user:", error.message);
     }
-    //   axios.post(loginEndpoint, data)
-    // .then(response => {
-
-    //   console.log('Signup successful:', response.data);
-
-    // })
-    // .catch(error => {
-
-    //   console.error('Signup failed:', error.response.data);
-
-    // });
 
     setOpen(false);
   };

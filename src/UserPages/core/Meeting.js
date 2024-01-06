@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 
 export default function Meeting() {
   return (
-    <List className='shadow shadow-lg' sx={{ width: '130%', borderRadius:'20px', bgcolor: 'background.paper' }}>
+    <List className='shadow shadow-lg' sx={{ width: '135%', borderRadius:'5px', bgcolor: 'background.paper' }}>
         <h4 className='pt-3 text-center'>Meetings</h4>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>

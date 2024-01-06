@@ -112,7 +112,7 @@ const Timer = () => {
   }, []);
 
   return (
-    <div className="card mb-3 shadow shadow-lg" style={{ maxWidth: '400px' }}>
+    <div className="card mb-3 rounded-3 shadow shadow-lg" style={{ maxWidth: '400px',maxHeight:'389px' }}>
       <div className="row g-0">
         <h4 className="pt-3 pb-5 text-center">ATTENDANCE</h4>
         <div className="d-flex justify-content-around">

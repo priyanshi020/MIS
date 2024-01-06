@@ -1,25 +1,27 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { saveAs } from 'file-saver';
 
-const Mus = () => {
-  const [pdfData, setPdfData] = useState(null);
+const PdfViewer = () => {
+  const [applications, setApplications] = useState([]);
+  const storedJobPositionId = localStorage.getItem('jobPositionId');
 
- 
+  // Check if the value is not null or undefined before using it
+  const jobPositionId = storedJobPositionId ? parseInt(storedJobPositionId, 10) : null;
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/bytesfarms/resume/get?jobPositionId=43');
+        const response = await fetch(`http://localhost:8080/bytesfarms/resume/get?jobPositionId=${jobPositionId}`);
         const data = await response.json();
-        setPdfData(data[0].fileData); // Assuming fileData contains the PDF content
+        setApplications(data);
       } catch (error) {
-        console.error('Error fetching PDF data', error);
+        console.error('Error fetching application data', error);
       }
     };
 
     fetchData();
   }, []);
 
-  const downloadPdf = () => {
+  const downloadPdf = (pdfData) => {
     const byteCharacters = atob(pdfData);
     const byteNumbers = new Array(byteCharacters.length);
 
@@ -29,18 +31,26 @@ const Mus = () => {
 
     const byteArray = new Uint8Array(byteNumbers);
     const blob = new Blob([byteArray], { type: 'application/pdf' });
-    saveAs(blob, 'resume.pdf'); // You can change 'resume.pdf' to any desired filename
+    saveAs(blob, 'resume.pdf');
   };
 
   return (
     <div>
-      {/* Your other UI elements */}
-      {pdfData && (
-        <button onClick={downloadPdf}>
-          Download PDF
-        </button>
-      )}
+      {applications.map((application) => (
+        <div key={application.id}>
+          <h2>Job Position: {application.jobPosition.title}</h2>
+          <p>User: {application.user.username}</p>
+          <p>Email: {application.user.email}</p>
+
+          {application.fileData && (
+            <button onClick={() => downloadPdf(application.fileData)}>
+              Download PDF
+            </button>
+          )}
+        </div>
+      ))}
     </div>
   );
 };
-export default Mus;
+
+export default PdfViewer;
