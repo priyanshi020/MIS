@@ -409,7 +409,7 @@ const Recruitment = () => {
                       Title
                     </th>
                     {/* <th style={{padding:'20px'}}>Email</th> */}
-                    <th style={{ padding: "20px" }}>Attendance</th>
+                    <th style={{ padding: "20px" }}>Applications</th>
                   </tr>
                 </thead>
                 <tbody>

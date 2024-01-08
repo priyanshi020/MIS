@@ -59,7 +59,11 @@ function ViewAttendance({ userId }) {
           </DialogTitle>
           <DialogContent>
             <div className="table-responsive">
-              <table className="rounded-4 table table-bordered table-striped">
+              <table className="rounded-4 table table-bordered table-striped" style={{
+                  borderRadius: "16px",
+                  overflow: "hidden",
+                  boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px",
+                }}>
                 <thead className="table-secondary text-center">
                   <tr>
                     <th style={{ padding: "20px" }}>Day</th>

@@ -7,17 +7,35 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import axios from "axios";
+import './admin.css'
 import { useCallback } from "react";
-
 import Add from "./core/Add";
 const Dashboard = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedItemId, setSelectedItemId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredData, setFilteredData] = useState(data);
 
+  const handleSearch = (event) => {
+    const term = event.target.value.toLowerCase();    
+    setSearchTerm(term);
+  };
+
+  useEffect(() => {
+    const filtered = data.filter(
+      (item) =>
+        item.username.toLowerCase().includes(searchTerm) ||
+        item.email.toLowerCase().includes(searchTerm)
+    );
+
+    setFilteredData(filtered);
+  }, [data, searchTerm]);
   console.log("selectedItemId0", selectedItemId);
 
   const [EditName, setEditName] = useState("");
@@ -275,7 +293,30 @@ const Dashboard = () => {
               </div>
             </div>
           
-          <div className="container pt-5">
+          <div className="container pt-5" >
+          <div className="mb-3">
+          {/* <Box
+      component="form"
+      sx={{
+        '& > :not(style)': { m: 1, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <TextField id="outlined-basic" label="Search " variant="outlined" value={searchTerm} onChange={handleSearch}/></Box> */}
+      <div className="d-flex search-container">
+      <input
+                type="search"
+                className="form-control rounded w-25"
+                placeholder="Search"
+                aria-label="Search"
+                aria-describedby="search-addon"
+                value={searchTerm}
+                onChange={handleSearch}
+              /> 
+              {/* <img src="/assets/ic-search.png" alt='icon' /> */}
+              </div>
+            </div>
             <table
               class="table  "
               style={{
@@ -298,8 +339,8 @@ const Dashboard = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                {data.map((item, index) => (
+              <tbody >
+                {filteredData.map((item, index) => (
                   <tr key={item?.id}>
                     <td className="text-center">{index + 1}</td>
                     <td>{item && item.username}</td>

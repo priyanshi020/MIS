@@ -70,6 +70,7 @@ function AddUser({ onUserAdded }) {
         }}
       >
         Add
+        {/* <img src='/assets/add.png' alt='icon' className="ml-2"/> */}
       </button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle style={{ fontSize: "30px", fontWeight: "600" }}>

@@ -1,0 +1,11 @@
+.search-container {
+    position: relative;
+  }
+  
+  .search-input {
+    padding-left: 30px; /* Adjust the padding based on your icon size */
+    background-image: url("../../public/assets/ic-search.png");
+    background-repeat: no-repeat;
+    background-position: 8px center; /* Adjust the position based on your preference */
+  }
+  
