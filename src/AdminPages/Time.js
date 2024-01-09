@@ -301,12 +301,12 @@ const TimeTracker = () => {
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={statusInput}
-                    label="Age"
+                    label="Status"
                     onChange={handleStatusInputChange}
                   >
-                    <MenuItem>Started</MenuItem>
-                    <MenuItem>In Progress</MenuItem>
-                    <MenuItem>Completed</MenuItem>
+                    <MenuItem value="Started">Started</MenuItem>
+                    <MenuItem value="In Progress">In Progress</MenuItem>
+                    <MenuItem value="Completed">Completed</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
@@ -360,17 +360,17 @@ const TimeTracker = () => {
                   {task.status}
                 </button>
                 <Button
-                type="submit"
-                onClick={() => handleSubmit(index)}
-                className=" text-white ml-5"
-                style={{
-                  backgroundColor: "#1B1A47",
-                  height: "46px",
-                  width: "100px",
-                }}
-              >
-                Submit
-              </Button>
+                  type="submit"
+                  onClick={() => handleSubmit(index)}
+                  className=" text-white ml-5"
+                  style={{
+                    backgroundColor: "#1B1A47",
+                    height: "46px",
+                    width: "100px",
+                  }}
+                >
+                  Submit
+                </Button>
                 {/* <button
                   type="button"
                   className="btn btn-outline-primary btn-lg font-weight-bold"

@@ -5,7 +5,22 @@ import axios from "axios";
 
 const TimeTracker1 = () => { 
   const [data, setData] = useState([]);
+  const [filteredData,setFilteredData]=useState(data);
+  const [searchTerm,setSearchTerm]=useState('');
+  const handleSearch = (event) => {
+    const term = event.target.value.toLowerCase();    
+    setSearchTerm(term);
+  };
 
+  useEffect(() => {
+    const filtered = data.filter(
+      (item) =>
+        item.username.toLowerCase().includes(searchTerm) ||
+        item.email.toLowerCase().includes(searchTerm)
+    );
+
+    setFilteredData(filtered);
+  }, [data, searchTerm]);
   useEffect(() => {
    
     axios
@@ -28,7 +43,24 @@ const TimeTracker1 = () => {
       <main className="" style={{backgroundColor:'#F0F5FD'}}>
         <div className="m-5">
         <h3 className="m-3 pt-3 pb-3">Time Tracker</h3>
-        
+        <div className="d-flex align-items-center search-container mb-3">
+  <input
+    type="search"
+    className="form-control rounded w-50"
+    placeholder="Search"
+    aria-label="Search"
+    aria-describedby="search-addon"
+    value={searchTerm}
+    onChange={handleSearch}
+  />
+  <div className="search-icon-container">
+    <img
+      src="/assets/ic-search.png"
+      alt="icon"
+      className="search-icon"
+    />
+  </div>
+</div>
          <table class="table rounded-4 " style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 50px'}}>
             <thead class="table-secondary p-2">
               <tr>
@@ -42,7 +74,7 @@ const TimeTracker1 = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((item,index) => (
+              {filteredData.map((item,index) => (
                 <tr key={item.id}>
                   <td className="text-center">{index+1}</td>
                   <td>{item.username}</td>

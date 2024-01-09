@@ -2,10 +2,16 @@
     position: relative;
   }
   
-  .search-input {
-    padding-left: 30px; /* Adjust the padding based on your icon size */
-    background-image: url("../../public/assets/ic-search.png");
-    background-repeat: no-repeat;
-    background-position: 8px center; /* Adjust the position based on your preference */
+  .search-icon-container {
+    position: absolute;
+    /* right: 10px; Adjust the right spacing as needed */
+    cursor: pointer; /* If you want the icon to be clickable */
+    left: 546px;
+    top: 5px 
+  }
+  
+  .search-icon {
+    width: 20px; /* Adjust the width as needed */
+    height: 20px; /* Adjust the height as needed */
   }
   

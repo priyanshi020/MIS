@@ -1,28 +1,24 @@
-import React ,{useState,useEffect} from 'react'
-import Sidebar1 from '../components/Sidebar1'
+import React, { useState, useEffect } from 'react';
+import Sidebar1 from '../components/Sidebar1';
 import axios from 'axios';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 
 const Attendance1 = () => {
-  const[data,setData]=useState();
-  
+  const [data, setData] = useState(null);
+  const [filteredData, setFilteredData] = useState(null);
+  const [dayFilter, setDayFilter] = useState('');
+  const [monthFilter, setMonthFilter] = useState('');
+  const [yearFilter, setYearFilter] = useState('');
+
   const storedUserId = localStorage.getItem('userId');
   const userId = storedUserId ? parseInt(storedUserId, 10) : null;
- 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch data using the user ID from state
-
-        
-        const response = await axios.get(
-          `http://localhost:8080/bytesfarms/timesheet/totalhours?userId=${userId}`
-        );
-
-        // Assuming the API response is an array
+        const response = await axios.get(`http://localhost:8080/bytesfarms/timesheet/totalhours?userId=${userId}`);
         setData(response.data);
-
-       
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -31,41 +27,54 @@ const Attendance1 = () => {
     fetchData();
   }, [userId]);
 
+  useEffect(() => {
+    // Filter the data based on the provided filters
+    if (data) {
+      const filtered = data.filter(item =>
+        (!dayFilter || item.day.toString().toLowerCase().includes(dayFilter.toLowerCase())) &&
+        (!monthFilter || item.month.toString().toLowerCase().includes(monthFilter.toLowerCase())) &&
+        (!yearFilter || item.year.toString().toLowerCase().includes(yearFilter.toLowerCase()))
+      );
 
-
-
-
-
+      setFilteredData(filtered);
+    }
+  }, [data, dayFilter, monthFilter, yearFilter]);
  
 
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
-  // const fetchData = () => {
-  //   axios
-  //     .get( `http://localhost:8080/bytesfarms/timesheet/totalhours?userId=${userId}`)
-  //     .then((response) => {
-  //       setData(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error.message);
-  //     });
-  // };
-
-  
   return (
     <>
-    <Sidebar1/>
-    <main className='' style={{backgroundColor:'#F0F5FD'}}>
-      <div className='m-5'>
-        <h3 className='m-3 pt-3 pb-3'>ATTENDANCE</h3>
-        <div style={{borderRadius:'20px'}}>
-        <table className="rounded-4 table table-bordered table-striped" style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 50px'}}>
-                <thead className="table-secondary text-center">
-                  <tr>
-                    <th style={{ padding: "20px" }}>Day</th>
+      <Sidebar1 />
+      <main className='' style={{ backgroundColor: '#F0F5FD' }}>
+        <div className='m-5'>
+          <h3 className='m-3 pt-3 pb-3'>ATTENDANCE</h3>
+          <Box
+      component="form"
+      sx={{
+        '& > :not(style)': { m: 2, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <TextField id="outlined-basic" label="Day" variant="outlined"  value={dayFilter} onChange={(e) => setDayFilter(e.target.value)} />
+      <TextField id="outlined-basic" label="Month" variant="outlined" value={monthFilter} onChange={(e) => setMonthFilter(e.target.value)} />
+      <TextField id="outlined-basic" label="Year" variant="outlined"value={yearFilter} onChange={(e) => setYearFilter(e.target.value)} />
+    </Box>
+          <div style={{ borderRadius: '20px' }}>
+            {/* Filter inputs */}
+            {/* <div className='mb-3'>
+              <label>Day:</label>
+              <input type="text" value={dayFilter} onChange={(e) => setDayFilter(e.target.value)} />
+              <label>Month:</label>
+              <input type="text" value={monthFilter} onChange={(e) => setMonthFilter(e.target.value)} />
+              <label>Year:</label>
+              <input type="text" value={yearFilter} onChange={(e) => setYearFilter(e.target.value)} />
+            </div> */}
+
+            <table className="rounded-4 table table-bordered table-striped" style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 50px' }}>
+              <thead className="table-secondary text-center">
+                <tr>
+                  {/* ...header columns */}
+                  <th style={{ padding: "20px" }}>Day</th>
                     <th style={{ padding: "20px" }}>Month </th>
                     <th style={{ padding: "20px" }}>Year </th>
                     <th style={{ padding: "20px" }}>Check In </th>
@@ -73,13 +82,14 @@ const Attendance1 = () => {
                     <th style={{ padding: "20px" }}>Break Start</th>
                     <th style={{ padding: "20px" }}>Break End </th>
                     <th style={{ padding: "20px" }}>Status </th>
-                  </tr>
-                </thead>
-                {data ? (
-                  <tbody className="text-center">
-                    {data.map((item) => (
-                      <tr key={item.date}>
-                        <td className="text-center">{item.day}</td>
+                </tr>
+              </thead>
+              {filteredData ? (
+                <tbody className="text-center">
+                  {filteredData.map((item) => (
+                    <tr key={item.date}>
+                      {/* ...table rows */}
+                      <td className="text-center">{item.day}</td>
                         <td>{item.month}</td>
                         <td>{item.year}</td>
                         <td>{item.checkInTime}</td>
@@ -103,20 +113,20 @@ const Attendance1 = () => {
                           ))}
                         </td>
                         <td>{item.status}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                ) : (
-                  <tr>
-                    <td colSpan="8">Loading...</td>
-                  </tr>
-                )}
-              </table>
-              </div> </div>
-    </main>
-   
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <tr>
+                  <td colSpan="8">Loading...</td>
+                </tr>
+              )}
+            </table>
+          </div>
+        </div>
+      </main>
     </>
-  )
-}
+  );
+};
 
-export default Attendance1
+export default Attendance1;

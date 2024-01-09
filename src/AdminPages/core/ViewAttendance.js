@@ -4,11 +4,17 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import axios from "axios";
 
 function ViewAttendance({ userId }) {
   const [open, setOpen] = useState(false);
-  const [data, setData] = useState();
+  const [data, setData] = useState(null);
+  const [filteredData, setFilteredData] = useState(null);
+  const [dayFilter, setDayFilter] = useState('');
+  const [monthFilter, setMonthFilter] = useState('');
+  const [yearFilter, setYearFilter] = useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,6 +38,19 @@ function ViewAttendance({ userId }) {
 
     fetchData();
   }, [userId]);
+
+  useEffect(() => {
+    // Filter the data based on the provided filters
+    if (data) {
+      const filtered = data.filter(item =>
+        (!dayFilter || item.day.toString().toLowerCase().includes(dayFilter.toLowerCase())) &&
+        (!monthFilter || item.month.toString().toLowerCase().includes(monthFilter.toLowerCase())) &&
+        (!yearFilter || item.year.toString().toLowerCase().includes(yearFilter.toLowerCase()))
+      );
+
+      setFilteredData(filtered);
+    }
+  }, [data, dayFilter, monthFilter, yearFilter]);
 
   return (
     <>
@@ -59,6 +78,18 @@ function ViewAttendance({ userId }) {
           </DialogTitle>
           <DialogContent>
             <div className="table-responsive">
+            <Box
+      component="form"
+      sx={{
+        '& > :not(style)': { m: 2, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <TextField id="outlined-basic" label="Day" variant="outlined"  value={dayFilter} onChange={(e) => setDayFilter(e.target.value)} />
+      <TextField id="outlined-basic" label="Month" variant="outlined" value={monthFilter} onChange={(e) => setMonthFilter(e.target.value)} />
+      <TextField id="outlined-basic" label="Year" variant="outlined"value={yearFilter} onChange={(e) => setYearFilter(e.target.value)} />
+    </Box>
               <table className="rounded-4 table table-bordered table-striped" style={{
                   borderRadius: "16px",
                   overflow: "hidden",
@@ -76,9 +107,9 @@ function ViewAttendance({ userId }) {
                     <th style={{ padding: "20px" }}>Status </th>
                   </tr>
                 </thead>
-                {data ? (
+                {filteredData ? (
                   <tbody className="text-center">
-                    {data.map((item) => (
+                    {filteredData.map((item) => (
                       <tr key={item.date}>
                         <td className="text-center">{item.day}</td>
                         <td>{item.month}</td>

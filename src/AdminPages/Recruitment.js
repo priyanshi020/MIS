@@ -409,7 +409,7 @@ const Recruitment = () => {
                       Title
                     </th>
                     {/* <th style={{padding:'20px'}}>Email</th> */}
-                    <th style={{ padding: "20px" }}>Applications</th>
+                    <th className="right-align " style={{ padding: "20px" ,paddingLeft:'682px'}}>Applications</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -419,7 +419,7 @@ const Recruitment = () => {
                         <td className="text-center">{index + 1}</td>
                         <td>{application.title}</td>
                         {/* <td>{item.email}</td> */}
-                        <td> <PdfViewer jobId={application.id} /> </td>
+                        <td  style={{ textAlign: 'right' }}> <PdfViewer jobId={application.id} /> </td>
                       </tr>
                     ))}
                 </tbody>
