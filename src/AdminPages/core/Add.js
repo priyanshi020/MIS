@@ -107,7 +107,7 @@ function AddUser({ onUserAdded }) {
             id="password"
             label="Password"
             // type={showPassword ? "text" : "password"}
-            type="text"
+            type="password"
             fullWidth
             variant="standard"
             value={password}

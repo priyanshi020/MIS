@@ -5,6 +5,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import { toast, ToastContainer } from "react-toastify";
 import { SettingsPhone } from "@mui/icons-material";
 
 function ApplyNow({jobPositionId}) {
@@ -70,9 +71,11 @@ function ApplyNow({jobPositionId}) {
     .then(result => {
       // Handle the API response if needed
       console.log('API Response:', result);
+      toast.success("Successfully Applied for a job");
     })
     .catch(error => {
       console.error('Error:', error);
+      toast.error("Try Again!");
     });
   
     // Close the dialog after submission
@@ -81,6 +84,7 @@ function ApplyNow({jobPositionId}) {
   
   return (
     <div className="container">
+       <ToastContainer />
       {/* Apply Now Button */}
       <Button
         variant="contained"

@@ -18,8 +18,8 @@ import Profile from './UserPages/Profile';
 import Time from './AdminPages/Time';
 import Recruitment2 from './components/Recruitment2';
 import LoginGuest from './components/LoginGuest';
-import Mus from './components/Mus';
-import PdfViewer from './components/PdfViewer';
+import OtpForm from './components/OtpForm';
+import ForgotPass from './components/ForgotPass';
 
 function App() {
   return (
@@ -27,7 +27,6 @@ function App() {
     
     <Router>
       <Routes>
-        <Route path ='/adi' element={<PdfViewer/>}/>
         <Route path='/log' element={<LoginGuest/>}/>
         <Route path='/' element={<LoginForm/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>
@@ -43,7 +42,8 @@ function App() {
         <Route path='/user-recruitment' element={<Recruitment1/>}/>
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/apply' element={<Recruitment2/>}/>
-        <Route path='/mus' element={<Mus />}/>
+        <Route path='otp-form' element={<OtpForm/>}/>
+        <Route path='/updatepassword?token=:uuid' element={<ForgotPass/>}/>
       </Routes>
 
     </Router>
