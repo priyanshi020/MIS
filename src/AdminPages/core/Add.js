@@ -7,16 +7,16 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
-
+import { toast, ToastContainer } from 'react-toastify';
 function AddUser({ onUserAdded }) {
   const [open, setOpen] = React.useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const admin = "admin";
-  const employee = "employee";
-
+  const admin = "Admin";
+  const employee = "Employee";
+  const hr="HR";
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -27,9 +27,9 @@ function AddUser({ onUserAdded }) {
 
   const loginEndpoint = "http://localhost:8080/bytesfarms/user/signup";
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async() => {
     // e.preventDefault();
-    const data = {
+    const dataToAdd = {
       username: name,
       email: email,
       password: password,
@@ -38,10 +38,11 @@ function AddUser({ onUserAdded }) {
       },
     };
     try {
-      const response = axios.post(loginEndpoint, data);
+      const response = axios.post(loginEndpoint, dataToAdd);
       console.log("User added successfully:", response.data);
 
       onUserAdded(response.data);
+      toast.success('User Added Successfully')
     } catch (error) {
       console.error("Error adding user:", error.message);
     }
@@ -54,7 +55,7 @@ function AddUser({ onUserAdded }) {
       <button
         className="btn btn-dark btn-sm-3 w-100"
         onClick={handleClickOpen}
-        type="submit"
+        type="button"
         style={{
           transition: "background-color 0.3s",
           backgroundColor: "#1B1A47",
@@ -72,6 +73,7 @@ function AddUser({ onUserAdded }) {
         Add
         {/* <img src='/assets/add.png' alt='icon' className="ml-2"/> */}
       </button>
+      <ToastContainer/>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle style={{ fontSize: "30px", fontWeight: "600" }}>
           Add User
@@ -124,6 +126,7 @@ function AddUser({ onUserAdded }) {
           >
             <MenuItem value={admin}>Admin</MenuItem>
             <MenuItem value={employee}>User</MenuItem>
+            <MenuItem value={hr}>HR</MenuItem>
           </TextField>
         </DialogContent>
         <DialogActions>

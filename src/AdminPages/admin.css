@@ -1,17 +1,17 @@
-.search-container {
-    position: relative;
-  }
-  
-  .search-icon-container {
-    position: absolute;
-    /* right: 10px; Adjust the right spacing as needed */
-    cursor: pointer; /* If you want the icon to be clickable */
-    left: 546px;
-    top: 5px 
-  }
-  
-  .search-icon {
-    width: 20px; /* Adjust the width as needed */
-    height: 20px; /* Adjust the height as needed */
-  }
-  
+  .search-container {
+      position: relative;
+    }
+    
+    .search-icon-container {
+      position: absolute;
+      /* right: 10px; Adjust the right spacing as needed */
+      cursor: pointer; /* If you want the icon to be clickable */
+      left: 546px;
+      top: 5px 
+    }
+    
+    .search-icon {
+      width: 20px; /* Adjust the width as needed */
+      height: 20px; /* Adjust the height as needed */
+    }
+    

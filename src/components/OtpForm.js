@@ -20,7 +20,7 @@ const OtpForm = ({ onSuccessVerification, userData }) => {
 
     const data = {
       ...userData,
-    //   otp: otp,
+    
     };
 
     axios

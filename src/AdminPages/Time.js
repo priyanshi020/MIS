@@ -26,6 +26,8 @@ const TimeTracker = () => {
   const [tasks, setTasks] = useState([]);
   const [elapsedTimes, setElapsedTimes] = useState([]);
   const [timers, setTimers] = useState([]);
+  const [editedRole, setEditedRole] = useState("");
+
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? parseInt(storedUserId, 10) : null;
 
@@ -189,11 +191,50 @@ const TimeTracker = () => {
     console.log("Item Index selected for editing:", index);
     setAnchorEl(event.currentTarget);
     setOpen(true);
+  
+    // Set the edited role to the current role of the task
+    setEditedRole(tasks[index].status);
   };
-
+  
   const handleClose = () => {
     setOpen(false);
+    setEditedRole("");
   };
+
+  const handleUpdate = (index) => {
+    const updatedRole = editedRole;
+  
+    // Send the updated role to the API
+    const taskId = tasks[index].id; // Replace 'id' with the actual property name of the task ID
+    const apiEndpoint = `http://localhost:8080/bytesfarms/tasks/update/${taskId}?userId=${userId}`;
+    
+    fetch(apiEndpoint, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: updatedRole }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("API response:", data);
+        
+        // Update the state with the new role
+        setTasks((prevTasks) =>
+          prevTasks.map((task, i) =>
+            i === index ? { ...task, status: updatedRole } : task
+          )
+        );
+  
+        // Close the dialog
+        handleClose();
+      })
+      .catch((error) => {
+        console.error("API error:", error);
+        // Handle error if needed
+      });
+  };
+  
 
   return (
     <>
@@ -247,12 +288,21 @@ const TimeTracker = () => {
 
             {/* tasklist */}
             <form className="d-flex   ml-5 mb-5">
+              {/* <TextField
+                id="outlined-basic"
+                label="Your Task"
+                variant="outlined"
+                value={taskInput}
+                onChange={handleTaskInputChange}
+                style={{ height: "47px" }  }
+              /> */}
               <TextField
                 id="standard-basic"
                 label="Your Task"
                 variant="standard"
                 value={taskInput}
                 onChange={handleTaskInputChange}
+                
               />
 
               {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -331,7 +381,7 @@ const TimeTracker = () => {
                 key={index}
                 className="list-group-item d-flex justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom rounded-0 mb-2"
               >
-                <div className="d-flex align-items-center">
+                <div className="d-flex align-items-center" style={{ width: "250px", wordWrap: "break-word" }}>
                   <h6>{task.task}</h6>
                 </div>
                 <h6 className="text-center">{task.time}</h6>
@@ -362,7 +412,7 @@ const TimeTracker = () => {
                 <Button
                   type="submit"
                   onClick={() => handleSubmit(index)}
-                  className=" text-white ml-5"
+                  className=" text-white ml-5 align-right"
                   style={{
                     backgroundColor: "#1B1A47",
                     height: "46px",
@@ -403,25 +453,28 @@ const TimeTracker = () => {
                   maxWidth="sm"
                 >
                   <DialogContent>
-                    <TextField
-                      id="role"
-                      select
-                      label="Role"
-                      fullWidth
-                      variant="standard"
-                      value={role}
-                    >
-                      <MenuItem>In Progress</MenuItem>
-                      <MenuItem>Completed</MenuItem>
-                    </TextField>
+                  <TextField
+    id="role"
+    select
+    label="Role"
+    fullWidth
+    variant="standard"
+    value={editedRole}
+    onChange={(e) => setEditedRole(e.target.value)}
+  >
+    <MenuItem value="In Progress">In Progress</MenuItem>
+    <MenuItem value="Completed">Completed</MenuItem>
+  </TextField>
                   </DialogContent>
                   <DialogActions className="justify-content-start p-3">
-                    <Button
-                      className=" text-white w-25 p-2"
-                      style={{ backgroundColor: "#1B1A47" }}
-                    >
-                      Update
-                    </Button>
+                  <Button
+  className=" text-white w-25 p-2"
+  style={{ backgroundColor: "#1B1A47" }}
+  onClick={() => handleUpdate(index)}
+>
+  Update
+</Button>
+
                   </DialogActions>
                 </Dialog>
               </li>

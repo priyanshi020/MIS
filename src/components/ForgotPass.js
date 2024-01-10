@@ -9,17 +9,19 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { useParams } from 'react-router-dom';
+
 
 import { Link } from "react-router-dom";
 
 
-export default function ForgotPass({ forgotPasswordUUID }) {
-    const [uuid, setUUID] = useState(forgotPasswordUUID);
-    // const { uuid } = useParams();
+export default function ForgotPass() {
+   
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword,setShowConfirmPassword]=useState(false);
-  const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -28,30 +30,36 @@ export default function ForgotPass({ forgotPasswordUUID }) {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  
-  const [password, setPassword] = useState("");
-  const [confirmPassword,setConfirmPassword]=useState("");
-  const navigate = useNavigate();
-
-
-  const handleSubmit=(e)=>{
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if(password===confirmPassword){
-        const resetPasswordEndpoint = `http://localhost:8080/bytesfarms/user/updatePassword?UUID=${uuid}&password=${password}`;
 
-        // Make a POST request to the reset password endpoint
-        axios.post(resetPasswordEndpoint)
-          .then((response) => {
-            // ... (your existing code)
-          })
-          .catch((error) => {
-            // ... (your existing code)
-          });
-    }else{
-        setPasswordsMatch(false);
-         toast.error("Passwords do not match.");
+    // Get UUID from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    // const uuid = urlParams.get("UUID");
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
     }
-  }
+    const resetUuid = localStorage.getItem('resetUuid');
+
+    // Make API request to reset password
+    const resetPasswordEndpoint = `http://localhost:8080/bytesfarms/user/updatePassword?UUID=${resetUuid}&password=${password}`;
+
+    axios
+      .put(resetPasswordEndpoint)
+      .then((response) => {
+        console.log("Password reset successful:", response.data);
+        toast.success("Password reset successful");
+        // Redirect to login page or any other page after successful password reset
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Password reset failed:", error.response.data);
+        toast.error("Password reset failed. Please try again.");
+      });
+  };
   
 
 
@@ -93,6 +101,7 @@ export default function ForgotPass({ forgotPasswordUUID }) {
                         <label className="text-dark mb-2" htmlFor="typeEmailX">
                           New Password
                         </label>
+                        <div className="position-relative ">
                         <input
                            type={showPassword ? "text" : "password"}
                            id="typePasswordX"
@@ -112,8 +121,10 @@ export default function ForgotPass({ forgotPasswordUUID }) {
                               right: "10px",
                             }}
                             onClick={togglePasswordVisibility}
-                          ></i>
+                          ></i></div>
                       </div>
+
+
                       <div className="form-outline form-black  d-flex flex-column align-items-start">
                         <label
                           className="form-label text-dark mb-2"

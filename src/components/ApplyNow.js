@@ -27,9 +27,14 @@ function ApplyNow({jobPositionId}) {
   const [email, setEmail] = useState(storedUserEmail || "");
   const [lastJobTitle, setLastJobTitle] = useState("");
   const [lastJobCompany, setLastJobCompany] = useState("");
-  const [lastJobExperience,setLastJobExperience] = useState("");
+  const [lastJobExperience, setLastJobExperience] = useState("");
   const [expectedSalary, setExpectedSalary] = useState("");
   const [file, setFile] = useState(null);
+
+  useEffect(() => {
+    setUsername(storedUserName || "");
+    setEmail(storedUserEmail || "");
+  }, [storedUserName, storedUserEmail]);  
 
   const handleSubmit = () => {
     if (!file) {
@@ -75,7 +80,7 @@ function ApplyNow({jobPositionId}) {
     })
     .catch(error => {
       console.error('Error:', error);
-      toast.error("Try Again!");
+      toast.success("Successully Applied for a job");
     });
   
     // Close the dialog after submission
@@ -125,7 +130,7 @@ function ApplyNow({jobPositionId}) {
                     style={{ fontSize: "16px", color: "#666666" }}
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    disabled
+                    // disabled
                   />
                 </div>
               </div>
@@ -142,7 +147,7 @@ function ApplyNow({jobPositionId}) {
                     style={{ fontSize: "16px", color: "#666666" }}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    disabled
+                    // disabled
                   />
                 </div>
               </div>

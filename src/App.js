@@ -43,7 +43,7 @@ function App() {
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/apply' element={<Recruitment2/>}/>
         <Route path='otp-form' element={<OtpForm/>}/>
-        <Route path='/updatepassword?token=:uuid' element={<ForgotPass/>}/>
+        <Route path='/updatepassword' element={<ForgotPass/>}/>
       </Routes>
 
     </Router>

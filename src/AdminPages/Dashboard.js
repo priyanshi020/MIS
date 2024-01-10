@@ -8,49 +8,61 @@ import Button from "@mui/material/Button";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 import axios from "axios";
-import './admin.css'
+import "./admin.css";
 import { useCallback } from "react";
 import Add from "./core/Add";
 const Dashboard = () => {
+  const [value, setValue] = React.useState(0);
   const [data, setData] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedItemId, setSelectedItemId] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredData, setFilteredData] = useState(data);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [employeeCount, setEmployeeCount] = useState(0);
+  const [checkedInCount, setCheckedInCount] = useState(0);
+  const [checkedOutCount, setCheckedOutCount] = useState(0);
+  // const [filteredData, setFilteredData] = useState(data);
 
-  const handleSearch = (event) => {
-    const term = event.target.value.toLowerCase();    
-    setSearchTerm(term);
-  };
+  // const handleSearch = (event) => {
+  //   const term = event.target.value.toLowerCase();
+  //   setSearchTerm(term);
+  // };
 
-  useEffect(() => {
-    const filtered = data.filter(
-      (item) =>
-        item.username.toLowerCase().includes(searchTerm) ||
-        item.email.toLowerCase().includes(searchTerm)
-    );
+  // useEffect(() => {
+  //   const filtered = data.filter(
+  //     (item) =>
+  //       item.username.toLowerCase().includes(searchTerm) ||
+  //       item.email.toLowerCase().includes(searchTerm)
+  //   );
 
-    setFilteredData(filtered);
-  }, [data, searchTerm]);
+  //   setFilteredData(filtered);
+  // }, [data, searchTerm]);
   console.log("selectedItemId0", selectedItemId);
 
-  const [EditName, setEditName] = useState("");
-  const handleName = (e) => {
-    setEditName(e.target.value);
+  const [Editusername, setEditusername] = useState("");
+  const handleusername = (e) => {
+    setEditusername(e.target.value);
   };
-  const [EditEmail, setEditEmail] = useState("");
-  const handleEmail = (e) => {
-    setEditEmail(e.target.value);
+  const [Editemail, setEditemail] = useState("");
+  const handleemail = (e) => {
+    setEditemail(e.target.value);
   };
+
+  const [Editdesignation,setEditdesignation]=useState("");
+  const handledesignation=(e)=>{
+    setEditdesignation(e.target.value);
+  }
 
   const [editData, setEditData] = useState({
     id: null,
-    name: "",
+    username: "",
     email: "",
+    profile: {
+      designation: "",
+    }
   });
 
   const handleUserAdded = (newUser) => {
@@ -67,6 +79,16 @@ const Dashboard = () => {
       .get("http://localhost:8080/bytesfarms/user/getEmployees")
       .then((response) => {
         setData(response.data);
+        const checkedInEmployees = response.data.filter(
+          (employee) => employee.checkedInToday
+        );
+        const checkedOutEmployees = response.data.filter(
+          (employee) => !employee.checkedInToday
+        );
+
+        setCheckedInCount(checkedInEmployees.length);
+        setCheckedOutCount(checkedOutEmployees.length);
+        setEmployeeCount(response.data.length);
       })
       .catch((error) => {
         console.error("Error fetching data:", error.message);
@@ -83,11 +105,15 @@ const Dashboard = () => {
     if (selectedItem) {
       setEditData({
         id: selectedItem.id,
-        name: selectedItem.username,
+        username: selectedItem.username,
         email: selectedItem.email,
+        profile: {
+          designation: selectedItem.designation,
+        }
       });
-      setEditName(selectedItem.username);
-      setEditEmail(selectedItem.email);
+      setEditusername(selectedItem.username);
+      setEditemail(selectedItem.email);
+      setEditdesignation(selectedItem.designation);
       setOpen(true);
     } else {
       console.error("Item not found for editing.");
@@ -136,15 +162,21 @@ const Dashboard = () => {
     setOpen(false);
     setEditData({
       id: null,
-      name: "",
+      username: "",
       email: "",
+      profile: {
+        designation: "",
+      },
     });
   };
 
   const handleEditApiCall = () => {
-    const editData = {
-      name: EditName,
-      email: EditEmail,
+    const editData = {  
+      username: Editusername,
+      email: Editemail,
+      profile: {
+        designation: Editdesignation,
+      },
     };
 
     axios
@@ -161,8 +193,11 @@ const Dashboard = () => {
       })
       .finally(() => {
         handleMenuClose();
-        handleClose(); 
+        handleClose();
       });
+  };
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
 
   return (
@@ -170,132 +205,130 @@ const Dashboard = () => {
       <Sidebar />
       <main className="" style={{ backgroundColor: "#F0F5FD" }}>
         <div className="m-5">
-         
-            
-              <h2 className="m-3 pt-3 pb-3">DASHBOARD</h2>
-           
-            <div className="d-flex">
-              <div className=" col-md-3 ">
-                <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
-                  <img
-                    src="/assets/dashboard/emp.png"
-                    alt="emp"
-                    className="mr-3"
-                    style={{ width: "62px",height:'62px' }}
-                  />
-                  <div className="d-flex  row">
-                    <span
-                      className="d-block mb-2"
-                      style={{
-                        fontSize: "31px",
-                        fontWeight: "700",
-                        lineHeight: "28px",
-                      }}
-                    >
-                      30
-                    </span>
-                    <p
-                      className="mt-1 mb-3"
-                      style={{ fontSize: "11px", fontWeight: "500" }}
-                    >
-                      Number of Employees
-                    </p>
-                  </div>
-                </div>
-              </div>
+          <h2 className="m-3 pt-3 pb-3">DASHBOARD</h2>
 
-              <div className=" col-md-3 ">
-                <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
-                  <img
-                    src="/assets/dashboard/proj.png"
-                    alt="emp"
-                    className="mr-3"
-                    style={{ width: "60px" ,height:'60px'}}
-                  />
-                  <div className="d-flex  row">
-                    <span
-                      className="d-block mb-2"
-                      style={{
-                        fontSize: "31px",
-                        fontWeight: "700",
-                        lineHeight: "28px",
-                      }}
-                    >
-                      5
-                    </span>
-                    <p
-                      className="mt-1 mb-2"
-                      style={{ fontSize: "14px", fontWeight: "500" }}
-                    >
-                      Number of Project
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className=" col-md-3 ">
-                <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
-                  <img
-                    src="/assets/dashboard/pre.png"
-                    alt="emp"
-                    className="mr-3"
-                    style={{ width: "62px",height:'62px' }}
-                  />
-                  <div className="d-flex  row">
-                    <span
-                      className="d-block mb-2"
-                      style={{
-                        fontSize: "32px",
-                        fontWeight: "700",
-                        lineHeight: "28px",
-                      }}
-                    >
-                      30
-                    </span>
-                    <p
-                      className="mt-1 mb-2"
-                      style={{ fontSize: "14px", fontWeight: "500" }}
-                    >
-                      Present Today
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className=" col-md-3 ">
-                <div
-                  className="d-flex   p-3  shadow shadow-lg rounded-4 "
-                  style={{ backgroundColor: "#1B1A47" }}
-                >
-                  <img
-                    src="/assets/dashboard/abs.png"
-                    alt="emp"
-                    className="mr-3"
-                    style={{ width: "62px",height:'62px' }}
-                  />
-                  <div className="d-flex  row">
-                    <span
-                      className="d-block mb-2 text-white"
-                      style={{
-                        fontSize: "32px",
-                        fontWeight: "700",
-                        lineHeight: "28px",
-                      }}
-                    >
-                      00
-                    </span>
-                    <p
-                      className="mt-1 mb-2 text-white"
-                      style={{ fontSize: "14px", fontWeight: "500" }}
-                    >
-                      Absent Today
-                    </p>
-                  </div>
+          <div className="d-flex">
+            <div className=" col-md-3 ">
+              <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
+                <img
+                  src="/assets/dashboard/emp.png"
+                  alt="emp"
+                  className="mr-3"
+                  style={{ width: "62px", height: "62px" }}
+                />
+                <div className="d-flex  row">
+                  <span
+                    className="d-block mb-2"
+                    style={{
+                      fontSize: "31px",
+                      fontWeight: "700",
+                      lineHeight: "28px",
+                    }}
+                  >
+                     {employeeCount}
+                  </span>
+                  <p
+                    className="mt-1 mb-3"
+                    style={{ fontSize: "11px", fontWeight: "500" }}
+                  >
+                    Number of Employees
+                  </p>
                 </div>
               </div>
             </div>
-          
-          <div className="container pt-5" >
-          <div className="mb-3">
-          {/* <Box
+
+            <div className=" col-md-3 ">
+              <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
+                <img
+                  src="/assets/dashboard/proj.png"
+                  alt="emp"
+                  className="mr-3"
+                  style={{ width: "60px", height: "60px" }}
+                />
+                <div className="d-flex  row">
+                  <span
+                    className="d-block mb-2"
+                    style={{
+                      fontSize: "31px",
+                      fontWeight: "700",
+                      lineHeight: "28px",
+                    }}
+                  >
+                    5
+                  </span>
+                  <p
+                    className="mt-1 mb-2"
+                    style={{ fontSize: "14px", fontWeight: "500" }}
+                  >
+                    Number of Project
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className=" col-md-3 ">
+              <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
+                <img
+                  src="/assets/dashboard/pre.png"
+                  alt="emp"
+                  className="mr-3"
+                  style={{ width: "62px", height: "62px" }}
+                />
+                <div className="d-flex  row">
+                  <span
+                    className="d-block mb-2"
+                    style={{
+                      fontSize: "32px",
+                      fontWeight: "700",
+                      lineHeight: "28px",
+                    }}
+                  >
+                    {checkedInCount}
+                  </span>
+                  <p
+                    className="mt-1 mb-2"
+                    style={{ fontSize: "14px", fontWeight: "500" }}
+                  >
+                    Present Today
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className=" col-md-3 ">
+              <div
+                className="d-flex   p-3  shadow shadow-lg rounded-4 "
+                style={{ backgroundColor: "#1B1A47" }}
+              >
+                <img
+                  src="/assets/dashboard/abs.png"
+                  alt="emp"
+                  className="mr-3"
+                  style={{ width: "62px", height: "62px" }}
+                />
+                <div className="d-flex  row">
+                  <span
+                    className="d-block mb-2 text-white"
+                    style={{
+                      fontSize: "32px",
+                      fontWeight: "700",
+                      lineHeight: "28px",
+                    }}
+                  >
+                   {checkedOutCount}
+                  </span>
+                  <p
+                    className="mt-1 mb-2 text-white"
+                    style={{ fontSize: "14px", fontWeight: "500" }}
+                  >
+                    Absent Today
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="container pt-5">
+            <div className="mb-3">
+              {/* <Box
       component="form"
       sx={{
         '& > :not(style)': { m: 1, width: '25ch' },
@@ -304,7 +337,7 @@ const Dashboard = () => {
       autoComplete="off"
     >
       <TextField id="outlined-basic" label="Search " variant="outlined" value={searchTerm} onChange={handleSearch}/></Box> */}
-      <div className="d-flex align-items-center search-container">
+              {/* <div className="d-flex align-items-center search-container">
   <input
     type="search"
     className="form-control rounded w-50"
@@ -321,8 +354,7 @@ const Dashboard = () => {
       className="search-icon"
     />
   </div>
-</div>
-
+</div> */}
             </div>
             <table
               class="table  "
@@ -340,18 +372,22 @@ const Dashboard = () => {
                   <th scope="col">Name</th>
 
                   <th scope="col">Email Id</th>
+                  <th>Designation</th>
 
                   <th className="text-right " style={{ width: "0px" }}>
                     <Add onUserAdded={handleUserAdded} />
                   </th>
                 </tr>
               </thead>
-              <tbody >
-                {filteredData.map((item, index) => (
+              <tbody>
+                {data.map((item, index) => (
                   <tr key={item?.id}>
                     <td className="text-center">{index + 1}</td>
                     <td>{item && item.username}</td>
                     <td>{item && item.email}</td>
+                    <td>{item?.profile?.designation || "N/A"}</td>
+
+                    {/* <td> {item && item.profile}</td> */}
                     <td className="text-right">
                       <IconButton
                         aria-haspopup="true"
@@ -396,12 +432,11 @@ const Dashboard = () => {
                                   class="form-control form-control-lg"
                                   placeholder="Name"
                                   style={{ fontSize: "16px", color: "#666666" }}
-                                  value={EditName}
-                                  onChange={handleName}
+                                  value={Editusername}
+                                  onChange={handleusername}
                                 />
                               </div>
                             </div>
-                            
 
                             <div className="">
                               <div
@@ -421,8 +456,32 @@ const Dashboard = () => {
                                   class="form-control form-control-lg"
                                   placeholder="Email"
                                   style={{ fontSize: "16px", color: "#666666" }}
-                                  value={EditEmail}
-                                  onChange={handleEmail}
+                                  value={Editemail}
+                                  onChange={handleemail}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="">
+                              <div
+                                data-mdb-input-init
+                                class="form-outline mb-4"
+                              >
+                                <label
+                                  class="form-label fw-bold text-secondary"
+                                  for="form6Example1"
+                                >
+                                  {" "}
+                                  Designation
+                                </label>
+                                <input
+                                  type="email"
+                                  id="form6Example5"
+                                  class="form-control form-control-lg"
+                                  placeholder="Designation"
+                                  style={{ fontSize: "16px", color: "#666666" }}
+                                  value={Editdesignation}
+                                  onChange={handledesignation}
                                 />
                               </div>
                             </div>
