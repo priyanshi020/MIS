@@ -383,7 +383,15 @@ const Dashboard = () => {
                 {data.map((item, index) => (
                   <tr key={item?.id}>
                     <td className="text-center">{index + 1}</td>
-                    <td>{item && item.username}</td>
+                    <td>
+                    <div class="d-flex align-items-center ">
+          <img
+              src={`data:image/png;base64, ${item && item.image}`}
+              alt=""
+              style={{width: "45px", height: "45px"}}
+              class="rounded-circle mr-3"
+              />
+                      {item && item.username}</div></td>
                     <td>{item && item.email}</td>
                     <td>{item?.profile?.designation || "N/A"}</td>
 

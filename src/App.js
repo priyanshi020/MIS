@@ -35,7 +35,7 @@ function App() {
         <Route path='/attendance' element={<Attendance/>}/>
         <Route path='/user-attendance' element={<Attendance1/>}/>
         <Route path='/user-payroll' element={<Payroll/>}/>
-        {/* <Route path='/user-time-tracker' element={<TimeTracker/>}/> */}
+        <Route path='/user-time-tracker' element={<TimeTracker/>}/>
         <Route path='/time-tracker' element={<TimeTracker1/>}/>
         <Route path='/time' element={<Time/>}/>
         <Route path='leave-tracker' element={<LeaveTracker1/>}/>

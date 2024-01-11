@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 
 const Sidebar1 = () => {
   const [userName, setUserName] = useState('');
-
+  const [imageProfile,setImageProfile]=useState("");
   useEffect(() => {
     const userId = localStorage.getItem('userId');
 
@@ -30,6 +30,7 @@ const Sidebar1 = () => {
 
           if (user) {
             setUserName(user.username);  // Change from 'name' to 'username'
+            setImageProfile(user.image);
           } else {
             console.error('User not found');
           }
@@ -158,9 +159,10 @@ const Sidebar1 = () => {
           <div className="mr-2 fw-1">{userName}</div>
             <div className="position top-0 end-0 ">
               <img
-                src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                src={`data:image/png;base64, ${imageProfile}`}
                 className="rounded-circle"
                 height="25"
+                width="25"
                 alt="Black and White Portrait of a Man"
                 loading="lazy"
               />

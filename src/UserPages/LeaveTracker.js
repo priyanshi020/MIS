@@ -215,7 +215,7 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
                   <td>{item.description}</td>
 
                   <td>
-                    <button
+                    {/* <button
                       type="button"
                       className={`btn ${
                         item.status === "Approved"
@@ -227,8 +227,14 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
                       style={{ minWidth: "100px" }}
                     >
                       {item.status}
-                    </button>
-                  </td>
+                    </button> */}
+<span className={`badge rounded-pill d-inline ${
+  item.status === 'Approved' ? 'badge-success' :
+  item.status === 'Pending' ? 'badge-warning' :
+  item.status === 'rejected' ? 'badge-danger' : ''
+}`}>
+  {item.status}
+</span>                  </td>
                   <td>
                     <IconButton aria-haspopup="true" onClick={handleMenuClick}>
                       <MoreVertIcon />
