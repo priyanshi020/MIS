@@ -84,8 +84,8 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
     <>
       <Sidebar1 />
       <main className="" style={{backgroundColor:'#F0F5FD'}}>
-        <div className="m-5">
-        <h3 className="m-3 pt-3 pb-3">Leaves</h3>
+        <div className="p-5">
+        <h3 className=" pb-3">Leaves</h3>
         <div className="d-flex justify-content-around ">
           <div className="col-md-3" style={{ width: "225px" }}>
             <div
@@ -194,22 +194,22 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
           </div>
         </div>
 
-        <div className="container pt-4">
+        <div className="container pt-5">
           <table class="table " style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 50px'}} >
-            <thead class="table-secondary ">
+            <thead class="table-secondary p-2">
               <tr>
-                <th scope="col">Leave Type</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
-                <th scope="col"> Description</th>
-                <th scope="col">Status </th>
+                <th style={{padding:'20px'}} scope="col">Leave Type</th>
+                <th style={{padding:'20px'}} scope="col">Start Date</th>
+                <th style={{padding:'20px'}} scope="col">End Date</th>
+                <th style={{padding:'20px'}} scope="col"> Description</th>
+                <th style={{padding:'20px'}} scope="col">Status </th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               {data.map((item) => (
                 <tr key={item.id}>
-                  <td>{item.leaveType}</td>
+                  <td style={{padding:'20px'}}>{item.leaveType}</td>
                   <td>{item.startDate}</td>
                   <td>{item.endDate}</td>
                   <td>{item.description}</td>
@@ -219,7 +219,9 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
                       type="button"
                       className={`btn ${
                         item.status === "Approved"
-                          ? "btn-outline-success"
+                        ? "btn-outline-success"  // If status is "Approved", use the success style
+                        : item.status === "Pending"
+                          ? "btn-outline-warning" // If status is "Pending", use the warning style
                           : "btn-outline-danger"
                       }`}
                       style={{ minWidth: "100px" }}

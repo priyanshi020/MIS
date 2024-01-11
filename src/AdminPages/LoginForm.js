@@ -147,7 +147,18 @@ export default function Mus() {
         overflow: "hidden",
       }}
     >
-       <ToastContainer />
+       <ToastContainer
+       position="top-center"
+       autoClose={5000}
+       hideProgressBar={false}
+       newestOnTop={false}
+       closeOnClick
+       rtl={false}
+       pauseOnFocusLoss
+       draggable
+       pauseOnHover
+       className="toast-center" />
+       
       <div className="container  py-5 h-25" style={{overflow:'hidden'}}>
         <div className="row d-flex justify-content-center align-items-center h-100 ">
           <div className="col-12 col-md-8 col-lg-6 col-xl-5  ">
@@ -222,7 +233,7 @@ export default function Mus() {
                           >
                             Password
                           </label>
-                          <div className="position-relative">
+                          <div className="position-relative mb-2">
                           <input
                             type={showPassword ? "text" : "password"}
                             id="typePasswordX"

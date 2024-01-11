@@ -20,6 +20,7 @@ import Recruitment2 from './components/Recruitment2';
 import LoginGuest from './components/LoginGuest';
 import OtpForm from './components/OtpForm';
 import ForgotPass from './components/ForgotPass';
+import Payroll from './UserPages/Payroll/Payroll';
 
 function App() {
   return (
@@ -33,7 +34,8 @@ function App() {
         <Route path='/user-dashboard' element={<Dashboard1/>}/>
         <Route path='/attendance' element={<Attendance/>}/>
         <Route path='/user-attendance' element={<Attendance1/>}/>
-        <Route path='/user-time-tracker' element={<TimeTracker/>}/>
+        <Route path='/user-payroll' element={<Payroll/>}/>
+        {/* <Route path='/user-time-tracker' element={<TimeTracker/>}/> */}
         <Route path='/time-tracker' element={<TimeTracker1/>}/>
         <Route path='/time' element={<Time/>}/>
         <Route path='leave-tracker' element={<LeaveTracker1/>}/>

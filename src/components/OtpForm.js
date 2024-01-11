@@ -3,7 +3,7 @@ import { MuiOtpInput } from 'mui-one-time-password-input';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const OtpForm = ({ onSuccessVerification, userData }) => {
+const OtpForm = () => {
   const [otp, setOtp] = React.useState('');
   const [minutes, setMinutes] = useState(5);
   const [seconds, setSeconds] = useState(0);
@@ -16,10 +16,10 @@ const OtpForm = ({ onSuccessVerification, userData }) => {
     e.preventDefault();
 
    
-    const verifyOtpEndpoint = `http://localhost:8080/bytesfarms/user/verifyOTP`;
+    const verifyOtpEndpoint = `http://localhost:8080/bytesfarms/user/verifyOTP?otp=${otp}`;
 
     const data = {
-      ...userData,
+      
     
     };
 
@@ -29,7 +29,6 @@ const OtpForm = ({ onSuccessVerification, userData }) => {
        
         console.log('OTP Verified:', response.data);
        
-        onSuccessVerification(); 
       })
       .catch((error) => {
         

@@ -240,8 +240,8 @@ const TimeTracker = () => {
     <>
       <Sidebar1 />
       <main className="" style={{ backgroundColor: "#F0F5FD" }}>
-        <div className="m-5">
-          <h3 className="m-3 pt-3 pb-3">TIME TRACKER</h3>
+        <div className="p-5">
+          <h3 className=" pb-3">TIME TRACKER</h3>
           <div className=" d-flex justify-content-start">
             <Box sx={{ minWidth: 120 }}>
               <FormControl

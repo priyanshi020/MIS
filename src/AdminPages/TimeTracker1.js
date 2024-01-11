@@ -41,8 +41,8 @@ const TimeTracker1 = () => {
     <>
       <Sidebar />
       <main className="" style={{backgroundColor:'#F0F5FD'}}>
-        <div className="m-5">
-        <h3 className="m-3 pt-3 pb-3">Time Tracker</h3>
+        <div className="p-4">
+        <h3 className=" pb-3">Time Tracker</h3>
         <div className="d-flex align-items-center search-container mb-3">
   <input
     type="search"

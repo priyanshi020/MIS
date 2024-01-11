@@ -11,12 +11,19 @@ import { toast, ToastContainer } from 'react-toastify';
 function AddUser({ onUserAdded }) {
   const [open, setOpen] = React.useState(false);
   const [name, setName] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const admin = "Admin";
   const employee = "Employee";
   const hr="HR";
+
+  
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -28,6 +35,12 @@ function AddUser({ onUserAdded }) {
   const loginEndpoint = "http://localhost:8080/bytesfarms/user/signup";
 
   const handleSubmit = async() => {
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{8,}$/;
+
+  if (!passwordRegex.test(password)) {
+    toast.error('Must contain 8 charchter including one capital ,one small letter and one symbol');
+    return;
+  }
     // e.preventDefault();
     const dataToAdd = {
       username: name,
@@ -73,7 +86,16 @@ function AddUser({ onUserAdded }) {
         Add
         {/* <img src='/assets/add.png' alt='icon' className="ml-2"/> */}
       </button>
-      <ToastContainer/>
+      <ToastContainer  position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        className="toast-center"/>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle style={{ fontSize: "30px", fontWeight: "600" }}>
           Add User
@@ -109,12 +131,21 @@ function AddUser({ onUserAdded }) {
             id="password"
             label="Password"
             // type={showPassword ? "text" : "password"}
-            type="password"
+            // type="password"
+            type={showPassword ? "text" : "password"}
             fullWidth
             variant="standard"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+         
+                            <i
+                              className={`bi bi-eye${
+                                showPassword ? "-slash" : ""
+                              } position-absolute  top-75 translate-middle-y`}
+                              style={{ cursor: "pointer" ,color:'black' ,right:'46px',top:'232px  '}}
+                              onClick={togglePasswordVisibility}
+                            ></i>
           <TextField
             id="role"
             select

@@ -36,8 +36,8 @@ const Dashboard1 = () => {
     <>
       <Sidebar1 />
       <main style={{ backgroundColor: "#F0F5FD" }}> 
-      <div className="m-5">
-        <h3 className="m-3 pt-3 pb-3">DASHBOARD</h3>
+      <div className="p-5">
+        <h3 className="pb-3">DASHBOARD</h3>
         
         {/* Timer Card */}
         <div className="row row-cols-2 g-3">

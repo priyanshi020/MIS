@@ -216,8 +216,8 @@ const Recruitment = () => {
       <Sidebar />
 
       <main className="" style={{ backgroundColor: "#F0F5FD" }}>
-        <div className="m-5">
-          <h3 className="m-3 pt-3 pb-3">Recruitment</h3>
+        <div className="p-4">
+          <h3 className=" pb-3">Recruitment</h3>
           <Box sx={{ width: "100%" }}>
             <Box
               sx={{

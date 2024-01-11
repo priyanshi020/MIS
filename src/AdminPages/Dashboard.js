@@ -171,7 +171,7 @@ const Dashboard = () => {
   };
 
   const handleEditApiCall = () => {
-    const editData = {  
+    const editData = {
       username: Editusername,
       email: Editemail,
       profile: {
@@ -204,8 +204,8 @@ const Dashboard = () => {
     <>
       <Sidebar />
       <main className="" style={{ backgroundColor: "#F0F5FD" }}>
-        <div className="m-5">
-          <h2 className="m-3 pt-3 pb-3">DASHBOARD</h2>
+        <div className="p-4">
+          <h2 className=" pb-3">DASHBOARD</h2>
 
           <div className="d-flex">
             <div className=" col-md-3 ">
