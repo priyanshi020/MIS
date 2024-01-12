@@ -246,7 +246,7 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
                       onClose={handleMenuClose}
                     >
                       {/* <MenuItem onClick={handleClick}>Edit</MenuItem> */}
-                      <MenuItem>Delete</MenuItem>
+                      <MenuItem>Cancel Leave</MenuItem>
                     </Menu>
                   </td>
                   

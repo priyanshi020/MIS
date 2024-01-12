@@ -33,17 +33,13 @@ export default function ForgotPass() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Get UUID from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    // const uuid = urlParams.get("UUID");
-
-    // Check if passwords match
+    
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
-    }
+    }else{
     const resetUuid = localStorage.getItem('resetUuid');
-
+    console.log("uuid",resetUuid);
     // Make API request to reset password
     const resetPasswordEndpoint = `http://localhost:8080/bytesfarms/user/updatePassword?UUID=${resetUuid}&password=${password}`;
 
@@ -59,6 +55,7 @@ export default function ForgotPass() {
         console.error("Password reset failed:", error.response.data);
         toast.error("Password reset failed. Please try again.");
       });
+    }
   };
   
 

@@ -22,7 +22,7 @@ const Sidebar = () => {
   const [imageProfile,setImageProfile]=useState("");
   useEffect(() => {
     const userId = localStorage.getItem('userId');
-
+    
     if (userId) {
       axios.get(`http://localhost:8080/bytesfarms/user/getEmployees`)
         .then(response => {
@@ -30,7 +30,7 @@ const Sidebar = () => {
           const user = response.data.find(employee => employee.id.toString() === userId);
 
           if (user) {
-            setUserName(user.username);  // Change from 'name' to 'username'
+            // setUserName(user.username);  // Change from 'name' to 'username'
             setImageProfile(user.image);
           } else {
             console.error('User not found');
@@ -164,7 +164,7 @@ const Sidebar = () => {
                 className="rounded-circle"
                 height="25"
                 width="25"
-                alt="Black and White Portrait of a Man"
+                alt="profile"
                 loading="lazy"
               />
             </div></div>

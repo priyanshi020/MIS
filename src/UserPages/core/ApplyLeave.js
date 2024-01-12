@@ -119,7 +119,7 @@ function AddUser({onApplyLeave}) {
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
             InputProps={{
-                style: { color: "gray" },
+                style: { color: "gray" , paddingTop:'7px',paddingBottom:'7px'},
               }}
           />
 
@@ -133,7 +133,7 @@ function AddUser({onApplyLeave}) {
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
             InputProps={{
-              style: { color: "gray" },
+              style: { color: "gray", paddingTop:'7px',paddingBottom:'7px' },
             }}
           />
 

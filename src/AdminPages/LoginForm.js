@@ -77,9 +77,10 @@ export default function Mus() {
     const userRole = response.data.role.roleName;
     
     const userId=response.data.id;
+    const userName=response.data.username;
     console.log("yeh hu userdi h ",userId)
     localStorage.setItem('userId', userId.toString());
-    
+    localStorage.setItem('userName',userName);
     if (userRole === 'Admin') {
       navigate('/dashboard');
     } 
@@ -124,10 +125,11 @@ export default function Mus() {
       .then((response) => {
         
         const resetUuid = response.data;
-        localStorage.setItem('userId', resetUuid.toString());
+        
+        localStorage.setItem('resetUuid', resetUuid);
         console.log('Password reset request successful:', response.data);
         toast.success('Password reset request sent. Check your email for further instructions.');
-        // navigate(`/updatepassword?token=${resetUuid}`)
+       
       })
       .catch((error) => {
        

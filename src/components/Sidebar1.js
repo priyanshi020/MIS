@@ -163,7 +163,7 @@ const Sidebar1 = () => {
                 className="rounded-circle"
                 height="25"
                 width="25"
-                alt="Black and White Portrait of a Man"
+                alt="profile"
                 loading="lazy"
               />
             </div>
