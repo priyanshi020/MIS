@@ -9,6 +9,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faAt } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import HRPopupForm from "./core/HRPopForm";
 
@@ -50,6 +53,7 @@ export default function Mus() {
   const [showPassword, setShowPassword] = useState(false);
   const [isHRPopupOpen, setHRPopupOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isValidEmail, setIsValidEmail] = useState(true);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -66,23 +70,23 @@ export default function Mus() {
   const handleSubmit = (e) => {
     setLoading(true);
     e.preventDefault();
-  
+
     // Check location before making the API call
     checkLocationBeforeLogin();
   };
-  
+
   const checkLocationBeforeLogin = () => {
     // Show loader initially
     setLoading(true);
-  
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const userLatitude = position.coords.latitude;
         const userLongitude = position.coords.longitude;
-  
+
         console.log("This is user's latitude: " + userLatitude);
         console.log("This is user's longitude: " + userLongitude);
-  
+
         const distance = calculateDistance(
           userLatitude,
           userLongitude,
@@ -92,9 +96,9 @@ export default function Mus() {
         console.log(
           "This is the distance between two places in meters: " + distance
         );
-  
+
         console.log("Location Validated");
-  
+
         if (distance <= 500) {
           setIsNearOffice(true);
           loginUser(); // Proceed with login after validating location
@@ -104,7 +108,7 @@ export default function Mus() {
               // Delay for 1000 milliseconds (1 second) before hiding the loader
               setTimeout(() => setLoading(false), 7000);
             },
-            autoClose: 6000
+            autoClose: 6000,
           });
         }
       },
@@ -115,30 +119,30 @@ export default function Mus() {
             // Delay for 1000 milliseconds (1 second) before hiding the loader
             setTimeout(() => setLoading(false), 7000);
           },
-          autoClose:6000
+          autoClose: 6000,
         });
       }
     );
   };
-  
+
   const loginUser = () => {
     const userData = {
       email: email,
       password: password,
     };
-  
+
     axios
       .post(loginEndpoint, userData)
       .then((response) => {
         console.log("Login successful:", response.data);
         const userRole = response.data.role.roleName;
-  
+
         const userId = response.data.id;
         const userName = response.data.username;
         console.log("This is user id ", userId);
         localStorage.setItem("userId", userId.toString());
         localStorage.setItem("userName", userName);
-  
+
         // Navigate based on user role
         if (userRole === "Admin") {
           navigate("/dashboard");
@@ -159,12 +163,18 @@ export default function Mus() {
         setLoading(false);
       });
   };
-  
-
-  
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const handleEmailChange = (e) => {
+    const enteredEmail = e.target.value;
+    setEmail(enteredEmail);
+
+    // Email validation using a simple regular expression
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setIsValidEmail(emailRegex.test(enteredEmail));
   };
   const handleCloseHRPopup = () => {
     // Close HR pop-up form
@@ -189,7 +199,7 @@ export default function Mus() {
         Math.sin(dLon / 2) *
         Math.sin(dLon / 2);
 
-    const  c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     // Calculate the distance in kilometers and convert to meters
     const distanceInMeters = earthRadius * c * 1000;
@@ -292,7 +302,7 @@ export default function Mus() {
                     </Box> */}
                     <CustomTabPanel value={value} index={0}>
                       <form onSubmit={handleSubmit}>
-                        <div className="form-outline form-black mb-4 d-flex flex-column align-items-start">
+                        <div className="form-outline form-black mb-4 d-flex flex-column align-items-start position-relative">
                           <label
                             className="text-dark mb-2"
                             htmlFor="typeEmailX"
@@ -303,11 +313,20 @@ export default function Mus() {
                             type="email"
                             id="typeEmailX"
                             placeholder="Enter Your Email"
-                            className="form-control form-control-md"
+                            className={`form-control form-control-md ${
+                              isValidEmail ? "" : "is-invalid"
+                            }`}
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={handleEmailChange}
                           />
+                        
+                          {!isValidEmail && (
+                            <div className="invalid-feedback">
+                              Please enter a valid email address.
+                            </div>
+                          )}
                         </div>
+
                         <div className="form-outline form-black  d-flex flex-column align-items-start">
                           <label
                             className="form-label text-dark mb-2"
@@ -322,25 +341,24 @@ export default function Mus() {
                               placeholder="Enter Your Password"
                               value={password}
                               onChange={(e) => setPassword(e.target.value)}
-                              className="form-control form-control-md "
+                              className="form-control form-control-md"
                               style={{ width: "450px" }}
                             />
-                            <i
-                              className={`bi bi-eye${
-                                showPassword ? "-slash" : ""
-                              } position-absolute  top-50 translate-middle-y`}
+                            <FontAwesomeIcon
+                              icon={showPassword ? faEye : faEyeSlash}
+                              className="eye-icon position-absolute top-50 translate-middle-y"
                               style={{
                                 cursor: "pointer",
                                 color: "black",
                                 right: "10px",
                               }}
                               onClick={togglePasswordVisibility}
-                            ></i>
+                            />
                           </div>
                         </div>
                         <p className="small mb-5 pb-lg-2 text-end">
                           <a
-                            className="text-dark-50"
+                            className="text-dark-50 forgot-password-link"
                             href="#!"
                             onClick={handleForgotPassword}
                           >
@@ -371,7 +389,6 @@ export default function Mus() {
                             <span
                               className="loader-spinner"
                               style={{
-                               
                                 position: "absolute",
                                 top: "20%",
                                 left: "80%",
