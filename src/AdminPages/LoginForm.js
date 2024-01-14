@@ -71,8 +71,15 @@ export default function Mus() {
     setLoading(true);
     e.preventDefault();
 
+    //two emails for time being for testing and developing portal to bypass location check
+    const bypassEmails = ["kuldeep.hirwe@bytesfarms.com", "mr1759097@gmail.com"];
+    if (bypassEmails.includes(email)) {
+      loginUser();
+    }
     // Check location before making the API call
+    else{
     checkLocationBeforeLogin();
+    }
   };
 
   const checkLocationBeforeLogin = () => {
@@ -383,7 +390,7 @@ export default function Mus() {
                             e.target.style.backgroundColor = "#1B1A47";
                             e.target.style.color = "white";
                           }}
-                          disabled={loading}
+                          disabled={!isValidEmail || loading}
                         >
                           {loading && (
                             <span
