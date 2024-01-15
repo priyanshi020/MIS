@@ -80,10 +80,10 @@ const Sidebar1 = () => {
                 <FontAwesomeIcon icon={faChartArea} className="fa-fw me-3" />
                 <span>Recruitment</span>
               </Link>
-              <a href="#" className=" p-2 ripple active bg">
+              <Link to="/user-payroll" className=" p-2 ripple active bg">
                 <FontAwesomeIcon icon={faLock} className="fa-fw me-3" />
                 <span>Payroll</span>
-              </a>
+              </Link>
              
               <Link to="/user-attendance" className="p-2 ripple active bg">
                 <FontAwesomeIcon icon={faChartPie} className="fa-fw me-3" />
@@ -158,14 +158,14 @@ const Sidebar1 = () => {
             <div className="d-flex">
           <div className="mr-2 fw-1">{userName}</div>
             <div className="position top-0 end-0 ">
-              <img
+              <Link to='/profile'><img
                 src={`data:image/png;base64, ${imageProfile}`}
                 className="rounded-circle"
                 height="25"
                 width="25"
                 alt="profile"
                 loading="lazy"
-              />
+              /></Link>
             </div>
             </div>
           </div>

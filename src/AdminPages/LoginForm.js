@@ -349,7 +349,7 @@ export default function Mus() {
                               value={password}
                               onChange={(e) => setPassword(e.target.value)}
                               className="form-control form-control-md"
-                              style={{ width: "450px" }}
+                              style={{ width: "445px" }}
                             />
                             <FontAwesomeIcon
                               icon={showPassword ? faEye : faEyeSlash}
@@ -374,7 +374,7 @@ export default function Mus() {
                         </p>
                         <button
                           onClick={handleSubmit}
-                          className="btn btn-dark btn-lg w-50 rounded-3"
+                          className="btn btn-dark btn-lg w-100 rounded-3"
                           type="button"
                           style={{
                             transition: "background-color 0.3s",

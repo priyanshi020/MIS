@@ -7,6 +7,8 @@ const Profile = () => {
   const [imageProfile, setImageProfile] = useState("");
   const [designation, setDesignation] = useState("");
   const [editMode, setEditMode] = useState(false);
+  const [editMode1, setEditMode1] = useState(false);
+  const [editMode2,setEditMode2]=useState(false);
   const [fullName, setFullName] = useState(" ");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -16,9 +18,20 @@ const Profile = () => {
   const [location, setLocation] = useState("");
   const [experience, setExperience] = useState("");
   const [joiningDate, setJoiningDate] = useState("");
+  const [dob,setDob]=useState("");
+  const [ age,setAge]=useState("");
+  const [gender,setGender]=useState("");
+  const [maritalStatus,setMaritalStatus]=useState("");
+
   const handleEditClick = () => {
     setEditMode(true);
   };
+  const handleEditClick1 = () => {
+    setEditMode1(true);
+  };
+  const handleEditClick2=()=>{
+    setEditMode2(true);
+  }
 
   const handleSaveClick = () => {
     const updatedData = {
@@ -32,6 +45,10 @@ const Profile = () => {
       designation,
       experience,
       joiningDate,
+      dob,
+      age,
+      gender,
+      maritalStatus,
     };
 
     // Assuming you have the user ID available
@@ -39,12 +56,14 @@ const Profile = () => {
 
     axios
       .put(
-        `http://localhost:8080/bytesfarms/user/updateUserData/${userId}`,
+        `http://localhost:8080/bytesfarms/user/update?userId=${userId}`,
         updatedData
       )
       .then((response) => {
         console.log("Data updated successfully:", response.data);
         setEditMode(false);
+        setEditMode1(false);
+        setEditMode2(false);
       })
       .catch((error) => {
         console.error("Error updating data:", error);
@@ -174,7 +193,7 @@ const Profile = () => {
                 </div>
 
                 <div class="bg-white card rounded-4 shadow shadow-lg p-3 position-relative">
-                  {editMode && (
+                  {editMode1 && (
                     <button
                       className="btn btn-primary position-absolute top-0 end-0 m-3"
                       onClick={handleSaveClick}
@@ -189,10 +208,10 @@ const Profile = () => {
                   </div>
                   <div class="row">
                     <div class="col-sm-5">
-                      <p class="mb-2">Department</p>
+                      <p class="mb-4">Department</p>
                     </div>
                     <div class="col-sm-7">
-                      {editMode ? (
+                      {editMode1 ? (
                         <input
                           type="text"
                           value={department}
@@ -204,13 +223,13 @@ const Profile = () => {
                       )}
                     </div>
                   </div>
-                  <hr />
+                 
                   <div class="row">
                     <div class="col-sm-5">
-                      <p class="mb-2">Location</p>
+                      <p class="mb-4">Location</p>
                     </div>
                     <div class="col-sm-7">
-                      {editMode ? (
+                      {editMode1 ? (
                         <input
                           type="text"
                           value={location}
@@ -222,13 +241,12 @@ const Profile = () => {
                       )}{" "}
                     </div>
                   </div>
-                  <hr />
                   <div class="row">
                     <div class="col-sm-5">
-                      <p class="mb-2">Designation</p>
+                      <p class="mb-4">Designation</p>
                     </div>
                     <div class="col-sm-7">
-                      {editMode ? (
+                      {editMode1 ? (
                         <input
                           type="text"
                           value={designation}
@@ -240,13 +258,12 @@ const Profile = () => {
                       )}
                     </div>
                   </div>
-                  <hr />
                   <div class="row">
                     <div class="col-sm-5">
-                      <p class="mb-2"> Experience</p>
+                      <p class="mb-4"> Experience</p>
                     </div>
                     <div class="col-sm-7">
-                      {editMode ? (
+                      {editMode1 ? (
                         <input
                           type="text"
                           value={experience}
@@ -258,13 +275,13 @@ const Profile = () => {
                       )}
                     </div>
                   </div>
-                  <hr />
                   <div class="row">
                     <div class="col-sm-5">
-                      <p class="mb-2"> Joining Date</p>
+                      <p class="mb-5
+                      "> Joining Date</p>
                     </div>
                     <div class="col-sm-7">
-                      {editMode ? (
+                      {editMode1 ? (
                         <input
                           type="text"
                           value={joiningDate}
@@ -276,10 +293,10 @@ const Profile = () => {
                       )}
                     </div>
                   </div>
-                  {!editMode && (
+                  {!editMode1 && (
                     <button
                       className="btn btn-link position-absolute top-0 end-0 m-3"
-                      onClick={handleEditClick}
+                      onClick={handleEditClick1}
                     >
                       <FaPencilAlt />
                     </button>
@@ -318,6 +335,7 @@ const Profile = () => {
                         <p className="text-muted mb-0">{fullName}</p>
                       )}
                     </div>
+                    
                     <div className="col-sm-3">
                       <p className="mb-4">Email</p>
                     </div>
@@ -389,64 +407,106 @@ const Profile = () => {
                     </button>
                   )}
                 </div>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class=" mb-4 mt-4">
-                      <div class="card-body bg-white shadow shadow-lg p-3">
-                        <div class="row">
-                          <div class="col-sm-9">
-                            <h5 class="mb-3">Personal Information</h5>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-3">
-                            <p class="mb-0">DOB</p>
-                          </div>
-                          <div class="col-sm-9">
-                            <p class="text-muted mb-0">Johnatan Smith</p>
-                          </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                          <div class="col-sm-3">
-                            <p class="mb-0">Age</p>
-                          </div>
-                          <div class="col-sm-9">
-                            <p class="text-muted mb-0">example@example.com</p>
-                          </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                          <div class="col-sm-3">
-                            <p class="mb-0">Gender</p>
-                          </div>
-                          <div class="col-sm-9">
-                            <p class="text-muted mb-0">(097) 234-5678</p>
-                          </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                          <div class="col-sm-3">
-                            <p class="mb-0">Marital Status</p>
-                          </div>
-                          <div class="col-sm-9">
-                            <p class="text-muted mb-0">(098) 765-4321</p>
-                          </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                          <div class="col-sm-3">
-                            <p class="mb-0">Address</p>
-                          </div>
-                          <div class="col-sm-9">
-                            <p class="text-muted mb-0">
-                              Bay Area, San Francisco, CA
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+                <div className="bg-white card rounded-4 shadow shadow-lg p-3 mt-4 position-relative">
+                  {editMode2 && (
+                    <button
+                      className="btn btn-primary position-absolute top-0 end-0 m-3"
+                      onClick={handleSaveClick}
+                    >
+                      Save
+                    </button>
+                  )}
+                  <div className="row">
+                    <div className="col-sm-9">
+                      <h5 className="py-4">Personal Information</h5>
                     </div>
                   </div>
+                  <div className="row">
+                    <div className="col-sm-3">
+                      <p className="mb-4">DOB</p>
+                    </div>
+                    <div className="col-sm-9">
+                      {editMode2 ? (
+                        <input
+                          type="text"
+                          value={dob}
+                          onChange={(e) => setDob(e.target.value)}
+                          style={{ width: "100%" }}
+                        />
+                      ) : (
+                        <p className="text-muted mb-0">{dob}</p>
+                      )}
+                    </div>
+                    <div className="col-sm-3">
+                      <p className="mb-4">Age</p>
+                    </div>
+                    <div className="col-sm-9">
+                      {editMode2 ? (
+                        <input
+                          type="number"
+                          value={age}
+                          onChange={(e) => setAge(e.target.value)}
+                          style={{ width: "100%" }}
+                        />
+                      ) : (
+                        <p className="text-muted mb-0">{age}</p>
+                      )}
+                    </div>
+                    <div className="col-sm-3">
+                      <p className="mb-4">Gender </p>
+                    </div>
+                    <div className="col-sm-9">
+                      {editMode2 ? (
+                        <input
+                          type="text"
+                          value={gender}
+                          onChange={(e) => setGender(e.target.value)}
+                          style={{ width: "100%" }}
+                        />
+                      ) : (
+                        <p className="text-muted mb-0">{gender}</p>
+                      )}
+                    </div>
+                    <div className="col-sm-3">
+                      <p className="mb-4">Marital Status</p>
+                    </div>
+                    <div className="col-sm-9">
+                      {editMode2 ? (
+                        <input
+                          type="number"
+                          value={maritalStatus}
+                          onChange={(e) => setMaritalStatus(e.target.value)}
+                          style={{ width: "100%" }}
+                        />
+                      ) : (
+                        <p className="text-muted mb-0">{maritalStatus}</p>
+                      )}
+                    </div>
+                    <div className="col-sm-3">
+                      <p className="mb-5">Address</p>
+                    </div>
+                    <div className="col-sm-9">
+                      {editMode2 ? (
+                        <input
+                          type="text"
+                          value={address}
+                          onChange={(e) => setAddress(e.target.value)}
+                          style={{ width: "100%" }}
+                        />
+                      ) : (
+                        <p className="text-muted mb-0">{address}</p>
+                      )}
+                    </div>
+                  </div>
+                  {/* Repeat similar structure for other fields */}
+                  {!editMode2 && (
+                    <button
+                      className="btn btn-link position-absolute top-0 end-0 m-3"
+                      onClick={handleEditClick2}
+                    >
+                      <FaPencilAlt />
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

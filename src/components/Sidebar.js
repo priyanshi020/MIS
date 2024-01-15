@@ -30,7 +30,7 @@ const Sidebar = () => {
           const user = response.data.find(employee => employee.id.toString() === userId);
 
           if (user) {
-            // setUserName(user.username);  // Change from 'name' to 'username'
+             setUserName(user.username);  // Change from 'name' to 'username'
             setImageProfile(user.image);
           } else {
             console.error('User not found');
@@ -100,6 +100,10 @@ const Sidebar = () => {
                 <FontAwesomeIcon icon={faBuilding} className="fa-fw me-3" />
                 <span>Time Tracker</span>
               </Link>
+              <a href="#" className="p-2 ripple active bg">
+                <FontAwesomeIcon icon={faChartBar} className="fa-fw me-3" />
+                <span>Company Policy</span>
+              </a>
 
               {/* <a href="#" className="p-2 ripple active bg">
                 <FontAwesomeIcon icon={faUsers} className="fa-fw me-3" />

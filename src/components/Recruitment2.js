@@ -12,7 +12,7 @@ const FixedHeightCard = ({ children }) => (
 );
 
 
-const Recruitment1 = () => {
+const Recruitment2 = () => {
   const [positions, setPositions] = useState([]);
 
   useEffect(() => {
@@ -34,10 +34,10 @@ const Recruitment1 = () => {
 
   return (
     <div >
-      {/* <Sidebar1 /> */}
+      <Sidebar1 />
       <main className="" style={{backgroundColor:'#F0F5FD'}} >
-        <div className="m-5">
-        <h3 className="m-3 pt-3 pb-3">Open Positions</h3>
+        <div className="p-5">
+        <h3 className=" pb-3">Open Positions</h3>
         <div className="container">
           <div className="row  " >
             {positions.map((position) => (
@@ -68,7 +68,7 @@ const Recruitment1 = () => {
 
                     </div>
 
-                    <div className="d-flex justify-content-around col-md-12 grid gap-2" style={{marginLeft:'22px'}}>
+                    <div className="d-flex justify-content-around col-md-9 grid gap-2" style={{marginLeft:'22px'}}>
                       <div className="col-md-4 p-0">
                         <Button
                           style={{
@@ -206,4 +206,4 @@ const Recruitment1 = () => {
   );
 };
 
-export default Recruitment1;
+export default Recruitment2;
