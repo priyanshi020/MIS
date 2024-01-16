@@ -14,10 +14,10 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { faAt } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import HRPopupForm from "./core/HRPopForm";
-
+ 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
-
+ 
   return (
     <div
       role="tabpanel"
@@ -34,43 +34,43 @@ function CustomTabPanel(props) {
     </div>
   );
 }
-
+ 
 CustomTabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
 };
-
+ 
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
-
+ 
 export default function Mus() {
   const [value, setValue] = React.useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [isHRPopupOpen, setHRPopupOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isValidEmail, setIsValidEmail] = useState(true);
-
+ 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
+ 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isNearOffice, setIsNearOffice] = useState(false);
-
+ 
   const navigate = useNavigate();
-
+ 
   const loginEndpoint = "http://localhost:8080/bytesfarms/user/signin";
-
+ 
   const handleSubmit = (e) => {
     setLoading(true);
     e.preventDefault();
-
+ 
     //two emails for time being for testing and developing portal to bypass location check
     const bypassEmails = ["kuldeep.hirwe@bytesfarms.com", "mr1759097@gmail.com"];
     if (bypassEmails.includes(email)) {
@@ -81,31 +81,31 @@ export default function Mus() {
     checkLocationBeforeLogin();
     }
   };
-
+ 
   const checkLocationBeforeLogin = () => {
     // Show loader initially
     setLoading(true);
-
+ 
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const userLatitude = position.coords.latitude;
         const userLongitude = position.coords.longitude;
-
+ 
         console.log("This is user's latitude: " + userLatitude);
         console.log("This is user's longitude: " + userLongitude);
-
+ 
         const distance = calculateDistance(
           userLatitude,
           userLongitude,
-          22.744928,
-          75.892278
+          22.7451159,
+          75.8921958
         );
         console.log(
           "This is the distance between two places in meters: " + distance
         );
-
+ 
         console.log("Location Validated");
-
+ 
         if (distance <= 500) {
           setIsNearOffice(true);
           loginUser(); // Proceed with login after validating location
@@ -131,25 +131,25 @@ export default function Mus() {
       }
     );
   };
-
+ 
   const loginUser = () => {
     const userData = {
       email: email,
       password: password,
     };
-
+ 
     axios
       .post(loginEndpoint, userData)
       .then((response) => {
         console.log("Login successful:", response.data);
         const userRole = response.data.role.roleName;
-
+ 
         const userId = response.data.id;
         const userName = response.data.username;
         console.log("This is user id ", userId);
         localStorage.setItem("userId", userId.toString());
         localStorage.setItem("userName", userName);
-
+ 
         // Navigate based on user role
         if (userRole === "Admin") {
           navigate("/dashboard");
@@ -170,15 +170,15 @@ export default function Mus() {
         setLoading(false);
       });
   };
-
+ 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+ 
   const handleEmailChange = (e) => {
     const enteredEmail = e.target.value;
     setEmail(enteredEmail);
-
+ 
     // Email validation using a simple regular expression
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     setIsValidEmail(emailRegex.test(enteredEmail));
@@ -187,42 +187,42 @@ export default function Mus() {
     // Close HR pop-up form
     setHRPopupOpen(false);
   };
-
+ 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const earthRadius = 6371; // Radius of the Earth in kilometers
-
+ 
     // Convert latitude and longitude from degrees to radians
     const toRadians = (angle) => {
       return angle * (Math.PI / 180);
     };
-
+ 
     const dLat = toRadians(lat2 - lat1);
     const dLon = toRadians(lon2 - lon1);
-
+ 
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(toRadians(lat1)) *
         Math.cos(toRadians(lat2)) *
         Math.sin(dLon / 2) *
         Math.sin(dLon / 2);
-
+ 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
+ 
     // Calculate the distance in kilometers and convert to meters
     const distanceInMeters = earthRadius * c * 1000;
-
+ 
     return distanceInMeters;
   };
-
+ 
   const handleForgotPassword = () => {
     // Add logic to send a request for password reset
     const forgotPasswordEndpoint = `http://localhost:8080/bytesfarms/user/forgotPassword?email=${email}`;
-
+ 
     axios
       .post(forgotPasswordEndpoint)
       .then((response) => {
         const resetUuid = response.data;
-
+ 
         localStorage.setItem("resetUuid", resetUuid);
         console.log("Password reset request successful:", response.data);
         toast.success(
@@ -234,7 +234,7 @@ export default function Mus() {
         toast.error("Password reset request failed. Please try again.");
       });
   };
-
+ 
   return (
     <section
       className=" gradient-custom pt-5 "
@@ -257,7 +257,7 @@ export default function Mus() {
         pauseOnHover
         className="toast-center"
       />
-
+ 
       <div className="container  py-5 h-25" style={{ overflow: "hidden" }}>
         <div className="row d-flex justify-content-center align-items-center h-100 ">
           <div className="col-12 col-md-8 col-lg-6 col-xl-5  ">
@@ -333,7 +333,7 @@ export default function Mus() {
                             </div>
                           )}
                         </div>
-
+ 
                         <div className="form-outline form-black  d-flex flex-column align-items-start">
                           <label
                             className="form-label text-dark mb-2"
@@ -349,7 +349,7 @@ export default function Mus() {
                               value={password}
                               onChange={(e) => setPassword(e.target.value)}
                               className="form-control form-control-md"
-                              style={{ width: "445px" }}
+                              style={{ width: "450px" }}
                             />
                             <FontAwesomeIcon
                               icon={showPassword ? faEye : faEyeSlash}
@@ -374,7 +374,7 @@ export default function Mus() {
                         </p>
                         <button
                           onClick={handleSubmit}
-                          className="btn btn-dark btn-lg w-100 rounded-3"
+                          className="btn btn-dark btn-lg w-50 rounded-3"
                           type="button"
                           style={{
                             transition: "background-color 0.3s",
@@ -493,3 +493,4 @@ export default function Mus() {
     </section>
   );
 }
+ 

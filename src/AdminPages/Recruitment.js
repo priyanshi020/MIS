@@ -370,12 +370,14 @@ const Recruitment = () => {
                         <DialogActions>
                           <Button
                             onClick={handleClose}
-                            className="bg-dark text-white"
+                            className=" text-white"
+                            style={{ backgroundColor: "#1B1A47" }}
                           >
                             Cancel
                           </Button>
                           <Button
-                            className="bg-dark text-white"
+                             className=" text-white"
+                             style={{ backgroundColor: "#1B1A47" }}
                             onClick={handleEditApiCall}
                           >
                             Edit

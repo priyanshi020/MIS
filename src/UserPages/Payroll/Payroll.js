@@ -15,7 +15,7 @@ const Payroll = () => {
             <div className=" col-md-3 ">
               <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
                 <img
-                  src="/assets/dashboard/emp.png"
+                  src="/assets/payroll/gross-salary.png"
                   alt="emp"
                   className="mr-3"
                   style={{ width: "62px", height: "62px" }}
@@ -45,7 +45,7 @@ const Payroll = () => {
             <div className=" col-md-3 ">
               <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
                 <img
-                  src="/assets/dashboard/proj.png"
+                  src="/assets/payroll/net-pay.png"
                   alt="emp"
                   className="mr-3"
                   style={{ width: "60px", height: "60px" }}
@@ -73,7 +73,7 @@ const Payroll = () => {
             <div className=" col-md-3 ">
               <div className="d-flex   p-3 bg-white shadow shadow-lg rounded-4 ">
                 <img
-                  src="/assets/dashboard/pre.png"
+                  src="/assets/payroll/ic-deduction.png"
                   alt="emp"
                   className="mr-3"
                   style={{ width: "62px", height: "62px" }}
@@ -105,7 +105,7 @@ const Payroll = () => {
                 // style={{ backgroundColor: "#1B1A47" }}
               >
                 <img
-                  src="/assets/dashboard/abs.png"
+                  src="/assets/payroll/ic-bonus.png"
                   alt="emp"
                   className="mr-3"
                   style={{ width: "62px", height: "62px" }}

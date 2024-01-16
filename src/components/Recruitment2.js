@@ -34,10 +34,10 @@ const Recruitment2 = () => {
 
   return (
     <div >
-      <Sidebar1 />
-      <main className="" style={{backgroundColor:'#F0F5FD'}} >
-        <div className="p-5">
-        <h3 className=" pb-3">Open Positions</h3>
+      
+      <div className="p-5" style={{backgroundColor:'#F0F5FD'}} >
+        
+        <h3 className=" ml-5 pl-2" >Open Positions</h3>
         <div className="container">
           <div className="row  " >
             {positions.map((position) => (
@@ -201,8 +201,8 @@ const Recruitment2 = () => {
           ))}
         </div> */}
         </div>
-      </main>
-    </div>
+      </div>
+  
   );
 };
 

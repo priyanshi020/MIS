@@ -21,6 +21,8 @@ import LoginGuest from './components/LoginGuest';
 import OtpForm from './components/OtpForm';
 import ForgotPass from './components/ForgotPass';
 import Payroll from './UserPages/Payroll/Payroll';
+import CompanyPolicy from './UserPages/CompanyPolicy';
+import CompanyPolicy1 from './AdminPages/CompanyPolicy1';
 
 function App() {
   return (
@@ -46,6 +48,8 @@ function App() {
         <Route path='/apply' element={<Recruitment2/>}/>
         <Route path='otp-form' element={<OtpForm/>}/>
         <Route path='/updatepassword' element={<ForgotPass/>}/>
+        <Route path='/user-company-policy' element={<CompanyPolicy/>}/>
+        <Route path='/company-policy' element={<CompanyPolicy1/>}/>
       </Routes>
 
     </Router>

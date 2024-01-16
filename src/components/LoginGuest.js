@@ -51,27 +51,32 @@ function Mus() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Role:', role);
-    const data = {
-      username: username,
-      email: email,
-      password: password,
-      role: {
-        roleName: role,
-      },
-    };
 
+    const data = {
+        username: username,
+        email: email,
+        password: password,
+        role: {
+            roleName: role,
+        },
+    };
+    const dataString = JSON.stringify(data);
+
+    // Store the JSON string in local storage with a specific key
+    localStorage.setItem('userData', dataString);
+    
     axios
-      .post('http://localhost:8080/bytesfarms/user/signup', data)
-      .then((response) => {
-        console.log('Signup successful:', response.data);
-        
-        setValue(1);
-        navigate('/otp-form')
-      })
-      .catch((error) => {
-        console.error('Signup failed:', error.response.data);
-      });
-  };
+        .post('http://localhost:8080/bytesfarms/user/signup', data)
+        .then((response) => {
+            console.log('Signup successful:', response.data);
+            setValue(1);
+            navigate('/otp-form');
+        })
+        .catch((error) => {
+            console.error('Signup failed:', error.response.data);
+        });
+};
+
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

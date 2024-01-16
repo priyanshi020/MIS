@@ -87,6 +87,11 @@ const PdfViewer = ({ jobId }) => {
         .then(response => {
           // Handle success
           console.log(`Application status updated to ${status}`);
+          if (status === "REJECTED") {
+            setApplications(prevApplications =>
+              prevApplications.filter(app => app.resumeId !== resumeId)
+            );
+          }
         })
         .catch(error => {
           // Handle error

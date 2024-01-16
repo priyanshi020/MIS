@@ -2,40 +2,41 @@ import React, { useState, useEffect } from 'react';
 import { MuiOtpInput } from 'mui-one-time-password-input';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const OtpForm = () => {
   const [otp, setOtp] = React.useState('');
   const [minutes, setMinutes] = useState(5);
   const [seconds, setSeconds] = useState(0);
-
+  const navigate=useNavigate();
   const handleChange = (newValue) => {
     setOtp(newValue);
   };
 
-  const handleSubmit = ( e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-   
+    const userData = JSON.parse(localStorage.getItem('userData'));
     const verifyOtpEndpoint = `http://localhost:8080/bytesfarms/user/verifyOTP?otp=${otp}`;
 
-    const data = {
-      
-    
-    };
-
     axios
-      .post(verifyOtpEndpoint, data)
-      .then((response) => {
-       
-        console.log('OTP Verified:', response.data);
-       
-      })
-      .catch((error) => {
-        
-        console.error('OTP Verification failed:', error.response.data);
-       
-      });
-  };
+        .post(verifyOtpEndpoint, {
+            username: userData.username,
+            email: userData.email,
+            password: userData.password,
+            // role: userData.role.roleName,
+        })
+        .then((response) => {
+            console.log('OTP Verified:', response.data);
+            navigate('/apply')
+            // Handle successful OTP verification
+        })
+        .catch((error) => {
+            console.error('OTP Verification failed:', error.response.data);
+            // Handle failed OTP verification
+        });
+};
+
 
   useEffect(() => {
     const interval = setInterval(() => {

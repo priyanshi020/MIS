@@ -160,17 +160,17 @@ const Sidebar = () => {
               </span> */}
             </form>
             <div className="d-flex">
-            <div className="mr-2 font-weight-bold">{userName}</div>
+            <div className="mr-2 font-weight-bold">{userName} ADMIN</div>
             
             <div className="position top-0 end-0 ">
-              <img
+              {/* <img
                 src={`data:image/png;base64, ${imageProfile}`}
                 className="rounded-circle"
                 height="25"
                 width="25"
                 alt="profile"
                 loading="lazy"
-              />
+              /> */}
             </div></div>
           </div>
         </nav>

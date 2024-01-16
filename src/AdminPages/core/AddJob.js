@@ -13,7 +13,7 @@ function AddJob({ onJobAdded }) {
   const [openings, setOpenings] = useState(0);
   const [experience, setExperience] = useState(0);
   const [requirements, setRequirements] = useState("");
-  const [data, setData] = useState([]);
+  
 
   const handleClickOpen = () => {
     setOpen(true);
