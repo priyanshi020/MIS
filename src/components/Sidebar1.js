@@ -99,10 +99,10 @@ const Sidebar1 = () => {
                 <span>Time Tracker</span>
               </Link>
 
-              <a href="#" className="p-2 ripple active bg">
+              <Link to="/user-company-policy" className="p-2 ripple active bg">
                 <FontAwesomeIcon icon={faChartBar} className="fa-fw me-3" />
                 <span>Company Policy</span>
-              </a>
+              </Link>
               {/* <a className="text-white text-decoration-none font-weight-500 cursor-pointer mt-auto">LOGOUT</a> */}
             </div>
             <div className="list-group list-group-flush " style={{marginTop:'325px'}}>

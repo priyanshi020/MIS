@@ -23,6 +23,7 @@ import ForgotPass from './components/ForgotPass';
 import Payroll from './UserPages/Payroll/Payroll';
 import CompanyPolicy from './UserPages/CompanyPolicy';
 import CompanyPolicy1 from './AdminPages/CompanyPolicy1';
+import InterviewSchedule from './AdminPages/core/InterviewSchedule';
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
         <Route path='/updatepassword' element={<ForgotPass/>}/>
         <Route path='/user-company-policy' element={<CompanyPolicy/>}/>
         <Route path='/company-policy' element={<CompanyPolicy1/>}/>
+        <Route path='/interview-schedule' element={<InterviewSchedule/>} />
       </Routes>
 
     </Router>

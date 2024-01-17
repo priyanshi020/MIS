@@ -51,15 +51,12 @@ function ApplyNow({jobPositionId}) {
     const formData = new FormData();
     formData.append("jobPositionId", jobPositionId);    
     formData.append("userId", userId);
-    // formData.append("username", username);
-    // formData.append("email", email);
+    
     formData.append("lastJobTitle", lastJobTitle);
     formData.append("lastJobCompany", lastJobCompany);
     formData.append("lastJobExperience", lastJobExperience);
     formData.append("expectedSalary", expectedSalary);
-    // formData.append("file", file);
-  
-    // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint
+    
     const blob = new Blob([file], { type: file.type });
 
     // Append the file to the FormData

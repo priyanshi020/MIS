@@ -98,57 +98,90 @@ const Dashboard1 = () => {
             </div>
 
             {/* User Profile Card */}
-            <div className="col col-md-4">
-              <div
-                className="card mb-4 rounded-3 shadow shadow-lg "
-                style={{ height: "384px" }}
-              >
-                <div className="card-body text-center mb-5">
-                  {imageProfile && (
-                    <div style={{ position: "relative" }}>
-                      <img
-                        src={`data:image/png;base64, ${imageProfile}`}
-                        alt="avatar"
-                        className="rounded-circle img-fluid mt-3"
-                        style={{ width: "150px", height: "150px" }}
-                      />
-                      <label
-                        htmlFor="imageUpload"
-                        className="pencil-icon"
-                        style={{
-                          position: "absolute",
-                          bottom: "0px",
-                          right: "110px",
-                          background: "rgb(211, 211, 211)",
-                          padding: "4px",
-                          height: "29px",
-                          width: "29px",
-                          borderRadius: "65%", // Border radius for a circular shape
-                        }}
-                      >
-                        <FaPencilAlt style={{ height: "100%" }} />
-                      </label>
-                      <input
-                        type="file"
-                        id="imageUpload"
-                        style={{ display: "none" }}
-                        onChange={handleImageUpload}
-                      />
-                    </div>
-                  )}
-                  {/* <h5 className="my-3">{userName}</h5> */}
-                  <h5 className="my-3 mt-5 " style={{ fontSize: "20px" }}>
-                    {userName}
-                  </h5>
-                  <p
-                    className="text-muted  text-lg"
-                    style={{ fontSize: "20px" }}
-                  >
-                    {designation}
-                  </p>
-                </div>
-              </div>
-            </div>
+            {/* // Inside the user profile card div  */}
+<div className="col col-md-4">
+  <div
+    className="card mb-4 rounded-3 shadow shadow-lg "
+    style={{ height: "384px" }}
+  >
+    <div className="card-body text-center mb-5">
+      {imageProfile ? (
+        // If image exists, display the user's image
+        <div style={{ position: "relative" }}>
+          <img
+            src={`data:image/png;base64, ${imageProfile}`}
+            alt="avatar"
+            className="rounded-circle img-fluid mt-3"
+            style={{ width: "150px", height: "150px" }}
+          />
+          <label
+            htmlFor="imageUpload"
+            className="pencil-icon"
+            style={{
+              position: "absolute",
+              bottom: "0px",
+              right: "110px",
+              background: "rgb(211, 211, 211)",
+              padding: "4px",
+              height: "29px",
+              width: "29px",
+              borderRadius: "65%", // Border radius for a circular shape
+            }}
+          >
+            <FaPencilAlt style={{ height: "100%" }} />
+          </label>
+          <input
+            type="file"
+            id="imageUpload"
+            style={{ display: "none" }}
+            onChange={handleImageUpload}
+          />
+        </div>
+      ) : (
+        // If no image exists, display a default circle and pencil icon
+        <div style={{ position: "relative" }}>
+          <div
+            className="rounded-circle img-fluid mt-3"
+            style={{
+              width: "150px",
+              height: "150px",
+              backgroundColor: "#ccc", // Default color for the circle
+            }}
+          />
+          <label
+            htmlFor="imageUpload"
+            className="pencil-icon"
+            style={{
+              position: "absolute",
+              bottom: "0px",
+              right: "110px",
+              background: "rgb(211, 211, 211)",
+              padding: "4px",
+              height: "29px",
+              width: "29px",
+              borderRadius: "65%", // Border radius for a circular shape
+            }}
+          >
+            <FaPencilAlt style={{ height: "100%" }} />
+          </label>
+          <input
+            type="file"
+            id="imageUpload"
+            style={{ display: "none" }}
+            onChange={handleImageUpload}
+          />
+        </div>
+      )}
+      <h5 className="my-3 mt-5 " style={{ fontSize: "20px" }}>
+        {userName}
+      </h5>
+      <p className="text-muted text-lg" style={{ fontSize: "20px" }}>
+        {designation}
+      </p>
+    </div>
+  </div>
+</div>
+
 
             {/* Tasklist */}
             <div className="col col-md-4">

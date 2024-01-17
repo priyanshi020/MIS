@@ -4,37 +4,37 @@ import Sidebar1 from '../components/Sidebar1';
 import axios from 'axios';
 
 const FixedHeightCard = ({ title, content, onClick }) => {
-    const shortenedDescription = content.split(' ').slice(0, 37).join(' ');
-  
-    return (
-      <Card style={{ padding: '20px', height: '400px', overflow: 'hidden' }}>
-        <CardMedia>
-          <img src='/assets/payroll/ic-calender.png' alt='icon' className='mr-2' />
-        </CardMedia>
-        <div className='mt-3'>
-          <h4>{title}</h4>
-        </div>
-        <div className='text-secondary '>
-          <p className='m-3 ' >{shortenedDescription}...</p>
-        </div>
-        <Button
-          variant="contained"
-          style={{
-            fontWeight: 600,
-            fontSize: "15px",
-            color: "white",
-            background: "#1B1A47",
-            borderRadius: "30px",
-            marginTop: "12px",
-          }}
-          onClick={onClick}
-        >
-          Read More
-        </Button>
-      </Card>
-    );
-  };
-  
+  const shortenedDescription = content.split(' ').slice(0, 37).join(' ');
+
+  return (
+    <Card style={{ padding: '20px', height: '400px', overflow: 'hidden' }}>
+      <CardMedia>
+        <img src='/assets/payroll/ic-calender.png' alt='icon' className='mr-2' />
+      </CardMedia>
+      <div className='mt-3'>
+        <h4>{title}</h4>
+      </div>
+      <div className='text-secondary' style={{ minHeight:'150px' ,maxHeight: '150px', overflow: 'hidden' }}>
+        <p className='m-3'>{shortenedDescription}...</p>
+      </div>
+      <Button
+        variant="contained"
+        style={{
+          fontWeight: 600,
+          fontSize: "15px",
+          color: "white",
+          background: "#1B1A47",
+          borderRadius: "30px",
+          marginTop: "12px",
+        }}
+        onClick={onClick}
+      >
+        Read More
+      </Button>
+    </Card>
+  );
+};
+
 const CompanyPolicy = () => {
   const [cardsData, setCardsData] = useState([]);
 

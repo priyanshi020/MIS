@@ -100,10 +100,10 @@ const Sidebar = () => {
                 <FontAwesomeIcon icon={faBuilding} className="fa-fw me-3" />
                 <span>Time Tracker</span>
               </Link>
-              <a href="#" className="p-2 ripple active bg">
+              <Link to="/company-policy" className="p-2 ripple active bg">
                 <FontAwesomeIcon icon={faChartBar} className="fa-fw me-3" />
                 <span>Company Policy</span>
-              </a>
+              </Link>
 
               {/* <a href="#" className="p-2 ripple active bg">
                 <FontAwesomeIcon icon={faUsers} className="fa-fw me-3" />
