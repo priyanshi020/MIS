@@ -111,7 +111,7 @@ const Sidebar = () => {
               </a> */}
               {/* <a className="text-white text-decoration-none font-weight-500 cursor-pointer mt-auto">LOGOUT</a> */}
             </div>
-            <div className="list-group list-group-flush " style={{marginTop:'355px'}}>
+            <div className="list-group list-group-flush " style={{marginTop:'335px'}}>
             <Link to="/" className="p-2 m-2 ripple active bg">
             <img src="/assets/logout-icon.png" alt='logout'/>
                 <span className="ml-1">LOG OUT</span>

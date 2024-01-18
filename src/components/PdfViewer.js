@@ -8,6 +8,7 @@ import axios from "axios";
 import { saveAs } from "file-saver";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { Link } from "react-router-dom";
 const PdfViewer = ({ jobId }) => {
   const [open, setOpen] = useState(false);
   const [applications, setApplications] = useState([]);
@@ -49,19 +50,18 @@ const PdfViewer = ({ jobId }) => {
   const downloadPdf = (pdfData, candidateUsername) => {
     const sanitizedUsername = candidateUsername.replace(/[^a-z0-9]/gi, "_");
     const filename = `${sanitizedUsername}_resume.pdf`;
-  
+
     const byteCharacters = atob(pdfData);
     const byteNumbers = new Array(byteCharacters.length);
-  
+
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
-  
+
     const byteArray = new Uint8Array(byteNumbers);
     const blob = new Blob([byteArray], { type: "application/pdf" });
     saveAs(blob, filename);
   };
-  
 
   const handleMenuClick = (event, application) => {
     setAnchorEl(event.currentTarget);
@@ -79,31 +79,30 @@ const PdfViewer = ({ jobId }) => {
       const { resumeId } = selectedApplication;
       const updateStatusApi = `http://localhost:8080/bytesfarms/resume/update-status?resumeId=${resumeId}&jobPositionId=${jobId}`;
 
-      axios.put(updateStatusApi, status, {
-        headers: {
-          'Content-Type': 'text/plain', // Set the content type to text/plain if needed
-        },
-      })
-        .then(response => {
+      axios
+        .put(updateStatusApi, status, {
+          headers: {
+            "Content-Type": "text/plain", // Set the content type to text/plain if needed
+          },
+        })
+        .then((response) => {
           // Handle success
           console.log(`Application status updated to ${status}`);
           if (status === "REJECTED") {
-            setApplications(prevApplications =>
-              prevApplications.filter(app => app.resumeId !== resumeId)
+            setApplications((prevApplications) =>
+              prevApplications.filter((app) => app.resumeId !== resumeId)
             );
           }
         })
-        .catch(error => {
+        .catch((error) => {
           // Handle error
           console.error("Error updating application status:", error);
         })
         .finally(() => {
           handleMenuClose();
         });
-      
     }
   };
-
 
   return (
     <>
@@ -141,19 +140,21 @@ const PdfViewer = ({ jobId }) => {
               >
                 <thead className="table-secondary text-center">
                   <tr>
-                    <th style={{padding:'20px'}}>S.No</th>
+                    <th style={{ padding: "20px" }}>S.No</th>
                     <th style={{ padding: "20px" }}>Candidate Name</th>
                     <th style={{ padding: "20px" }}>Email </th>
                     <th style={{ padding: "20px" }}>Resume </th>
+                    <th style={{ padding: "20px" }}>Meeting </th>
+
                     <th></th>
                   </tr>
                 </thead>
 
                 {applications ? (
                   <tbody className="text-center">
-                    {applications.map((application,index) => (
+                    {applications.map((application, index) => (
                       <tr key={application.id}>
-                        <td>{index+1}</td>
+                        <td>{index + 1}</td>
                         <td className="text-center">
                           {application.user.username}
                         </td>
@@ -162,29 +163,56 @@ const PdfViewer = ({ jobId }) => {
                         <td>
                           {application.fileData && (
                             <Button
-                            onClick={() => downloadPdf(application.fileData, application.user.username)}
+                              onClick={() =>
+                                downloadPdf(
+                                  application.fileData,
+                                  application.user.username
+                                )
+                              }
                               className="text-white"
-                              style={{ backgroundColor: "#1B1A47" }}
-                            ><img src='/assets/Download.png' alt='icon' className="mr-2"/>
-                              Download
+                              // style={{ backgroundColor: "#1B1A47" }}
+                            >
+                              <img
+                                src="/assets/Download-blue.png"
+                                alt="icon"
+                                className="mr-2"
+                              />
+                              {/* Download */}
                             </Button>
                           )}
                         </td>
+                        <td>
+                          <Link to="/interview-schedule">
+                            <Button className="text-white" style={{ backgroundColor: "#1B1A47" }}>Schedule</Button>
+                          </Link>
+                        </td>
+
                         <td className="text-right">
-                            <IconButton 
-                            aria-haspopup='true'
-                            onClick={(event) => handleMenuClick(event, application)}
-                            >
-                              <MoreVertIcon/>
-                            </IconButton>
-                            <Menu 
+                          <IconButton
+                            aria-haspopup="true"
+                            onClick={(event) =>
+                              handleMenuClick(event, application)
+                            }
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+                          <Menu
                             anchorEl={anchorEl}
                             keepMounted
                             open={Boolean(anchorEl)}
-                            onClose={handleMenuClose}>
-                              <MenuItem onClick={() => handleStatusUpdate("SHORTLISTED")}>Shortlisted</MenuItem>
-                              <MenuItem onClick={() => handleStatusUpdate("REJECTED")}>Rejected</MenuItem>
-                            </Menu>
+                            onClose={handleMenuClose}
+                          >
+                            <MenuItem
+                              onClick={() => handleStatusUpdate("SHORTLISTED")}
+                            >
+                              Shortlisted
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => handleStatusUpdate("REJECTED")}
+                            >
+                              Rejected
+                            </MenuItem>
+                          </Menu>
                         </td>
                       </tr>
                     ))}
@@ -208,7 +236,6 @@ const PdfViewer = ({ jobId }) => {
           </DialogActions>
         </Dialog>
       </div>
-     
     </>
   );
 };

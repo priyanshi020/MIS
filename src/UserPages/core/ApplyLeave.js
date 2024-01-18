@@ -101,12 +101,12 @@ function AddUser({onApplyLeave}) {
             value={leaveType}
             onChange={(e) => setLeaveType(e.target.value)}
           >
-            <MenuItem value="Planned">Sick Leave</MenuItem>
+            <MenuItem value="Sick Leave">Sick Leave</MenuItem>
 
             <MenuItem value="Planned">Planned Leave</MenuItem>
             <MenuItem value="Unplanned">Unplanned Leave</MenuItem>
-            <MenuItem value="Planned">Half Day Leave</MenuItem>
-            <MenuItem value="Planned">Other</MenuItem>
+            <MenuItem value="Half Day">Half Day Leave</MenuItem>
+            <MenuItem value="Other">Other</MenuItem>
           </TextField>
 
           <TextField

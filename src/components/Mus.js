@@ -1,56 +1,98 @@
-import React, { useEffect, useState } from 'react';
-import { saveAs } from 'file-saver';
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardMedia, Typography, Button } from '@mui/material';
+import Sidebar1 from '../components/Sidebar1';
+import axios from 'axios';
 
-const PdfViewer = () => {
-  const [applications, setApplications] = useState([]);
-  const storedJobPositionId = localStorage.getItem('jobPositionId');
-
-  // Check if the value is not null or undefined before using it
-  const jobPositionId = storedJobPositionId ? parseInt(storedJobPositionId, 10) : null;
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/bytesfarms/resume/get?jobPositionId=${jobPositionId}`);
-        const data = await response.json();
-        setApplications(data);
-      } catch (error) {
-        console.error('Error fetching application data', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const downloadPdf = (pdfData) => {
-    const byteCharacters = atob(pdfData);
-    const byteNumbers = new Array(byteCharacters.length);
-
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'application/pdf' });
-    saveAs(blob, 'resume.pdf');
-  };
+const FixedHeightCard = ({ title, content, onClick }) => {
+  const shortenedDescription = content.split(' ').slice(0, 37).join(' ');
 
   return (
-    <div>
-      {applications.map((application) => (
-        <div key={application.id}>
-          <h2>Job Position: {application.jobPosition.title}</h2>
-          <p>User: {application.user.username}</p>
-          <p>Email: {application.user.email}</p>
-
-          {application.fileData && (
-            <button onClick={() => downloadPdf(application.fileData)}>
-              Download PDF
-            </button>
-          )}
-        </div>
-      ))}
-    </div>
+    <Card style={{ padding: '20px', height: '400px', overflow: 'hidden' }}>
+      <CardMedia>
+        <img src='/assets/payroll/ic-calender.png' alt='icon' className='mr-2' />
+      </CardMedia>
+      <div className='mt-3'>
+        <h4>{title}</h4>
+      </div>
+      <div className='text-secondary' style={{ minHeight:'150px' ,maxHeight: '150px', overflow: 'hidden' }}>
+        <p className='m-3'>{shortenedDescription}...</p>
+      </div>
+      <Button
+        variant="contained"
+        style={{
+          fontWeight: 600,
+          fontSize: "15px",
+          color: "white",
+          background: "#1B1A47",
+          borderRadius: "30px",
+          marginTop: "12px",
+        }}
+        onClick={onClick}
+      >
+        Read More
+      </Button>
+    </Card>
   );
 };
 
-export default PdfViewer;
+const CompanyPolicy = () => {
+  const [cardsData, setCardsData] = useState([]);
+
+  useEffect(() => {
+   
+    axios.get('http://localhost:8080/bytesfarms/policy/get?id=0')
+      .then(response => {
+        setCardsData(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []); 
+
+  const handleReadMoreClick = (id) => {
+    axios
+      .post(`http://localhost:8080/bytesfarms/policy/create/pdf?id=${id}`, {
+        responseType: 'arraybuffer', // Specify the response type as arraybuffer
+      })
+      .then(response => {
+        // Create a Blob from the binary data
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+  
+        // Generate a URL for the Blob
+        const url = URL.createObjectURL(blob);
+  
+        // Open the PDF in a new window
+        window.open(url, '_blank');
+      })
+      .catch(error => {
+        console.error('Error fetching PDF:', error);
+      });
+  };
+  
+
+  return (
+    <>
+      <Sidebar1 />
+      <main style={{ backgroundColor: "#F0F5FD" }}>
+        <div className="p-5">
+          <h3 className="pb-3">Company Policy</h3>
+          <div className="container">
+            <div className="row">
+              {cardsData.map(card => (
+                <div key={card.id} className="col-md-4 p-2">
+                  <FixedHeightCard
+                    title={card.title}
+                    content={card.content}
+                    onClick={() => handleReadMoreClick(card.id)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </main>
+    </>
+  );
+};
+
+export default CompanyPolicy;

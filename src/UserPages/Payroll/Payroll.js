@@ -1,10 +1,85 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Sidebar1 from "../../components/Sidebar1";
 import PieChartWithCenterLabel from "./PieChart";
 import BasicLineChart from "./LineChart";
 import { Button } from "@mui/material";
+import axios from "axios";
 const Payroll = () => {
-  const [data, setData] = useState("");
+  const [data, setData] = useState([]);
+  const [payrollDetails, setPayrollDetails] = useState({
+    grossSalary: 0,
+    netPay: 0,
+    deductions: 0,
+    bonus: 0,
+  });
+
+  const storedUserId = localStorage.getItem("userId");
+  const userId = storedUserId ? parseInt(storedUserId, 10) : null;
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/bytesfarms/payroll/allData?userId=${userId}`)
+      .then((response) => {
+        const payrollDetails = response.data[0];
+  
+        console.log("Payroll API Response:", payrollDetails);
+  
+        if (payrollDetails) {
+          setPayrollDetails({
+            grossSalary: payrollDetails.grossSalary || 0,
+            netPay: Number(payrollDetails.netPay.toFixed(2)) || 0,
+            deductions: Number(payrollDetails.deductions.toFixed(2)) || 0,
+            bonus: payrollDetails.bonus || 0,
+          });
+          setData(response.data);
+        } else {
+          console.error("Invalid API response format:", payrollDetails);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error.message);
+      });
+  }, [userId]);
+  
+
+
+
+ 
+  // const handleDownloadPdf = (userId) => {
+  //   const apiEndpoint = `http://localhost:8080/bytesfarms/payroll/generatePdf?userId=${userId}`;
+
+  //   axios
+  //     .post(apiEndpoint, {}, { responseType: 'blob' }) // Use POST method for your API
+  //     .then((response) => {
+  //       const blob = new Blob([response.data], { type: 'application/pdf' });
+  //       const url = URL.createObjectURL(blob);
+  //       const a = document.createElement('a');
+  //       a.href = url;
+  //       a.download = `Payroll_${userId}.pdf`;
+  //       document.body.appendChild(a);
+  //       a.click();
+  //       document.body.removeChild(a);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error downloading PDF:', error);
+  //     });
+  // };
+  const handleDownloadPdf = (userId) => {
+    const apiEndpoint = `http://localhost:8080/bytesfarms/payroll/generatePdf?userId=${userId}`;
+  
+    axios
+      .post(apiEndpoint, {}, { responseType: 'blob' })
+      .then((response) => {
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        
+        window.open(url, '_blank');
+      })
+      .catch((error) => {
+        console.error('Error opening PDF:', error);
+      });
+  };
+
   return (
     <>
       <Sidebar1 />
@@ -30,7 +105,7 @@ const Payroll = () => {
                     }}
                   >
                     {/* {employeeCount} */}
-                    25000
+                    {payrollDetails.grossSalary}
                   </span>
                   <p
                     className=" mb-2"
@@ -59,7 +134,7 @@ const Payroll = () => {
                       lineHeight: "28px",
                     }}
                   >
-                    25000
+                    {payrollDetails.netPay}
                   </span>
                   <p
                     className=" mb-2"
@@ -87,8 +162,7 @@ const Payroll = () => {
                       lineHeight: "28px",
                     }}
                   >
-                    {/* {checkedInCount} */}
-                    25000
+                   {payrollDetails.deductions}
                   </span>
                   <p
                     className=" mb-2"
@@ -119,8 +193,7 @@ const Payroll = () => {
                       lineHeight: "28px",
                     }}
                   >
-                    {/* {checkedOutCount} */}
-                    25000
+                    {payrollDetails.bonus}
                   </span>
                   <p
                     className=" mb-2 "
@@ -138,7 +211,7 @@ const Payroll = () => {
         </div>
         <div className="d-flex justify-content-around">
           <div className=" card  py-4 bg-white  col col-md-5 shadow shadow-lg">
-            <PieChartWithCenterLabel />
+            <PieChartWithCenterLabel userId={userId}/>
           </div>
           <div className="card col col-md-5">
             <BasicLineChart />
@@ -168,38 +241,41 @@ const Payroll = () => {
                 Leave
               </th>
               <th style={{ padding: "20px" }}>Half Day</th>
-              <th style={{ padding: "20px" }}>Deduction</th>
+              {/* <th style={{ padding: "20px" }}>Deduction</th> */}
               <th style={{ padding: "20px" }}>Pay Slip</th>
             </tr>
           </thead>
           <tbody className="p-2">
-            {/* {data.map((item, index) => (
+            {data.map((item) => (
                 <tr key={item.id}>
-                  <td className="text-center">{index + 1}</td>
-                  <td>{item.username}</td>
-                  <td>{item.email}</td>
-                  <td>
-                  </td>
-                 
-                </tr>
-              ))} */}
-            <tr>
-              <td className="text-center" style={{ padding: "20px" }}>December</td>
-              <td style={{ padding: "20px" }}>3</td>
-              <td style={{ padding: "20px" }}>4</td>
-              <td style={{ padding: "20px" }}>6</td>
-              <td>
-                          {/* {application.fileData && ( */}
-                            <Button
+                  <td className="text-center" style={{ padding: "20px" }}>{item.month}</td>
+                  <td style={{ padding: "20px" }}>{item.leaveDays}</td>
+                  <td style={{ padding: "20px" }}>{item.halfDays}</td>
+                  <td><Button
                             // onClick={() => downloadPdf(application.fileData, application.user.username)}
+                            onClick={() => handleDownloadPdf(userId)}
                               className="text-white"
                               style={{ backgroundColor: "#1B1A47" }}
                             ><img src='/assets/Download.png' alt='icon' className="mr-2"/>
                               Download
                             </Button>
-                          {/* )} */}
+                  </td>
+                 
+                </tr>
+              ))}
+            {/* <tr>
+              <td className="text-center" style={{ padding: "20px" }}>December</td>
+              <td style={{ padding: "20px" }}>3</td>
+              <td style={{ padding: "20px" }}>4</td>
+              <td>
+                            <Button
+                              className="text-white"
+                              style={{ backgroundColor: "#1B1A47" }}
+                            ><img src='/assets/Download.png' alt='icon' className="mr-2"/>
+                              Download
+                            </Button>
                         </td>
-            </tr>
+            </tr> */}
           </tbody>
         </table></div>
       </main>

@@ -17,7 +17,6 @@ const LeaveTracker = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  // const [userId, setUserId] = useState("");
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -28,7 +27,6 @@ const LeaveTracker = () => {
   };
 
   const handleLeave = (newUser) => {
-    // Update the data state by adding the new job
     setData((prevData) => [...prevData, newUser]);
     fetchData();
   };
@@ -41,29 +39,8 @@ const LeaveTracker = () => {
     setOpen(false);
   };
 
-  const storedUserId = localStorage.getItem('userId');
-const userId = storedUserId ? parseInt(storedUserId, 10) : null;
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       console.log('hii')
-  //       const response = await axios.get(
-  //         `http://localhost:8080/bytesfarms/leave/get?userId=${userId}`
-  //       );
-  //       setData(response.data); // Assuming the API response is an array
-  //         console.log('useridd',
-  //         userId)
-  //       const leaveRequestId = response.data.id;
-  //       console.log("yeh hu userdi h ", leaveRequestId);
-  //       localStorage.setItem("userId", leaveRequestId);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
+  const storedUserId = localStorage.getItem("userId");
+  const userId = storedUserId ? parseInt(storedUserId, 10) : null;
 
   useEffect(() => {
     fetchData();
@@ -71,7 +48,7 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
 
   const fetchData = () => {
     axios
-      .get( `http://localhost:8080/bytesfarms/leave/get?userId=${userId}`)
+      .get(`http://localhost:8080/bytesfarms/leave/get?userId=${userId}`)
       .then((response) => {
         setData(response.data);
       })
@@ -79,6 +56,28 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
         console.error("Error fetching data:", error.message);
       });
   };
+
+  const handleDeleteClick = (leaveRequestId) => {
+    if (!leaveRequestId) {
+      handleMenuClose();
+      return;
+    }
+
+    const apiUrl = `http://localhost:8080/bytesfarms/leave/delete?leaveRequestId=${leaveRequestId}`;
+
+    axios
+      .delete(apiUrl)
+      .then(() => {
+        fetchData();
+      })
+      .catch((error) => {
+        console.error("Error deleting item:", error.message);
+      })
+      .finally(() => {
+        handleMenuClose();
+      });
+  };
+
 
   return (
     <>
@@ -246,8 +245,8 @@ const userId = storedUserId ? parseInt(storedUserId, 10) : null;
                       onClose={handleMenuClose}
                     >
                       {/* <MenuItem onClick={handleClick}>Edit</MenuItem> */}
-                      <MenuItem>Cancel Leave</MenuItem>
-                    </Menu>
+                      <MenuItem onClick={handleDeleteClick.bind(null, item.id)}>Cancel Leave</MenuItem>
+                                            </Menu>
                   </td>
                   
                 </tr>
