@@ -7,13 +7,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
+
 import axios from "axios";
 import "./admin.css";
 import { useCallback } from "react";
 import Add from "./core/Add";
+
 const Dashboard = () => {
   const [value, setValue] = React.useState(0);
   const [data, setData] = useState([]);

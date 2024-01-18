@@ -7,6 +7,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import axios from "axios";
+import moment from "moment";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 function ViewAttendance({ userId }) {
   const [open, setOpen] = useState(false);
@@ -15,6 +18,8 @@ function ViewAttendance({ userId }) {
   const [dayFilter, setDayFilter] = useState('');
   const [monthFilter, setMonthFilter] = useState('');
   const [yearFilter, setYearFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -49,8 +54,19 @@ function ViewAttendance({ userId }) {
       );
 
       setFilteredData(filtered);
+      setCurrentPage(1); // Reset current page when filters change
     }
   }, [data, dayFilter, monthFilter, yearFilter]);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData
+    ? filteredData.slice(indexOfFirstItem, indexOfLastItem)
+    : null;
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
   return (
     <>
@@ -78,23 +94,23 @@ function ViewAttendance({ userId }) {
           </DialogTitle>
           <DialogContent>
             <div className="table-responsive">
-            <Box
-      component="form"
-      sx={{
-        '& > :not(style)': { m: 2, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <TextField id="outlined-basic" label="Day" variant="outlined"  value={dayFilter} onChange={(e) => setDayFilter(e.target.value)} />
-      <TextField id="outlined-basic" label="Month" variant="outlined" value={monthFilter} onChange={(e) => setMonthFilter(e.target.value)} />
-      <TextField id="outlined-basic" label="Year" variant="outlined"value={yearFilter} onChange={(e) => setYearFilter(e.target.value)} />
-    </Box>
-              <table className="rounded-4 table table-bordered table-striped" style={{
-                  borderRadius: "16px",
-                  overflow: "hidden",
-                  boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px",
-                }}>
+              <Box
+                component="form"
+                sx={{
+                  '& > :not(style)': { m: 2, width: '25ch' },
+                }}
+                noValidate
+                autoComplete="off"
+              >
+                <TextField id="outlined-basic" label="Day" variant="outlined" value={dayFilter} onChange={(e) => setDayFilter(e.target.value)} />
+                <TextField id="outlined-basic" label="Month" variant="outlined" value={monthFilter} onChange={(e) => setMonthFilter(e.target.value)} />
+                <TextField id="outlined-basic" label="Year" variant="outlined" value={yearFilter} onChange={(e) => setYearFilter(e.target.value)} />
+              </Box>
+              <table className=" table" style={{
+                borderRadius: "16px",
+                overflow: "hidden",
+                boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px",
+              }}>
                 <thead className="table-secondary text-center">
                   <tr>
                     <th style={{ padding: "20px" }}>Day</th>
@@ -107,21 +123,21 @@ function ViewAttendance({ userId }) {
                     <th style={{ padding: "20px" }}>Status </th>
                   </tr>
                 </thead>
-                {filteredData ? (
+                {currentItems ? (
                   <tbody className="text-center">
-                    {filteredData.map((item) => (
+                    {currentItems.map((item) => (
                       <tr key={item.date}>
                         <td className="text-center">{item.day}</td>
                         <td>{item.month}</td>
                         <td>{item.year}</td>
-                        <td>{item.checkInTime}</td>
-                        <td>{item.checkOutTime}</td>
+                        <td>{moment(item.checkInTime).format("HH:mm")}</td>
+                        <td>{moment(item.checkOutTime).format("HH:mm")}</td>
 
                         <td>
                           {item.breaks.map((breakItem, index) => (
                             <React.Fragment key={breakItem.id}>
                               {index > 0 && ", "}
-                              {breakItem.breakStartTime}
+                              {moment(breakItem.breakStartTime).format("HH:mm")}
                             </React.Fragment>
                           ))}
                         </td>
@@ -130,7 +146,7 @@ function ViewAttendance({ userId }) {
                           {item.breaks.map((breakItem, index) => (
                             <React.Fragment key={breakItem.id}>
                               {index > 0 && ", "}
-                              {breakItem.breakEndTime || "N/A"}
+                              {moment(breakItem.breakEndTime || "N/A").format("HH:mm")}
                             </React.Fragment>
                           ))}
                         </td>
@@ -144,6 +160,15 @@ function ViewAttendance({ userId }) {
                   </tr>
                 )}
               </table>
+              {filteredData && (
+                <Stack spacing={2} style={{ marginTop: "20px" }}>
+                  <Pagination
+                    count={Math.ceil(filteredData.length / itemsPerPage)}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                  />
+                </Stack>
+              )}
             </div>
           </DialogContent>
           <DialogActions>

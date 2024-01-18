@@ -8,14 +8,49 @@ import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { TimeField } from "@mui/x-date-pickers/TimeField";
+import Typography from "@mui/material/Typography";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import axios from "axios";  
+
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
 
 const TimeTracker = () => {
   const [project, setProject] = React.useState("");
@@ -27,9 +62,28 @@ const TimeTracker = () => {
   const [elapsedTimes, setElapsedTimes] = useState([]);
   const [timers, setTimers] = useState([]);
   const [editedRole, setEditedRole] = useState("");
+  const [value, setValue] = React.useState(0);
+  const [data, setData] = useState();
 
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? parseInt(storedUserId, 10) : null;
+
+
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/bytesfarms/tasks/get?userId=${userId}`
+        );
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      }
+    };
+
+    fetchData();
+  }, [userId]);
 
   useEffect(() => {
     const initialTimers = tasks.map(() => false);
@@ -105,21 +159,9 @@ const TimeTracker = () => {
   };
 
   const handleRemoveTask = (index) => {
-    const updatedTasks = tasks.filter((_, i) => i !== index);
-    setTasks(updatedTasks);
-
-    setTimers((prevTimers) => {
-      const newTimers = [...prevTimers];
-      newTimers.splice(index, 1);
-      return newTimers;
-    });
-
-    setElapsedTimes((prevElapsedTimes) => {
-      const newElapsedTimes = [...prevElapsedTimes];
-      newElapsedTimes.splice(index, 1);
-      return newElapsedTimes;
-    });
-  };
+      const updatedTasks = tasks.filter((_, i) => i !== index);
+      setTasks(updatedTasks);
+    };
 
   const handleProjectChange = (event) => {
     setProject(event.target.value);
@@ -129,15 +171,7 @@ const TimeTracker = () => {
     setRole(event.target.value);
   };
 
-  const handleStatusUpdate = (index) => {
-    if (statusInput.trim() !== "") {
-      setTasks((prevTasks) =>
-        prevTasks.map((task, i) =>
-          i === index ? { ...task, status: statusInput } : task
-        )
-      );
-    }
-  };
+ 
 
   const handleSubmit = (index) => {
     const taskToSubmit = tasks[index];
@@ -182,59 +216,60 @@ const TimeTracker = () => {
 
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
 
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
-  const handleMenuClick = (event, index) => {
-    console.log("Item Index selected for editing:", index);
+  const handleMenuClick = (event, taskId) => {
     setAnchorEl(event.currentTarget);
-    setOpen(true);
-  
-    // Set the edited role to the current role of the task
-    setEditedRole(tasks[index].status);
+    setSelectedTaskId(taskId);
   };
-  
+
   const handleClose = () => {
     setOpen(false);
     setEditedRole("");
   };
 
-  const handleUpdate = (index) => {
-    const updatedRole = editedRole;
-  
-    // Send the updated role to the API
-    const taskId = tasks[index].id; // Replace 'id' with the actual property name of the task ID
-    const apiEndpoint = `http://localhost:8080/bytesfarms/tasks/update/${taskId}?userId=${userId}`;
-    
-    fetch(apiEndpoint, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ status: updatedRole }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("API response:", data);
-        
-        // Update the state with the new role
-        setTasks((prevTasks) =>
-          prevTasks.map((task, i) =>
-            i === index ? { ...task, status: updatedRole } : task
-          )
-        );
-  
-        // Close the dialog
-        handleClose();
-      })
-      .catch((error) => {
-        console.error("API error:", error);
-        // Handle error if needed
-      });
+  const handleStatusChange = (status) => {
+    if (selectedTaskId) {
+      
+      const apiUrl = `http://localhost:8080/bytesfarms/tasks/update?userId=${userId}&taskId=${selectedTaskId}`;
+      const requestBody={
+        status:status,
+      }
+      axios.put(apiUrl,requestBody)
+        .then(response => {
+          console.log(response.data);
+          // Update the local state (data) with the new status
+          const updatedData = data.map(item => {
+            if (item.id === selectedTaskId) {
+              return {
+                ...item,
+                status: status,
+              };
+            } else {
+              return item;
+            }
+          });
+          setData(updatedData); 
+        })
+        .catch(error => {
+          console.error('Error updating status:', error);
+        })
+        .finally(() => {
+          handleMenuClose();
+        });
+    }
   };
+
   
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
 
   return (
     <>
@@ -242,6 +277,38 @@ const TimeTracker = () => {
       <main className="" style={{ backgroundColor: "#F0F5FD" }}>
         <div className="p-5">
           <h3 className=" pb-3">TIME TRACKER</h3>
+          <Box sx={{ width: "100%" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "left",
+                borderBottom: 1,
+                borderColor: "divider",
+              }}
+            >
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                aria-label="basic tabs example  "
+                sx={{
+                  "& .MuiTabs-indicator": {
+                    backgroundColor: "#1B1A47",
+                  },
+                  "& .MuiTab-root": {
+                    color: "black !important",
+                    "&:hover": {
+                      color: "#1B1A47",
+                    },
+                  },
+                }}
+              >
+                <Tab label="MOM" {...a11yProps(0)} />
+                <Tab label="Task List" {...a11yProps(1)} />
+                {/* <Tab label='GUEST' {...a11yProps(2)}/> */}
+              </Tabs>
+            </Box>
+            <CustomTabPanel value={value} index={0}>
+
           <div className=" d-flex justify-content-start">
             <Box sx={{ minWidth: 120 }}>
               <FormControl
@@ -288,45 +355,14 @@ const TimeTracker = () => {
 
             {/* tasklist */}
             <form className="d-flex   ml-5 mb-5">
-              {/* <TextField
-                id="outlined-basic"
-                label="Your Task"
-                variant="outlined"
-                value={taskInput}
-                onChange={handleTaskInputChange}
-                style={{ height: "47px" }  }
-              /> */}
+              
               <TextField
                 id="standard-basic"
                 label="Your Task"
                 variant="standard"
                 value={taskInput}
                 onChange={handleTaskInputChange}
-                
               />
-
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["TimeField"]}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["TimeField"]}>
-              <TimeField
-          label="Format without meridiem"
-          value={timeInput}
-          onChange={handleTimeInputChange}
-          InputLabelProps={{ style: { color: 'gray' } }}
-          InputProps={{
-            style: {
-              borderColor: 'gray',
-              // Adjust the size of the field (you can use fontSize or width/height)
-              width: '200px', // Adjust the width as needed
-            },
-          }}
-          format="HH:mm"
-        />
-              </DemoContainer>
-            </LocalizationProvider>
-              </DemoContainer>
-            </LocalizationProvider> */}
 
               <div className="form-outline flex-fill ml-5">
                 <input
@@ -381,7 +417,10 @@ const TimeTracker = () => {
                 key={index}
                 className="list-group-item d-flex justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom rounded-0 mb-2"
               >
-                <div className="d-flex align-items-center" style={{ width: "250px", wordWrap: "break-word" }}>
+                <div
+                  className="d-flex align-items-center"
+                  style={{ width: "250px", wordWrap: "break-word" }}
+                >
                   <h6>{task.task}</h6>
                 </div>
                 <h6 className="text-center">{task.time}</h6>
@@ -421,14 +460,14 @@ const TimeTracker = () => {
                 >
                   Submit
                 </Button>
-                {/* <button
+                <button
                   type="button"
-                  className="btn btn-outline-primary btn-lg font-weight-bold"
-                  onClick={() => handleSubmit(index)}
+                  className="btn btn-link text-decoration-none"
+                  onClick={() => handleRemoveTask(index)}
                 >
-                  Submit
-                </button> */}
-                <IconButton
+                  ❌
+                </button>
+                {/* <IconButton
                   aria-haspopup="true"
                   onClick={(event) => handleMenuClick(event, index)}
                 >
@@ -453,33 +492,95 @@ const TimeTracker = () => {
                   maxWidth="sm"
                 >
                   <DialogContent>
-                  <TextField
-    id="role"
-    select
-    label="Role"
-    fullWidth
-    variant="standard"
-    value={editedRole}
-    onChange={(e) => setEditedRole(e.target.value)}
-  >
-    <MenuItem value="In Progress">In Progress</MenuItem>
-    <MenuItem value="Completed">Completed</MenuItem>
-  </TextField>
+                    <TextField
+                      id="role"
+                      select
+                      label="Role"
+                      fullWidth
+                      variant="standard"
+                      value={editedRole}
+                      onChange={(e) => setEditedRole(e.target.value)}
+                    >
+                      <MenuItem value="In Progress">In Progress</MenuItem>
+                      <MenuItem value="Completed">Completed</MenuItem>
+                    </TextField>
                   </DialogContent>
                   <DialogActions className="justify-content-start p-3">
-                  <Button
-  className=" text-white w-25 p-2"
-  style={{ backgroundColor: "#1B1A47" }}
-  onClick={() => handleUpdate(index)}
->
-  Update
-</Button>
-
+                    <Button
+                      className=" text-white w-25 p-2"
+                      style={{ backgroundColor: "#1B1A47" }}
+                      onClick={() => handleUpdate(index)}
+                    >
+                      Update
+                    </Button>
                   </DialogActions>
-                </Dialog>
+                </Dialog> */}
               </li>
             ))}
           </ul>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+          <table class="    rounded-4 table table-responsive-lg  ">
+              <thead class="table-secondary text-center">
+                <tr className="">
+                  <th className="" style={{ padding: "20px" }}>
+                    Date
+                  </th>
+
+                  <th className="" style={{ padding: "20px" }}>
+                    Task{" "}
+                  </th>
+                  <th className="" style={{ padding: "20px" }}>
+                    Expected time{" "}
+                  </th>
+                  <th className="" style={{ padding: "20px" }}>
+                    Actual Time{" "}
+                  </th>
+                  <th className="" style={{ padding: "20px" }}>
+                    Status{" "}
+                  </th>
+                  <th></th>
+                </tr>
+              </thead>
+              {data ? (
+                <tbody className="text-center">
+                  {data.map((item) => (
+                    <tr key={item.date}>
+                      <td className="text-center">{item.date}</td>
+                      <td>{item.taskDescription}</td>
+                      <td>{item.expectedTime}</td>
+                      <td>{item.actualTime}</td>
+                      <td>{item.status}</td>
+                      <td>
+                      <IconButton
+                aria-haspopup="true"
+                onClick={(event) => handleMenuClick(event, item.id)} // Pass the task ID to handleMenuClick
+              >
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                >
+                   <MenuItem onClick={() => handleStatusChange('In Progress')}>In Progress</MenuItem>
+                   <MenuItem onClick={() => handleStatusChange('Completed')}>
+                    Completed
+                  </MenuItem>
+                </Menu>
+                
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <p>Loading...</p>
+              )}
+            </table>
+
+          </CustomTabPanel>
+          </Box>
         </div>
       </main>
     </>

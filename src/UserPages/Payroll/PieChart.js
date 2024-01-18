@@ -1,9 +1,8 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useDrawingArea } from '@mui/x-charts/hooks';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
-import * as d3 from 'd3'; // Import d3 library
 
 const size = {
   width: 450,
@@ -38,43 +37,37 @@ function PieCenterLabel({ children }) {
   );
 }
 
-export default function PieChartWithCenterLabel() {
-  const [apiData, setApiData] = React.useState([]);
+const PieChartWithCenterLabel = () => {
+  const [payrollData, setPayrollData] = useState(null);
 
-  React.useEffect(() => {
-    axios
-      .get(`http://localhost:8080/bytesfarms/payroll/allData?userId=3`)
-      .then((response) => {
-        setApiData(response.data);
+  useEffect(() => {
+    // Fetch data from the API
+    axios.get('http://localhost:8080/bytesfarms/payroll/allData?userId=3')
+      .then(response => {
+        setPayrollData(response.data);
       })
-      .catch((error) => {
-        console.error("Error fetching API data:", error.message);
+      .catch(error => {
+        console.error('Error fetching payroll data:', error);
       });
   }, []);
 
-  const colorScale = getColorScale(apiData.length);
+  if (!payrollData) {
+    // Display loading or handle the absence of data
+    return <div>Loading...</div>;
+  }
+
+  const data = [
+    { value: payrollData.grossSalary, label: 'Gross Salary' },
+    { value: payrollData.deductions, label: 'Deductions' },
+    { value: payrollData.netPay, label: 'Net Pay' },
+    { value: payrollData.bonus, label: 'Bonus' },
+  ];
 
   return (
-    <PieChart
-      series={[
-        {
-          data: apiData.map((item) => ({ value: item.value, label: item.label })),
-          innerRadius: 75,
-          cornerRadius: 20,
-          padAngle: 10,
-        },
-      ]}
-      colorScale={colorScale} // Use dynamically generated color scale
-      {...size}
-    >
-      <PieCenterLabel>{apiData.length > 0 ? apiData[0].value : 0}</PieCenterLabel>
+    <PieChart series={[{ data, innerRadius: 75, cornerRadius: 20, padAngle: 10 }]} colors={['#D1D7FF', '#E9156E', '#353DE1', '#FEA41D']} {...size}>
+      <PieCenterLabel>{payrollData.grossSalary}</PieCenterLabel>
     </PieChart>
   );
-}
+};
 
-// Function to generate a color scale based on the number of data points
-function getColorScale(dataLength) {
-  // You can replace this logic with any color scale generation algorithm
-  const colorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(d3.range(dataLength));
-  return colorScale;
-}
+export default PieChartWithCenterLabel;

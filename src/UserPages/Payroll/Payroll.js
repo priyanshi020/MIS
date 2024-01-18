@@ -17,29 +17,29 @@ const Payroll = () => {
   const userId = storedUserId ? parseInt(storedUserId, 10) : null;
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/bytesfarms/payroll/allData?userId=${userId}`)
-      .then((response) => {
-        const payrollDetails = response.data[0];
-  
-        console.log("Payroll API Response:", payrollDetails);
-  
-        if (payrollDetails) {
-          setPayrollDetails({
-            grossSalary: payrollDetails.grossSalary || 0,
-            netPay: Number(payrollDetails.netPay.toFixed(2)) || 0,
-            deductions: Number(payrollDetails.deductions.toFixed(2)) || 0,
-            bonus: payrollDetails.bonus || 0,
-          });
-          setData(response.data);
-        } else {
-          console.error("Invalid API response format:", payrollDetails);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error.message);
-      });
-  }, [userId]);
+  axios
+    .get(`http://localhost:8080/bytesfarms/payroll/allData?userId=${userId}`)
+    .then((response) => {
+      const payrollDetails = response.data[0];
+
+      console.log("Payroll API Response:", payrollDetails);
+
+      if (payrollDetails) {
+        setPayrollDetails({
+          grossSalary: payrollDetails.grossSalary || 0,
+          netPay: Number(payrollDetails.netPay.toFixed(2)) || 0,
+          deductions: Number(payrollDetails.deductions.toFixed(2)) || 0,
+          bonus: payrollDetails.bonus || 0,
+        });
+        setData(response.data);
+      } else {
+        console.error("Invalid API response format:", payrollDetails);
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error.message);
+    });
+}, [userId]);
   
 
 

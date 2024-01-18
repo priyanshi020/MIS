@@ -3,6 +3,9 @@ import Sidebar1 from "../components/Sidebar1";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import moment from "moment";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const Attendance1 = () => {
   const [data, setData] = useState(null);
@@ -10,6 +13,8 @@ const Attendance1 = () => {
   const [dayFilter, setDayFilter] = useState("");
   const [monthFilter, setMonthFilter] = useState("");
   const [yearFilter, setYearFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? parseInt(storedUserId, 10) : null;
@@ -55,12 +60,22 @@ const Attendance1 = () => {
     }
   }, [data, dayFilter, monthFilter, yearFilter]);
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData
+    ? filteredData.slice(indexOfFirstItem, indexOfLastItem)
+    : null;
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
   return (
     <>
       <Sidebar1 />
       <main className="" style={{ backgroundColor: "#F0F5FD" }}>
         <div className="p-5">
-          <h3 className=" pb-3">ATTENDANCE</h3>
+          <h3 className="pb-3">ATTENDANCE</h3>
           <Box
             component="form"
             sx={{
@@ -92,18 +107,8 @@ const Attendance1 = () => {
             />
           </Box>
           <div style={{ borderRadius: "20px" }}>
-            {/* Filter inputs */}
-            {/* <div className='mb-3'>
-              <label>Day:</label>
-              <input type="text" value={dayFilter} onChange={(e) => setDayFilter(e.target.value)} />
-              <label>Month:</label>
-              <input type="text" value={monthFilter} onChange={(e) => setMonthFilter(e.target.value)} />
-              <label>Year:</label>
-              <input type="text" value={yearFilter} onChange={(e) => setYearFilter(e.target.value)} />
-            </div> */}
-
             <table
-              className="rounded-4 table table-bordered table-striped"
+              className="rounded-4 table"
               style={{
                 borderRadius: "16px",
                 overflow: "hidden",
@@ -112,42 +117,48 @@ const Attendance1 = () => {
             >
               <thead className="table-secondary text-center">
                 <tr>
-                  {/* ...header columns */}
                   <th style={{ padding: "20px" }}>Day</th>
-                  <th style={{ padding: "20px" }}>Month </th>
-                  <th style={{ padding: "20px" }}>Year </th>
-                  <th style={{ padding: "20px" }}>Check In </th>
-                  <th style={{ padding: "20px" }}>Check Out </th>
+                  <th style={{ padding: "20px" }}>Month</th>
+                  <th style={{ padding: "20px" }}>Year</th>
+                  <th style={{ padding: "20px" }}>Check In</th>
+                  <th style={{ padding: "20px" }}>Check Out</th>
                   <th style={{ padding: "20px" }}>Break Start</th>
-                  <th style={{ padding: "20px" }}>Break End </th>
-                  <th style={{ padding: "20px" }}>Status </th>
+                  <th style={{ padding: "20px" }}>Break End</th>
+                  <th style={{ padding: "20px" }}>Status</th>
                 </tr>
               </thead>
-              {filteredData ? (
-                <tbody className="">
-                  {filteredData.map((item) => (
+              {currentItems ? (
+                <tbody className="text-center">
+                  {currentItems.map((item) => (
                     <tr key={item.date}>
-                      {/* ...table rows */}
-                      <td className="" style={{fontSize:'14px',padding:'20px'}}>{item.day}</td>
-                      <td style={{fontSize:'14px',padding:'20px'}}>{item.month}</td>
-                      <td style={{padding:'20px'}}>{item.year}</td>
-                      <td style={{padding:'20px'}}>{item.checkInTime}</td>
-                      <td style={{padding:'20px'}}>{item.checkOutTime}</td>
-                      {/* Display all break starts in a separate column */}
+                      <td style={{ fontSize: "14px", padding: "20px" }}>
+                        {item.day}
+                      </td>
+                      <td style={{ fontSize: "14px", padding: "20px" }}>
+                        {item.month}
+                      </td>
+                      <td style={{ padding: "20px" }}>{item.year}</td>
+                      <td style={{ padding: "20px" }}>
+                        {moment(item.checkInTime).format("HH:mm")}
+                      </td>
+                      <td style={{ padding: "20px" }}>
+                        {moment(item.checkOutTime).format("HH:mm")}
+                      </td>
                       <td>
                         {item.breaks.map((breakItem, index) => (
                           <React.Fragment key={breakItem.id}>
                             {index > 0 && ", "}
-                            {breakItem.breakStartTime}
+                            {moment(breakItem.breakStartTime).format("HH:mm")}
                           </React.Fragment>
                         ))}
                       </td>
-                      {/* Display all break ends in a separate column */}
                       <td>
                         {item.breaks.map((breakItem, index) => (
                           <React.Fragment key={breakItem.id}>
                             {index > 0 && ", "}
-                            {breakItem.breakEndTime || "N/A"}
+                            {moment(
+                              breakItem.breakEndTime || "N/A"
+                            ).format("HH:mm")}
                           </React.Fragment>
                         ))}
                       </td>
@@ -161,6 +172,15 @@ const Attendance1 = () => {
                 </tr>
               )}
             </table>
+            {filteredData && (
+              <Stack spacing={2} style={{ marginTop: "20px" }}>
+                <Pagination
+                  count={Math.ceil(filteredData.length / itemsPerPage)}
+                  page={currentPage}
+                  onChange={handlePageChange}
+                />
+              </Stack>
+            )}
           </div>
         </div>
       </main>
