@@ -1,83 +1,83 @@
-import React,{useState,useEffect} from 'react'
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import FolderIcon from '@mui/icons-material/Folder';
+import DeleteIcon from '@mui/icons-material/Delete';
+import axios from 'axios';
+
+const Demo = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+}));
 
 const TaskList = () => {
-    const [taskInput, setTaskInput] = useState('');
-    const [tasks, setTasks] = useState([]);
-  
-    const handleInputChange = (event) => {
-      setTaskInput(event.target.value);
-    };
-  
-    const handleAddTask = (event) => {
-      event.preventDefault();
-  
-      if (taskInput.trim() !== '') {
-        setTasks((prevTasks) => [...prevTasks, taskInput]);
-        setTaskInput('');
-      }
-    };
-  
-    const handleRemoveTask = (index) => {
-      const updatedTasks = tasks.filter((_, i) => i !== index);
-      setTasks(updatedTasks);
-    };
+  const [dense, setDense] = React.useState(false);
+  const [secondary, setSecondary] = React.useState(false);
+  const [tasks, setTasks] = React.useState([]);
+
+  React.useEffect(() => {
+    // Fetch data from the API when the component mounts
+    axios.get('http://localhost:8080/bytesfarms/tasks/get?userId=3')
+      .then(response => {
+        setTasks(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching tasks:', error);
+      });
+  }, []); // Empty dependency array ensures this effect runs once when the component mounts
+
+  const handleDelete = (taskId) => {
+    // Make API call to delete the task with taskId
+    axios.delete(`http://localhost:8080/bytesfarms/tasks/delete?taskId=${taskId}`)
+      .then(response => {
+        // Remove the deleted task from the state
+        setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+      })
+      .catch(error => {
+        console.error('Error deleting task:', error);
+      });
+  };
+
   return (
-    <div className="mb-3 shadow shadow-lg rounded-4" style={{ maxWidth: "400px" }}>
-    <div className="row g-0">
-      <div className="card" style={{ height: '290px' }}>
-        <div className="card-body p-3">
-          <h4 className="mb-3 text-center pb-3">DAILY TASK</h4>
-
-          <form className="d-flex justify-content-center align-items-center mb-4">
-            <div className="form-outline flex-fill">
-              <input
-                type="text"
-                id="form3"
-                className="form-control form-control-sm"
-                value={taskInput}
-                onChange={handleInputChange}
-              />
-            </div>
-            <button
-              type="submit"
-              className="btn btn-primary btn-sm ms-2"
-              style={{ backgroundColor: "#1B1A47", color: "white" }}
-              onClick={handleAddTask}
-            >
-              Add
-            </button>
-          </form>
-
-          <ul className="list-group mb-0">
-            {tasks.map((task, index) => (
-              <li
-                key={index}
-                className="list-group-item d-flex justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom rounded-0 mb-2"
-              >
-                <div className="d-flex align-items-center">
-                  <input
-                    className="form-check-input me-2"
-                    type="checkbox"
-                    value=""
-                    aria-label="..."
+    <Box sx={{ flexGrow: 1, maxWidth: 752 }}>
+      <Grid container maxWidth='382px'>
+        <Grid item xs={6} md={12}>
+          <Demo>
+            <Typography className='pt-3 text-bold text-center'>
+              Task List
+            </Typography>
+            <List dense={dense}>
+              {tasks.map(task => (
+                <ListItem key={task.id} secondaryAction={
+                  <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(task.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                }>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <FolderIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={task.taskDescription}
+                    secondary={secondary ? task.taskDescription : null}
                   />
-                  {task}
-                </div>
-                <button
-                  type="button"
-                  className="btn btn-link text-decoration-none"
-                  onClick={() => handleRemoveTask(index)}
-                >
-                  ❌
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-  )
-}
+                </ListItem>
+              ))}
+            </List>
+          </Demo>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
 
-export default TaskList
+export default TaskList;

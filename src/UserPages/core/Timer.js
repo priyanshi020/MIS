@@ -155,7 +155,7 @@ const Timer = () => {
       <ToastContainer />
 
       <div className="row g-0">
-        <h4 className="pt-3 pb-5 text-center">ATTENDANCE</h4>
+        <h5 className="pt-4 pb-5 text-center">Attendance</h5>
         <div className="d-flex justify-content-around">
           <button
             onClick={handleCheckButtonClick}

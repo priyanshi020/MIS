@@ -10,7 +10,7 @@ import axios from "axios";
 import { toast, ToastContainer } from 'react-toastify';
 function AddUser({ onUserAdded }) {
   const [open, setOpen] = React.useState(false);
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,35 +34,44 @@ function AddUser({ onUserAdded }) {
 
   const loginEndpoint = "http://localhost:8080/bytesfarms/user/signup";
 
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{8,}$/;
-
-  if (!passwordRegex.test(password)) {
-    toast.error('Must contain 8 charchter including one capital ,one small letter and one symbol');
-    return;
-  }
-    // e.preventDefault();
+  
+    if (!passwordRegex.test(password)) {
+      toast.error('Must contain 8 characters including one capital, one small letter, and one symbol');
+      return;
+    }
+  
     const dataToAdd = {
-      username: name,
+      username: username,
       email: email,
       password: password,
       role: {
         roleName: role,
       },
     };
+  
     try {
-      const response = axios.post(loginEndpoint, dataToAdd);
-      console.log("User added successfully:", response.data);
-
-      onUserAdded(response.data);
-      toast.success('User Added Successfully')
+      console.log("Request data:", dataToAdd);
+      const response = await axios.post(loginEndpoint, dataToAdd);
+      console.log("Response:", response);
+  
+      if (response && response.data) {
+        console.log("User added successfully:", response.data);
+        onUserAdded(response.data);
+        toast.success('User Added Successfully');
+      } else {
+        console.error("Invalid response structure:", response);
+        toast.error('Error adding user. Please try again.');
+      }
     } catch (error) {
       console.error("Error adding user:", error.message);
+      toast.error('Error adding user. Please try again.');
     }
-
+  
     setOpen(false);
   };
-
+  
   return (
     <div className="container">
       <button
@@ -109,8 +118,8 @@ function AddUser({ onUserAdded }) {
             type="text"
             fullWidth
             variant="standard"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
 
           <TextField

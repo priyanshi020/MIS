@@ -258,8 +258,8 @@ export default function Mus() {
         className="toast-center"
       />
  
-      <div className="container  py-5 h-25" style={{ overflow: "hidden" }}>
-        <div className="row d-flex justify-content-center align-items-center h-100 ">
+      <div className="container  py-5 h-25" style={{ overflow: "hidden",width:"75%" }}>
+        <div className="row d-flex justify-content-center align-items-center h-100 " >
           <div className="col-12 col-md-8 col-lg-6 col-xl-5  ">
             <div
               className="card  text-white shadow shadow-lg"
@@ -267,15 +267,15 @@ export default function Mus() {
             >
               <div className="card-body pb-5 text-center">
                 <div className=" mt-md-4 ">
-                  <div className="text-center pb-5">
+                  <div className="text-center pb-3">
                     <img
                       src="assets/ByteWiseLogo.png"
                       style={{ width: "185px" }}
                       alt="logo"
                     />
-                    <h4 className="pt-4 mt-4 text-dark">
-                      LOGIN TO YOUR ACCOUNT
-                    </h4>
+                    <h6 className="pt-2 mt-4 " style={{color:'#797675'}}>
+                      Login To Your Account
+                    </h6>
                   </div>
                   <Box sx={{ width: "100%" }}>
                     {/* <Box
@@ -349,7 +349,7 @@ export default function Mus() {
                               value={password}
                               onChange={(e) => setPassword(e.target.value)}
                               className="form-control form-control-md"
-                              style={{ width: "450px" }}
+                              style={{ width: "370px" }}
                             />
                             <FontAwesomeIcon
                               icon={showPassword ? faEye : faEyeSlash}
@@ -374,7 +374,7 @@ export default function Mus() {
                         </p>
                         <button
                           onClick={handleSubmit}
-                          className="btn btn-dark btn-lg w-50 rounded-3"
+                          className="btn btn-dark btn-lg w-100 rounded-3"
                           type="button"
                           style={{
                             transition: "background-color 0.3s",

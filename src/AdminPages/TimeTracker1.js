@@ -10,7 +10,7 @@ const TimeTracker1 = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 6;
 
   const handleSearch = (event) => {
     const term = event.target.value.toLowerCase();

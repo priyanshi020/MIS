@@ -37,6 +37,7 @@ const Profile = () => {
     const updatedData = {
       fullName,
       email,
+      profile:{
       phone,
       mobile,
       address,
@@ -49,6 +50,7 @@ const Profile = () => {
       age,
       gender,
       maritalStatus,
+      },
     };
 
     // Assuming you have the user ID available
@@ -122,8 +124,20 @@ const Profile = () => {
 
           if (user) {
             setUserName(user.username); // Change from 'name' to 'username'
+            setEmail(user.email);
             setImageProfile(user.image);
             setDesignation(user.profile.designation);
+            setLocation(user.profile.location);
+            setExperience(user.profile.experience);
+            setJoiningDate(user.profile.joiningDate);
+            setPhone(user.profile.phone);
+            setMobile(user.profile.mobile);
+            setAddress(user.profile.address);
+            setDob(user.profile.dob);
+            setAge(user.profile.age);
+            setGender(user.profile.gender);
+            setMaritalStatus(user.profile.maritalStatus);
+            
           } else {
             console.error("User not found");
           }
@@ -214,12 +228,12 @@ const Profile = () => {
                       {editMode1 ? (
                         <input
                           type="text"
-                          value={department}
-                          onChange={(e) => setDepartment(e.target.value)}
+                          value={designation}
+                          onChange={(e) => setDesignation(e.target.value)}
                           style={{ width: "100%" }}
                         />
                       ) : (
-                        <p className="text-muted mb-0">{department}</p>
+                        <p className="text-muted mb-0">{designation}</p>
                       )}
                     </div>
                   </div>
@@ -327,12 +341,12 @@ const Profile = () => {
                       {editMode ? (
                         <input
                           type="text"
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
+                          value={userName}
+                          onChange={(e) => setUserName(e.target.value)}
                           style={{ width: "100%" }}
                         />
                       ) : (
-                        <p className="text-muted mb-0">{fullName}</p>
+                        <p className="text-muted mb-0">{userName}</p>
                       )}
                     </div>
                     

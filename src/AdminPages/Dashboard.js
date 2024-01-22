@@ -7,7 +7,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 import axios from "axios";
 import "./admin.css";
 import { useCallback } from "react";
@@ -16,6 +17,7 @@ import Add from "./core/Add";
 const Dashboard = () => {
   const [value, setValue] = React.useState(0);
   const [data, setData] = useState([]);
+  console.log();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -23,22 +25,25 @@ const Dashboard = () => {
   const [employeeCount, setEmployeeCount] = useState(0);
   const [checkedInCount, setCheckedInCount] = useState(0);
   const [checkedOutCount, setCheckedOutCount] = useState(0);
-  // const [filteredData, setFilteredData] = useState(data);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
 
-  // const handleSearch = (event) => {
-  //   const term = event.target.value.toLowerCase();
-  //   setSearchTerm(term);
-  // };
+  // Search filter
+  const filteredData = data.filter(
+    (item) =>
+      item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  // useEffect(() => {
-  //   const filtered = data.filter(
-  //     (item) =>
-  //       item.username.toLowerCase().includes(searchTerm) ||
-  //       item.email.toLowerCase().includes(searchTerm)
-  //   );
+  // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  //   setFilteredData(filtered);
-  // }, [data, searchTerm]);
+  const paginate = (event, value) => {
+    setCurrentPage(value);
+  };
+
   console.log("selectedItemId0", selectedItemId);
 
   const [Editusername, setEditusername] = useState("");
@@ -50,10 +55,10 @@ const Dashboard = () => {
     setEditemail(e.target.value);
   };
 
-  const [Editdesignation,setEditdesignation]=useState("");
-  const handledesignation=(e)=>{
+  const [Editdesignation, setEditdesignation] = useState("");
+  const handledesignation = (e) => {
     setEditdesignation(e.target.value);
-  }
+  };
 
   const [editData, setEditData] = useState({
     id: null,
@@ -61,7 +66,7 @@ const Dashboard = () => {
     email: "",
     profile: {
       designation: "",
-    }
+    },
   });
 
   const handleUserAdded = (newUser) => {
@@ -108,7 +113,7 @@ const Dashboard = () => {
         email: selectedItem.email,
         profile: {
           designation: selectedItem.designation,
-        }
+        },
       });
       setEditusername(selectedItem.username);
       setEditemail(selectedItem.email);
@@ -195,9 +200,6 @@ const Dashboard = () => {
         handleClose();
       });
   };
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   return (
     <>
@@ -224,7 +226,7 @@ const Dashboard = () => {
                       lineHeight: "28px",
                     }}
                   >
-                     {employeeCount}
+                    {employeeCount}
                   </span>
                   <p
                     className="mt-1 mb-3"
@@ -312,7 +314,7 @@ const Dashboard = () => {
                       lineHeight: "28px",
                     }}
                   >
-                   {checkedOutCount}
+                    {checkedOutCount}
                   </span>
                   <p
                     className="mt-1 mb-2 text-white"
@@ -326,7 +328,7 @@ const Dashboard = () => {
           </div>
 
           <div className="container pt-5">
-            <div className="mb-3">
+            <div className="d-flex align-items-center search-container mb-3">
               {/* <Box
       component="form"
       sx={{
@@ -354,6 +356,22 @@ const Dashboard = () => {
     />
   </div>
 </div> */}
+              <input
+                type="search"
+                className="form-control rounded w-50"
+                placeholder="Search"
+                aria-label="Search"
+                aria-describedby="search-addon"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <div className="search-icon-container">
+                <img
+                  src="/assets/ic-search.png"
+                  alt="icon"
+                  className="search-icon"
+                />
+              </div>
             </div>
             <table
               class="table  "
@@ -379,18 +397,22 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((item, index) => (
+                {currentItems.map((item, index) => (
                   <tr key={item?.id}>
-                    <td className="text-center">{index + 1}</td>
+                    <td className="text-center">
+                      {index + 1 + (currentPage - 1) * itemsPerPage}
+                    </td>
                     <td>
-                    <div class="d-flex align-items-center ">
-          <img
-              src={`data:image/png;base64, ${item && item.image}`}
-              alt=""
-              style={{width: "45px", height: "45px"}}
-              class="rounded-circle mr-3"
-              />
-                      {item && item.username}</div></td>
+                      <div class="d-flex align-items-center ">
+                        <img
+                          src={`data:image/png;base64, ${item && item.image}`}
+                          alt=""
+                          style={{ width: "45px", height: "45px" }}
+                          class="rounded-circle mr-3"
+                        />
+                        {item && item.username}
+                      </div>
+                    </td>
                     <td>{item && item.email}</td>
                     <td>{item?.profile?.designation || "N/A"}</td>
 
@@ -519,6 +541,11 @@ const Dashboard = () => {
                 ))}
               </tbody>
             </table>
+            <Pagination
+              count={Math.ceil(filteredData.length / itemsPerPage)}
+              page={currentPage}
+              onChange={paginate}
+            />
           </div>
         </div>
       </main>

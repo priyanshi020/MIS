@@ -30,7 +30,7 @@ import CompanyPolicy from "./UserPages/CompanyPolicy";
 import CompanyPolicy1 from "./AdminPages/CompanyPolicy1";
 import InterviewSchedule from "./AdminPages/core/InterviewSchedule";
 import { useNavigate } from "react-router-dom";
-
+import Policy from "./UserPages/Policy";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [logout, setLogout] = useState(false);
@@ -92,6 +92,7 @@ function App() {
           <Route path="/updatepassword" element={<ForgotPass />} />
           <Route path="/user-company-policy" element={<CompanyPolicy />} />
           <Route path="/company-policy" element={<CompanyPolicy1 />} />
+          <Route path="/policy" element={<Policy/>}/>
           <Route path="/interview-schedule" element={<InterviewSchedule />} />
         </Routes>
       

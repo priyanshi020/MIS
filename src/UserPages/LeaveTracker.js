@@ -92,7 +92,7 @@ const LeaveTracker = () => {
               style={{ maxWidth: "280px" }}
             >
               <div className="row g-0">
-                <h5 className="pt-3 pb-4 text-center">Casual Leave</h5>
+                <h5 className="pt-3 pb-4 text-center">Availabe Leave</h5>
                 <div className="text-center">
                   <img src="/assets/leave/casual.png" alt="leave" />
                 </div>
@@ -112,7 +112,7 @@ const LeaveTracker = () => {
               style={{ maxWidth: "280px" }}
             >
               <div className="row g-0">
-                <h5 className="pt-3 pb-4 text-center">Sick Leave</h5>
+                <h5 className="pt-3 pb-4 text-center"> Leaves Taken</h5>
                 <div className="text-center">
                   <img
                     src="/assets/leave/sick.png"
@@ -156,7 +156,7 @@ const LeaveTracker = () => {
               style={{ maxWidth: "280px" }}
             >
               <div className="row g-0">
-                <h5 className="pt-3 pb-4 text-center">Earned Leave</h5>
+                <h5 className="pt-3 pb-4 text-center">Half Day</h5>
                 <div className="text-center">
                   <img src="/assets/leave/earned.png" alt="leave" />
                 </div>
