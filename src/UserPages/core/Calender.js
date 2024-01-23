@@ -19,4 +19,4 @@ const Calender = () => {
   )
 }
 
-export default Calenderzz
+export default Calender
