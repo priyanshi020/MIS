@@ -34,7 +34,7 @@ const Payroll = () => {
           });
         } else {
           console.error("Invalid API response format:", payrollDetails);
-        }
+        }                         
       })
       .catch((error) => {
         console.error("Error fetching data:", error.message);

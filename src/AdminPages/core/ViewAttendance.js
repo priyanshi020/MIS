@@ -136,7 +136,8 @@ function ViewAttendance({ userId }) {
                         <td>
                           {item.breaks.map((breakItem, index) => (
                             <React.Fragment key={breakItem.id}>
-                              {index > 0 && ", "}
+                               {index > 0 && <hr />}
+                            {`Break ${index + 1}: `}
                               {moment(breakItem.breakStartTime).format("HH:mm")}
                             </React.Fragment>
                           ))}
@@ -145,7 +146,8 @@ function ViewAttendance({ userId }) {
                         <td>
                           {item.breaks.map((breakItem, index) => (
                             <React.Fragment key={breakItem.id}>
-                              {index > 0 && ", "}
+                              {index > 0 && <hr />}
+                            {`Break ${index + 1}: `}
                               {moment(breakItem.breakEndTime || "N/A").format("HH:mm")}
                             </React.Fragment>
                           ))}

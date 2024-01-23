@@ -144,21 +144,23 @@ const Attendance1 = () => {
                       <td style={{ padding: "20px" }}>
                         {moment(item.checkOutTime).format("HH:mm")}
                       </td>
-                      <td>
+                      <td style={{ whiteSpace: "pre-line", padding: "20px" }}>
                         {item.breaks.map((breakItem, index) => (
                           <React.Fragment key={breakItem.id}>
-                            {index > 0 && ", "}
+                            {index > 0 && <hr />}
+                            {`Break ${index + 1}: `}
                             {moment(breakItem.breakStartTime).format("HH:mm")}
                           </React.Fragment>
                         ))}
                       </td>
-                      <td>
+                      <td style={{ whiteSpace: "pre-line", padding: "20px" }}>
                         {item.breaks.map((breakItem, index) => (
                           <React.Fragment key={breakItem.id}>
-                            {index > 0 && ", "}
-                            {moment(
-                              breakItem.breakEndTime || "N/A"
-                            ).format("HH:mm")}
+                            {index > 0 && <hr />}
+                            {`Break ${index + 1}: `}
+                            {moment(breakItem.breakEndTime || "N/A").format(
+                              "HH:mm"
+                            )}
                           </React.Fragment>
                         ))}
                       </td>

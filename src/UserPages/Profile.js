@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar";
+import Sidebar1 from "../components/Sidebar";
 import axios from "axios";
 import { FaPencilAlt } from "react-icons/fa";
 const Profile = () => {
@@ -150,7 +150,7 @@ const Profile = () => {
 
   return (
     <>
-      <Sidebar />
+      <Sidebar1 />
       <main className="" style={{ backgroundColor: "#F0F5FD" }}>
         <section className="p-5">
           <div class="container ">

@@ -1,23 +1,75 @@
-import React, { useState, useEffect, useCallback } from "react";
-import Sidebar from "../components/Sidebar";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import axios from "axios";
+import React, { useState, useEffect ,useCallback} from 'react';
+import {
+  Card,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField
+} from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
 import AddPolicy from "./core/AddPolicy";
-const CompanyPolicy1 = () => {
-  const [value, setValue] = React.useState(0);
-  const [data, setData] = useState([]);
-  const [open, setOpen] = useState(false);
+const FixedHeightCard = ({
+  title,
+  content,
+  onClickReadMore,
+  isExpanded,
+  onMenuClick,
+  onEditClick,
+  onDeleteClick
+}) => {
+  const shortenedDescription = content.split(' ').slice(0, 37).join(' ');
+
+  return (
+    <Card style={{ padding: '20px', overflow: 'hidden' }}>
+      <div className='mt-3'>
+        <h4>{title}</h4>
+      </div>
+      <div className='text-secondary' style={{ minHeight: '150px', overflow: 'hidden' }}>
+        <p className='m-3'>{isExpanded ? content : shortenedDescription}...</p>
+      </div>
+      <Button
+        variant="contained"
+        style={{
+          fontWeight: 600,
+          fontSize: '15px',
+          color: 'white',
+          background: '#1B1A47',
+          borderRadius: '30px',
+          marginTop: '12px',
+        }}
+        onClick={onClickReadMore}
+      >
+        <Link to='/policy' className='text-decoration-none text-white'>
+          {isExpanded ? 'Read Less' : 'Read More'}
+        </Link>
+      </Button>
+      <IconButton
+        aria-haspopup="true"
+        onClick={onMenuClick}
+        style={{ position: 'absolute', top: '10px', right: '10px' }}
+      >
+        <MoreVertIcon />
+      </IconButton>
+      {/* Menu and Dialog components can be rendered here as well if you want them inside the card */}
+    </Card>
+  );
+};
+
+const CompanyPolicy = () => {
+  const navigate = useNavigate();
+  const [cardsData, setCardsData] = useState([]);
+  const [expandedCards, setExpandedCards] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedItemId, setSelectedItemId] = useState(null);
-  const [showFullContent, setShowFullContent] = useState(false);
-  const maxLinesToShow = 3;
+  const [open, setOpen] = useState(false);
+  const [itemId, setItemId] = useState(null);
   const [Edittitle, setEdittitle] = useState("");
   const handletitle = (e) => {
     setEdittitle(e.target.value);
@@ -33,32 +85,49 @@ const CompanyPolicy1 = () => {
     title: "",
     content: "",
   });
-
-  const handlePolicyAdded = (newPolicy) => {
-    setData((prevData) => [...prevData, newPolicy]);
-    fetchData();
-  };
+  const [selectedItemId, setSelectedItemId] = useState(null);
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  const fetchData = () => {
+  },[]);
+  const fetchData=()=>{
     axios
-      .get("http://localhost:8080/bytesfarms/policy/get?id=0")
+      .get('http://localhost:8080/bytesfarms/policy/get?id=0')
       .then((response) => {
-        setData(response.data);
+        setCardsData(response.data);
+        // Initialize the expanded state for each card to false
+        setExpandedCards(Array(response.data.length).fill(false));
       })
       .catch((error) => {
-        console.error("Error fetching data:", error.message);
+        console.error('Error fetching data:', error);
       });
+  };
+
+  const handleReadMoreClick = (index) => {
+    // Get the selected card's data
+    const selectedCard = cardsData[index];
+
+    // Toggle the expanded state for the clicked card
+    setExpandedCards((prevState) => {
+      const newState = [...prevState];
+      newState[index] = !newState[index];
+      return newState;
+    });
+
+    // Redirect to the Policy component with the selected card's title and content
+    navigate('/policy', {
+      state: {
+        title: selectedCard.title,
+        content: selectedCard.content,
+      },
+    });
   };
 
   const handleMenuClick = (event, itemId) => {
     setAnchorEl(event.currentTarget);
     setSelectedItemId(itemId);
 
-    const selectedItem = data.find((item) => item.id === itemId);
+    const selectedItem = cardsData.find((item) => item.id === itemId);
 
     if (selectedItem) {
       setEditData({
@@ -79,15 +148,15 @@ const CompanyPolicy1 = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
     setSelectedItemId(null);
-  };
+    };
 
-  const handleEditClick = useCallback(
-    (itemId) => () => {
-      setSelectedItemId(itemId);
-      setOpen(true);
-    },
-    [handleMenuClose]
-  );
+    const handleEditClick = useCallback(
+      (itemId) => () => {
+        setSelectedItemId(itemId);
+        setOpen(true);
+      },
+      [handleMenuClose]
+    );
 
   const handleDeleteClick = () => {
     if (!selectedItemId) {
@@ -120,6 +189,7 @@ const CompanyPolicy1 = () => {
     });
   };
 
+
   const handleEditApiCall = () => {
     const editData = {
       title: Edittitle,
@@ -142,164 +212,108 @@ const CompanyPolicy1 = () => {
         handleClose();
       });
   };
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handlePolicyAdded = (newPolicy) => {
+    setCardsData((prevData) => [...prevData, newPolicy]);
+    fetchData();
   };
 
   return (
     <>
-      <Sidebar />
-      <main style={{ backgroundColor: "#F0F5FD" }}>
-        <div className="p-4">
-          <h3 className=" pb-3">Company Policy</h3>
-          <table
-            className="table "
-            style={{
-              borderRadius: "16px",
-              overflow: "hidden",
-              boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px",
-            }}
-          >
-            <thead className="table-secondary p-2">
-              <tr>
-                <th
-                  scope="col"
-                  className="text-center "
-                  style={{ padding: "20px" }}
-                >
-                  S.No
-                </th>
-                <th scope="col" className="" style={{ padding: "20px" }}>
-                  Title
-                </th>
-                <th scope="col" style={{ padding: "20px" }}>
-                  Content
-                </th>
+    <Sidebar/>
+      <main style={{ backgroundColor: '#F0F5FD' }}>
+        <div className='p-5'>
+          <div className='d-flex justify-content-between'>          
+            <h3 className='pb-3'>Company Policy</h3>
+            <div><AddPolicy onPolicyAdded={handlePolicyAdded} /></div>
+          </div>
 
-                <th>
-                  <AddPolicy onPolicyAdded={handlePolicyAdded} />
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item, index) => (
-                <tr key={item.id}>
-                  <td className="text-center">{index + 1}</td>
-                  <td>{item.title}</td>
-                  <td>
-                    <div
-                      style={{
-                        overflow: "hidden",
-                        display: "-webkit-box",
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: showFullContent
-                          ? "unset"
-                          : maxLinesToShow,
-                      }}
-                    >
-                      {item.content}
-                    </div>
-                    {!showFullContent && (
-                      <span
-                        style={{ color: "#007BFF", cursor: "pointer" }}
-                        onClick={() => setShowFullContent(true)}
-                      >
-                        See more
-                      </span>
-                    )}
-                    {showFullContent && (
-                      <span
-                        style={{ color: "#007BFF", cursor: "pointer" }}
-                        onClick={() => setShowFullContent(false)}
-                      >
-                        See less
-                      </span>
-                    )}
-                  </td>
-
-                  <td>
-                    <IconButton
-                      aria-haspopup="true"
-                      onClick={(event) => handleMenuClick(event, item.id)}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={Boolean(anchorEl)}
-                      onClose={handleMenuClose}
-                    >
-                      <MenuItem onClick={handleEditClick(item.id)}>
-                        Edit
-                      </MenuItem>
-                      <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
-                    </Menu>
-                  </td>
-                  <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    fullWidth
-                    maxWidth="lg"
-                  >
-                    <DialogTitle
-                      style={{ fontSize: "30px", fontWeight: "600" }}
-                    >
-                      Update
-                    </DialogTitle>
-                    <DialogContent>
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Title"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        name="name"
-                        value={Edittitle}
-                        onChange={handletitle}
-                      />
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="number"
-                        label="Content"
-                        multiline
-                        rows={8} // Set the number of rows based on your content length
-                        fullWidth
-                        variant="standard"
-                        name="name"
-                        value={EditContent}
-                        onChange={handleContent}
-                      />
-                    </DialogContent>
-                    <DialogActions>
-                      <Button
-                        onClick={handleClose}
-                        className=" text-white"
-                        style={{ backgroundColor: "#1B1A47" }}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        className=" text-white"
-                        style={{ backgroundColor: "#1B1A47" }}
-                        onClick={handleEditApiCall}
-                      >
-                        Edit
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-                </tr>
+          <div className='container'>
+            <div className='row'>
+              {cardsData.map((card, index) => (
+                <div key={card.id} className='col-md-4 p-2'>
+                  <FixedHeightCard
+                    title={card.title}
+                    content={card.content}
+                    onClickReadMore={() => handleReadMoreClick(index)}
+                    isExpanded={expandedCards[index]}
+                    onMenuClick={(e) => handleMenuClick(e, card.id)}
+                    onEditClick={handleEditClick(card.id)}
+                    onDeleteClick={handleDeleteClick}
+                  />
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </div>
         </div>
       </main>
+      <Menu
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        <MenuItem onClick={handleEditClick(itemId)}>
+          Edit
+        </MenuItem>
+        <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
+      </Menu>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="lg"
+      >
+        <DialogTitle
+          style={{ fontSize: '30px', fontWeight: '600' }}
+        >
+          Update
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Title"
+            type="text"
+            fullWidth
+            variant="standard"
+            name="name"
+            value={Edittitle}
+            onChange={handletitle}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="number"
+            label="Content"
+            multiline
+            rows={8} // Set the number of rows based on your content length
+            fullWidth
+            variant="standard"
+            name="name"
+            value={EditContent}
+            onChange={handleContent}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleClose}
+            className="text-white"
+            style={{ backgroundColor: "#1B1A47" }}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="text-white"
+            style={{ backgroundColor: "#1B1A47" }}
+            onClick={handleEditApiCall}
+          >
+            Edit
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
 
-export default CompanyPolicy1;
+export default CompanyPolicy;

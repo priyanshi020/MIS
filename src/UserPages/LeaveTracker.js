@@ -2,12 +2,6 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar1 from "../components/Sidebar1";
 import ApplyLeave from "./core/ApplyLeave";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import Button from "@mui/material/Button";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
@@ -17,6 +11,44 @@ const LeaveTracker = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [leavesData, setLeavesData] = useState({
+    quarter: "",
+    availableLeaves: 0,
+    leavesTaken: 0,
+    leaveWithoutPay: 0,
+    totalHalfDay: 0,
+  });
+
+  const storedUserId = localStorage.getItem("userId");
+  const userId = storedUserId ? parseInt(storedUserId, 10) : null;
+
+  useEffect(() => {
+    const fetchData1 = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/bytesfarms/leave/get?userId=${userId}&quarter=This`
+        );
+    
+        console.log("Leaves data response:", response.data);
+        console.log("leavedata",leavesData);
+        console.log("availableleaves",leavesData.availableLeaves  );
+    
+        // Update the component state with the fetched data
+        setLeavesData({
+          quarter: leavesData.quarter,
+          availableLeaves: leavesData.availableLeaves,
+          leavesTaken: leavesData.leavesTaken,
+          leaveWithoutPay: leavesData.leaveWithoutPay,
+          totalHalfDay: leavesData.totalHalfDay,
+        });
+        console.log("leavedata1",leavesData);
+      } catch (error) {
+        console.error("Error fetching leaves data:", error.message);
+      }
+    };
+
+    fetchData1();
+  }, [userId]);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -39,8 +71,7 @@ const LeaveTracker = () => {
     setOpen(false);
   };
 
-  const storedUserId = localStorage.getItem("userId");
-  const userId = storedUserId ? parseInt(storedUserId, 10) : null;
+  
 
   useEffect(() => {
     fetchData();
@@ -84,7 +115,10 @@ const LeaveTracker = () => {
       <Sidebar1 />
       <main className="" style={{backgroundColor:'#F0F5FD'}}>
         <div className="p-5">
+          <div className="d-flex justify-content-between">
         <h3 className=" pb-3">Leaves</h3>
+        <p className="text-secondary">(Jan-Mar)  {leavesData.quarter}</p>
+        </div>
         <div className="d-flex justify-content-around ">
           <div className="col-md-3" style={{ width: "225px" }}>
             <div
@@ -96,13 +130,10 @@ const LeaveTracker = () => {
                 <div className="text-center">
                   <img src="/assets/leave/casual.png" alt="leave" />
                 </div>
-                <h6 className="text-center text-secondary pt-4">
-                  Available: 20
-                  <br />
-                </h6>
-                <h6 className="text-center text-secondary pb-4">
-                  Booked &nbsp; &nbsp;: 00
-                </h6>
+                <h5 className="text-center text-secondary pt-4 pb-4">
+                     {leavesData.availableLeaves}
+
+                </h5>
               </div>
             </div>
           </div>
@@ -120,13 +151,10 @@ const LeaveTracker = () => {
                     style={{ height: "50px" }}
                   />
                 </div>
-                <h6 className="text-center text-secondary pt-4">
-                  Available: 20
-                  <br />
-                </h6>
-                <h6 className="text-center text-secondary pb-4">
-                  Booked &nbsp; &nbsp;: 00
-                </h6>
+                <h5 className="text-center text-secondary pt-4 pb-4">
+                     {leavesData.leavesTaken}
+                 
+                </h5>
               </div>
             </div>
           </div>
@@ -140,13 +168,9 @@ const LeaveTracker = () => {
                 <div className="text-center">
                   <img src="/assets/leave/lwp.png" alt="leave" />
                 </div>
-                <h6 className="text-center text-secondary pt-3">
-                  Available: 20
-                  <br />
-                </h6>
-                <h6 className="text-center text-secondary pb-3">
-                  Booked &nbsp; &nbsp;: 00
-                </h6>
+                <h5 className="text-center text-secondary pt-3 pb-3">
+                     {leavesData.leaveWithoutPay}
+                  </h5>
               </div>
             </div>
           </div>
@@ -160,13 +184,10 @@ const LeaveTracker = () => {
                 <div className="text-center">
                   <img src="/assets/leave/earned.png" alt="leave" />
                 </div>
-                <h6 className="text-center text-secondary pt-4">
-                  Available: 20
-                  <br />
-                </h6>
-                <h6 className="text-center text-secondary pb-4">
-                  Booked &nbsp; &nbsp;: 00
-                </h6>
+                <h5 className="text-center text-secondary pt-4 pb-4">
+                    {leavesData.totalHalfDay}
+                 
+                </h5>
               </div>
             </div>
           </div>
@@ -176,14 +197,14 @@ const LeaveTracker = () => {
               style={{ maxWidth: "250px" }}
             >
               <div className="row g-0">
-                <div className="text-center mt-3">
+                <div className="text-center mt-2">
                   <img
                     src="/assets/leave/upload.png"
                     alt="leave"
-                    style={{ height: "65px" }}
+                    style={{ height: "55px" }}
                   />
                 </div>
-                <h5 className="text-center mt-3 ">Submit your leave</h5>
+                <h5 className="text-center mt-2 ">Submit your leave</h5>
                 <h5 className="text-center  mb-3">application here</h5>
                 <div className="text-center mb-3">
                   <ApplyLeave onApplyLeave={handleLeave} />
@@ -214,26 +235,26 @@ const LeaveTracker = () => {
                   <td>{item.description}</td>
 
                   <td>
-                    {/* <button
+                    <button
                       type="button"
-                      className={`btn ${
+                      className={`badge rounded-pill d-inline ${
                         item.status === "Approved"
-                        ? "btn-outline-success"  // If status is "Approved", use the success style
+                        ? "badge-success"  // If status is "Approved", use the success style
                         : item.status === "Pending"
-                          ? "btn-outline-warning" // If status is "Pending", use the warning style
-                          : "btn-outline-danger"
+                          ? "badge-warning" // If status is "Pending", use the warning style
+                          : "badge-danger"
                       }`}
                       style={{ minWidth: "100px" }}
                     >
                       {item.status}
-                    </button> */}
-<span className={`badge rounded-pill d-inline ${
+                    </button></td>
+{/* <span className={`badge rounded-pill d-inline ${
   item.status === 'Approved' ? 'badge-success' :
   item.status === 'Pending' ? 'badge-warning' :
   item.status === 'rejected' ? 'badge-danger' : ''
 }`}>
   {item.status}
-</span>                  </td>
+</span>                  </td> */}
                   <td>
                     <IconButton aria-haspopup="true" onClick={handleMenuClick}>
                       <MoreVertIcon />

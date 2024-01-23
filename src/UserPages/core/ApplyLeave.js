@@ -123,19 +123,22 @@ function AddUser({onApplyLeave}) {
               }}
           />
 
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            type="date"
-            fullWidth
-            variant="standard"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            InputProps={{
-              style: { color: "gray", paddingTop:'7px',paddingBottom:'7px' },
-            }}
-          />
+{leaveType !== "Half Day" && (
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              type="date"
+              fullWidth
+              variant="standard"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              InputProps={{
+                style: { color: "gray", paddingTop: '7px', paddingBottom: '7px' },
+              }}
+              />
+          )}
+
 
           <TextField
             autoFocus

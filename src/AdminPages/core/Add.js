@@ -165,7 +165,7 @@ function AddUser({ onUserAdded }) {
             onChange={(e) => setRole(e.target.value)}
           >
             <MenuItem value={admin}>Admin</MenuItem>
-            <MenuItem value={employee}>User</MenuItem>
+            <MenuItem value={employee}>Employee</MenuItem>
             <MenuItem value={hr}>HR</MenuItem>
           </TextField>
         </DialogContent>
