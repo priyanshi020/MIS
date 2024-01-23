@@ -309,60 +309,59 @@ export default function Mus() {
                     </Box> */}
                     <CustomTabPanel value={value} index={0}>
                       <form onSubmit={handleSubmit}>
-                        <div className="form-outline form-black mb-4 d-flex flex-column align-items-start position-relative">
-                          <label
-                            className="text-dark mb-2"
-                            htmlFor="typeEmailX"
-                          >
-                            Email
-                          </label>
-                          <input
-                            type="email"
-                            id="typeEmailX"
-                            placeholder="Enter Your Email"
-                            className={`form-control form-control-md ${
-                              isValidEmail ? "" : "is-invalid"
-                            }`}
-                            value={email}
-                            onChange={handleEmailChange}
-                          />
-                        
-                          {!isValidEmail && (
-                            <div className="invalid-feedback">
-                              Please enter a valid email address.
-                            </div>
-                          )}
-                        </div>
- 
-                        <div className="form-outline form-black  d-flex flex-column align-items-start">
-                          <label
-                            className="form-label text-dark mb-2"
-                            htmlFor="typePasswordX"
-                          >
-                            Password
-                          </label>
-                          <div className="position-relative mb-2">
+                          <div className="form-outline form-black mb-4 d-flex flex-column align-items-start position-relative">
+                            <label
+                              className="text-dark mb-2"
+                              htmlFor="typeEmailX"
+                            >
+                              Email
+                            </label>
                             <input
-                              type={showPassword ? "text" : "password"}
-                              id="typePasswordX"
-                              placeholder="Enter Your Password"
-                              value={password}
-                              onChange={(e) => setPassword(e.target.value)}
-                              className="form-control form-control-md"
-                              style={{ width: "370px" }}
+                              type="email"
+                              id="typeEmailX"
+                              placeholder="Enter Your Email"
+                              className={`form-control form-control-md ${
+                                isValidEmail ? "" : "is-invalid"
+                              }`}
+                              value={email}
+                              onChange={handleEmailChange}
                             />
-                            <FontAwesomeIcon
-                              icon={showPassword ? faEye : faEyeSlash}
-                              className="eye-icon position-absolute top-50 translate-middle-y"
-                              style={{
-                                cursor: "pointer",
-                                color: "black",
-                                right: "10px",
-                              }}
-                              onClick={togglePasswordVisibility}
-                            />
+                          
+                            {!isValidEmail && (
+                              <div className="invalid-feedback">
+                                Please enter a valid email address.
+                              </div>
+                            )}
                           </div>
-                        </div>
+  
+                          <div className="form-outline form-black  d-flex flex-column align-items-start">
+                            <label
+                              className="form-label text-dark mb-2"
+                              htmlFor="typePasswordX"
+                            >
+                              Password
+                            </label>
+                            <div className="position-relative mb-2 w-100">
+                              <input
+                                type={showPassword ? "text" : "password"}
+                                id="typePasswordX"
+                                placeholder="Enter Your Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="form-control form-control-md"
+                              />
+                              <FontAwesomeIcon
+                                icon={showPassword ? faEye : faEyeSlash}
+                                className="eye-icon position-absolute top-50 translate-middle-y"
+                                style={{
+                                  cursor: "pointer",
+                                  color: "black",
+                                  right: "10px",
+                                }}
+                                onClick={togglePasswordVisibility}
+                              />
+                            </div>
+                          </div>
                         <p className="small mb-5 pb-lg-2 text-end">
                           <a
                             className="text-dark-50 forgot-password-link"

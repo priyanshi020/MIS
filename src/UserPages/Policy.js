@@ -19,8 +19,16 @@ const Policy = () => {
           {/* Back button with icon */}
           <div className='d-flex '>
           <Link to='/user-company-policy' className='text-decoration-none'>
-            <FontAwesomeIcon icon={faArrowLeft} className='mr-2 ' />
-          
+            {/* <FontAwesomeIcon icon={faArrowLeft} className='mr-2 ' /> */}
+          <img src='/assets/BACK-ARROW.png' className='mr-2'  style={{
+            //   position: "absolute",
+              marginTop:'3px',
+              background: "rgb(211, 211, 211)",
+              padding: "6px",
+              height: "29px",
+              width: "29px",
+              borderRadius: "65%", // Border radius for a circular shape
+            }}/>
           </Link>
           <h3 className='pb-3'>{title || 'Policy'}</h3>
           </div>

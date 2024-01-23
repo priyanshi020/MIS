@@ -11,6 +11,10 @@ const Timer = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [userId, setUserId] = useState("");
 
+
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const formattedDate = currentDate.toLocaleString('en-US', options);
+
   useEffect(() => {
     // Retrieve the user ID from local storage
     const storedUserId = localStorage.getItem("userId");
@@ -155,8 +159,20 @@ const Timer = () => {
       <ToastContainer />
 
       <div className="row g-0">
-        <h5 className="pt-4 pb-5 text-center">Attendance</h5>
-        <div className="d-flex justify-content-around">
+        <h5 className="pt-4 pb-4 text-center">Attendance</h5>
+        <h6 className="text-center text-secondary pt-2  ">
+  {formattedDate}
+</h6>
+<h1 className="text-center pt-5">{formatTime(elapsedTime)}Hrs</h1>
+        
+        <p className="text-center text-primary pt-5">
+          {isCheckInRunning
+            ? "Yet to check out"
+            : isBreakStartRunning
+            ? "On break"
+            : ""}
+        </p>
+        <div className="d-flex justify-content-around pb-5 mb-1">
           <button
             onClick={handleCheckButtonClick}
             className={isCheckInRunning ? "checkout-button" : "checkin-button"}
@@ -173,17 +189,7 @@ const Timer = () => {
             {isBreakStartRunning ? "Break End" : "Break Start"}
           </button>
         </div>
-        <h1 className="text-center pt-5">{formatTime(elapsedTime)}Hrs</h1>
-        <h5 className="text-center text-secondary pt-5">
-          {currentDate.toLocaleDateString()}
-        </h5>
-        <p className="text-center text-primary pt-5">
-          {isCheckInRunning
-            ? "Yet to check out"
-            : isBreakStartRunning
-            ? "On break"
-            : ""}
-        </p>
+       
       </div>
     </div>
   );

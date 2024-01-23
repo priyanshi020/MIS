@@ -17,68 +17,65 @@ const Payroll = () => {
   const userId = storedUserId ? parseInt(storedUserId, 10) : null;
 
   useEffect(() => {
-  axios
-    .get(`http://localhost:8080/bytesfarms/payroll/allData?userId=${userId}`)
-    .then((response) => {
-      const payrollDetails = response.data[0];
+    // Fetch current month data
+    axios
+      .get(`http://localhost:8080/bytesfarms/payroll/generatePayslip?userId=${userId}&month=DECEMBER`)
+      .then((response) => {
+        const payrollDetails = response.data[0];
 
-      console.log("Payroll API Response:", payrollDetails);
+        console.log("Payroll API Response:", payrollDetails);
 
-      if (payrollDetails) {
-        setPayrollDetails({
-          grossSalary: payrollDetails.grossSalary || 0,
-          netPay: Number(payrollDetails.netPay.toFixed(2)) || 0,
-          deductions: Number(payrollDetails.deductions.toFixed(2)) || 0,
-          bonus: payrollDetails.bonus || 0,
-        });
+        if (payrollDetails) {
+          setPayrollDetails({
+            grossSalary: payrollDetails.grossSalary || 0,
+            netPay: Number(payrollDetails.netPay.toFixed(2)) || 0,
+            deductions: Number(payrollDetails.deductions.toFixed(2)) || 0,
+            bonus: payrollDetails.bonus || 0,
+          });
+        } else {
+          console.error("Invalid API response format:", payrollDetails);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error.message);
+      });
+
+    // Fetch all months data
+    axios
+      .get(`http://localhost:8080/bytesfarms/payroll/generatePayslip?userId=${userId}`)
+      .then((response) => {
         setData(response.data);
-      } else {
-        console.error("Invalid API response format:", payrollDetails);
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error.message);
-    });
-}, [userId]);
+      })
+      .catch((error) => {
+        console.error("Error fetching all data:", error.message);
+      });
+  }, [userId]);
+
+  const handleDownloadPdf = (userId, month) => {
+    const apiEndpoint = `http://localhost:8080/bytesfarms/payroll/generatePdf?userId=${userId}&month=${month}`;
   
-
-
-
- 
-  // const handleDownloadPdf = (userId) => {
-  //   const apiEndpoint = `http://localhost:8080/bytesfarms/payroll/generatePdf?userId=${userId}`;
-
-  //   axios
-  //     .post(apiEndpoint, {}, { responseType: 'blob' }) // Use POST method for your API
-  //     .then((response) => {
-  //       const blob = new Blob([response.data], { type: 'application/pdf' });
-  //       const url = URL.createObjectURL(blob);
-  //       const a = document.createElement('a');
-  //       a.href = url;
-  //       a.download = `Payroll_${userId}.pdf`;
-  //       document.body.appendChild(a);
-  //       a.click();
-  //       document.body.removeChild(a);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error downloading PDF:', error);
-  //     });
-  // };
-  const handleDownloadPdf = (userId) => {
-    const apiEndpoint = `http://localhost:8080/bytesfarms/payroll/generatePdf?userId=${userId}`;
+    const requestData = {
+      grossSalary: payrollDetails.grossSalary || 0,
+      netPay: Number(payrollDetails.netPay.toFixed(2)) || 0,
+      deductions: Number(payrollDetails.deductions.toFixed(2)) || 0,
+      bonus: payrollDetails.bonus || 0,
+      month: payrollDetails.month,
+    };
   
     axios
-      .post(apiEndpoint, {}, { responseType: 'blob' })
+      .post(apiEndpoint, requestData, { responseType: 'blob' })
       .then((response) => {
         const blob = new Blob([response.data], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
-        
+  
         window.open(url, '_blank');
       })
       .catch((error) => {
         console.error('Error opening PDF:', error);
       });
   };
+  
+
 
   return (
     <>
@@ -220,64 +217,35 @@ const Payroll = () => {
 
         {/* table */}
         <div className="m-5">
-        <table
-          class="table rounded-4 "
-          style={{
-            borderRadius: "16px",
-            overflow: "hidden",
-            boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px",
-          }}
-        >
-          <thead class="table-secondary p-2">
-            <tr>
-              <th
-                className="text-center"
-                scope="col"
-                style={{ padding: "20px" }}
-              >
-                Month
-              </th>
-              <th scope="col" style={{ padding: "20px" }}>
-                Leave
-              </th>
-              <th style={{ padding: "20px" }}>Half Day</th>
-              {/* <th style={{ padding: "20px" }}>Deduction</th> */}
-              <th style={{ padding: "20px" }}>Pay Slip</th>
-            </tr>
-          </thead>
-          <tbody className="p-2">
-            {data.map((item) => (
+        <table className="table rounded-4" style={{ borderRadius: "16px", overflow: "hidden", boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px" }}>
+            <thead className="table-secondary p-2">
+              <tr>
+                <th className="text-center" style={{ padding: "20px" }}>Month</th>
+                <th style={{ padding: "20px" }}>Leave</th>
+                <th style={{ padding: "20px" }}>Half Day</th>
+                <th style={{ padding: "20px" }}>Pay Slip</th>
+              </tr>
+            </thead>
+            <tbody className="p-2">
+              {data.map((item) => (
                 <tr key={item.id}>
                   <td className="text-center" style={{ padding: "20px" }}>{item.month}</td>
                   <td style={{ padding: "20px" }}>{item.leaveDays}</td>
                   <td style={{ padding: "20px" }}>{item.halfDays}</td>
-                  <td><Button
-                            // onClick={() => downloadPdf(application.fileData, application.user.username)}
-                            onClick={() => handleDownloadPdf(userId)}
-                              className="text-white"
-                              style={{ backgroundColor: "#1B1A47" }}
-                            ><img src='/assets/Download.png' alt='icon' className="mr-2"/>
-                              Download
-                            </Button>
+                  <td>
+                    <Button
+                      onClick={() => handleDownloadPdf(userId, item.month)}
+                      className="text-white"
+                      style={{ backgroundColor: "#1B1A47" }}
+                    >
+                      <img src='/assets/Download.png' alt='icon' className="mr-2" />
+                      Download
+                    </Button>
                   </td>
-                 
                 </tr>
               ))}
-            {/* <tr>
-              <td className="text-center" style={{ padding: "20px" }}>December</td>
-              <td style={{ padding: "20px" }}>3</td>
-              <td style={{ padding: "20px" }}>4</td>
-              <td>
-                            <Button
-                              className="text-white"
-                              style={{ backgroundColor: "#1B1A47" }}
-                            ><img src='/assets/Download.png' alt='icon' className="mr-2"/>
-                              Download
-                            </Button>
-                        </td>
-            </tr> */}
-          </tbody>
-        </table></div>
+            </tbody>
+          </table></div>
       </main>
     </>
   );
