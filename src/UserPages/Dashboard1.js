@@ -8,17 +8,16 @@ import Chart from "./core/Chart";
 import Meeting from "./core/Meeting";
 import axios from "axios";
 import { FaPencilAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
 const Dashboard1 = () => {
   const [userName, setUserName] = useState("");
   const [imageProfile, setImageProfile] = useState("");
   const [designation, setDesignation] = useState("");
-  
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     const formData = new FormData();
 
-    
     const userId = localStorage.getItem("userId");
 
     formData.append("userId", userId);
@@ -99,89 +98,108 @@ const Dashboard1 = () => {
 
             {/* User Profile Card */}
             {/* // Inside the user profile card div  */}
-<div className="col col-md-4">
-  <div
-    className="card mb-4 rounded-3 shadow shadow-lg "
-    style={{ height: "384px" }}
-  >
-    <div className="card-body text-center mb-5">
-      {imageProfile ? (
-        // If image exists, display the user's image
-        <div style={{ position: "relative" }}>
-          <img
-            src={`data:image/png;base64, ${imageProfile}`}
-            alt="avatar"
-            className="rounded-circle img-fluid mt-3"
-            style={{ width: "150px", height: "150px" }}
-          />
-          <label
-            htmlFor="imageUpload"
-            className="pencil-icon"
-            style={{
-              position: "absolute",
-              bottom: "0px",
-              right: "110px",
-              background: "rgb(211, 211, 211)",
-              padding: "4px",
-              height: "29px",
-              width: "29px",
-              borderRadius: "65%", // Border radius for a circular shape
-            }}
-          >
-            <FaPencilAlt style={{ height: "100%" }} />
-          </label>
-          <input
-            type="file"
-            id="imageUpload"
-            style={{ display: "none" }}
-            onChange={handleImageUpload}
-          />
-        </div>
-      ) : (
-        // If no image exists, display a default circle and pencil icon
-        <div style={{ position: "relative" }}>
-          <div
-            className="rounded-circle img-fluid mt-3"
-            style={{
-              width: "150px",
-              height: "150px",
-              backgroundColor: "#ccc", // Default color for the circle
-            }}
-          />
-          <label
-            htmlFor="imageUpload"
-            className="pencil-icon"
-            style={{
-              position: "absolute",
-              bottom: "0px",
-              right: "110px",
-              background: "rgb(211, 211, 211)",
-              padding: "4px",
-              height: "29px",
-              width: "29px",
-              borderRadius: "65%", // Border radius for a circular shape
-            }}
-          >
-            <FaPencilAlt style={{ height: "100%" }} />
-          </label>
-          <input
-            type="file"
-            id="imageUpload"
-            style={{ display: "none" }}
-            onChange={handleImageUpload}
-          />
-        </div>
-      )}
-      <h5 className="my-3 mt-5 " style={{ fontSize: "20px" }}>
-        {userName}
-      </h5>
-      <p className="text-muted text-lg" style={{ fontSize: "20px" }}>
-        {designation}
-      </p>
-    </div>
-  </div>
-</div>
-
+            <div className="col col-md-4">
+              <div
+                className="card mb-4 rounded-3 shadow shadow-lg "
+                style={{ height: "389px" }}
+              >
+                <div className="card-body text-center mb-5">
+                  <h5 className="mt-2">My Profile</h5>
+                  {imageProfile ? (
+                    // If image exists, display the user's image
+                    <div style={{ position: "relative" }}>
+                      <img
+                        src={`data:image/png;base64, ${imageProfile}`}
+                        alt="avatar"
+                        className="rounded-circle img-fluid mt-2"
+                        style={{ width: "150px", height: "150px" }}
+                      />
+                      <label
+                        htmlFor="imageUpload"
+                        className="pencil-icon"
+                        style={{
+                          position: "absolute",
+                          bottom: "0px",
+                          right: "110px",
+                          background: "rgb(211, 211, 211)",
+                          padding: "4px",
+                          height: "29px",
+                          width: "29px",
+                          borderRadius: "65%", // Border radius for a circular shape
+                        }}
+                      >
+                        <FaPencilAlt style={{ height: "100%" }} />
+                      </label>
+                      <input
+                        type="file"
+                        id="imageUpload"
+                        style={{ display: "none" }}
+                        onChange={handleImageUpload}
+                      />
+                    </div>
+                  ) : (
+                    // If no image exists, display a default circle and pencil icon
+                    <div style={{ position: "relative", width: "150px", height: "150px" }}>
+                    <div
+                      className="rounded-circle img-fluid mt-2"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "#ccc", // Default color for the circle
+                        marginLeft:'93px'
+                      }}
+                    />
+                    {/* Adjusted position of the pencil icon */}
+                    <label
+                      htmlFor="imageUpload"
+                      className="pencil-icon"
+                      style={{
+                        position: "absolute",
+                        bottom: "0px",
+                        left:'207px',
+                        // right: "5px",
+                        background: "rgb(211, 211, 211)",
+                        padding: "4px",
+                        height: "29px",
+                        width: "29px",
+                        borderRadius: "65%", // Border radius for a circular shape
+                      }}
+                    >
+                      <FaPencilAlt style={{ height: "100%" }} />
+                    </label>
+                    <input
+                      type="file"
+                      id="imageUpload"
+                      style={{ display: "none" }}
+                      onChange={handleImageUpload}
+                    />
+                  </div>
+                  )}
+                  <h5 className="my-3 mt-3 " style={{ fontSize: "20px" }}>
+                    {userName}
+                  </h5>
+                  <p
+                    className="text-muted text-lg"
+                    style={{ fontSize: "18px" }}
+                  >
+                    {designation}
+                  </p>
+                  <Link to="/profile">
+                    <button
+                      variant="outlined"
+                      id="addbutton"
+                      className="btn btn-primary btn-sm-3 rounded-3  "
+                      style={{ backgroundColor: "#1B1A47" }}
+                      type="button"
+                      title="Add"
+                    >
+                      {/* <i className="fa fa-table"></i> */}
+                      View Profile
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </div>
 
             {/* Tasklist */}
             <div className="col col-md-4">

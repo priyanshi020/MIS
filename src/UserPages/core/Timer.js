@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { Button } from "@mui/material";
 import axios from "axios";
 
 const Timer = () => {
@@ -154,28 +154,54 @@ const Timer = () => {
   return (
     <div
       className="card mb-3 rounded-3 shadow shadow-lg"
-      style={{ maxWidth: "400px", maxHeight: "389px" }}
+      style={{ maxWidth: "400px", maxHeight: "392px" }}
     >
       <ToastContainer />
 
       <div className="row g-0">
-        <h5 className="pt-4 pb-4 text-center">Attendance</h5>
-        <h6 className="text-center text-secondary pt-2  ">
+        <h5 className="pt-4 pb-3 text-center">Attendance</h5>
+        <h6 className="text-center text-secondary pt-1  ">
   {formattedDate}
 </h6>
-<h1 className="text-center pt-5">{formatTime(elapsedTime)}Hrs</h1>
+<h1 className="text-center pt-3">{formatTime(elapsedTime)}Hrs</h1>
         
-        <p className="text-center text-primary pt-5">
+        {/* <p className="text-center text-primary pt-5">
           {isCheckInRunning
             ? "Yet to check out"
             : isBreakStartRunning
             ? "On break"
             : ""}
-        </p>
-        <div className="d-flex justify-content-around pb-5 mb-1">
+        </p> */}
+        
+        <div
+          style={{
+            fontSize: "12px",
+            color: '#a9a7a7',
+            backgroundColor: '#f5f1f1',
+            borderRadius: '4px',
+            fontWeight: '500',
+            width: '82%',
+            padding: '18px 25px 0px 25px',
+            marginTop: '7px',
+            marginLeft: '33px',
+            marginBottom: '27px'
+          }}
+        >
+          <div className="d-flex justify-content-between">
+            <p>Break Time</p>
+            <p>45 min</p>
+          </div>
+          <div className="d-flex justify-content-between">
+            <p>Target Hours</p>
+            <p>08H 45M </p>
+          </div>
+        </div>
+
+        <div className="d-flex   mb-5 mt-3" style={{paddingLeft:'29px'}}>
           <button
             onClick={handleCheckButtonClick}
             className={isCheckInRunning ? "checkout-button" : "checkin-button"}
+            style={{width:'155px',marginRight:'13px'}}
           >
             {isCheckInRunning ? "Check Out" : "Check In"}
           </button>
@@ -184,6 +210,7 @@ const Timer = () => {
             className={
               isBreakStartRunning ? "breakend-button" : "breakstart-button"
             }
+            style={{width:'155px'}}
             disabled={!isCheckInRunning} // Disable if not checked in
           >
             {isBreakStartRunning ? "Break End" : "Break Start"}

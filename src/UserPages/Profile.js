@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Sidebar1 from "../components/Sidebar";
+import Sidebar1 from "../components/Sidebar1";
 import axios from "axios";
 import { FaPencilAlt } from "react-icons/fa";
 const Profile = () => {

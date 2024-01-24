@@ -6,14 +6,13 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
 
-
 const LeaveTracker = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [leavesData, setLeavesData] = useState({
     quarter: "",
-    availableLeaves: 0,
+    availableLeaves: 3,
     leavesTaken: 0,
     leaveWithoutPay: 0,
     totalHalfDay: 0,
@@ -28,20 +27,17 @@ const LeaveTracker = () => {
         const response = await axios.get(
           `http://localhost:8080/bytesfarms/leave/get?userId=${userId}&quarter=This`
         );
-    
-        console.log("Leaves data response:", response.data);
-        console.log("leavedata",leavesData);
-        console.log("availableleaves",leavesData.availableLeaves  );
-    
-        // Update the component state with the fetched data
+
+        const leavesDataFromApi = response.data[0]; // Assuming the response is an array with a single object
+        console.log("Leaves data response:", leavesDataFromApi);
+
         setLeavesData({
-          quarter: leavesData.quarter,
-          availableLeaves: leavesData.availableLeaves,
-          leavesTaken: leavesData.leavesTaken,
-          leaveWithoutPay: leavesData.leaveWithoutPay,
-          totalHalfDay: leavesData.totalHalfDay,
+          quarter: leavesDataFromApi.quarter,
+          availableLeaves: leavesDataFromApi.availableLeaves,
+          leavesTaken: leavesDataFromApi.leavesTaken,
+          leaveWithoutPay: leavesDataFromApi.leaveWithoutPay,
+          totalHalfDay: leavesDataFromApi.totalHalfDay,
         });
-        console.log("leavedata1",leavesData);
       } catch (error) {
         console.error("Error fetching leaves data:", error.message);
       }
@@ -70,8 +66,6 @@ const LeaveTracker = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  
 
   useEffect(() => {
     fetchData();
@@ -109,133 +103,147 @@ const LeaveTracker = () => {
       });
   };
 
-
   return (
     <>
       <Sidebar1 />
-      <main className="" style={{backgroundColor:'#F0F5FD'}}>
+      <main className="" style={{ backgroundColor: "#F0F5FD" }}>
         <div className="p-5">
           <div className="d-flex justify-content-between">
-        <h3 className=" pb-3">Leaves</h3>
-        <p className="text-secondary">(Jan-Mar)  {leavesData.quarter}</p>
-        </div>
-        <div className="d-flex justify-content-around ">
-          <div className="col-md-3" style={{ width: "225px" }}>
-            <div
-              className="card m-2 p-2 rounded-4 shadow shadow-lg"
-              style={{ maxWidth: "280px" }}
-            >
-              <div className="row g-0">
-                <h5 className="pt-3 pb-4 text-center">Availabe Leave</h5>
-                <div className="text-center">
-                  <img src="/assets/leave/casual.png" alt="leave" />
+            <h3 className=" pb-3">Leaves</h3>
+            <p className="text-secondary">( {leavesData.quarter})</p>
+          </div>
+          <div className="d-flex justify-content-around ">
+            <div className="col-md-3" style={{ width: "225px" }}>
+              <div
+                className="card m-2 p-2 rounded-4 shadow shadow-lg"
+                style={{ maxWidth: "280px" }}
+              >
+                <div className="row g-0">
+                  <h5 className="pt-3 pb-4 text-center">Availabe Leave</h5>
+                  <div className="text-center">
+                    <img src="/assets/leave/casual.png" alt="leave" />
+                  </div>
+                  <h4 className="text-center text-secondary pt-4 pb-4">
+                    {leavesData.availableLeaves}
+                  </h4>
                 </div>
-                <h5 className="text-center text-secondary pt-4 pb-4">
-                     {leavesData.availableLeaves}
-
-                </h5>
               </div>
             </div>
-          </div>
-          <div className="col-md-3" style={{ width: "225px" }}>
-            <div
-              className="card m-2 p-2 rounded-4 shadow shadow-lg"
-              style={{ maxWidth: "280px" }}
-            >
-              <div className="row g-0">
-                <h5 className="pt-3 pb-4 text-center"> Leaves Taken</h5>
-                <div className="text-center">
-                  <img
-                    src="/assets/leave/sick.png"
-                    alt="leave"
-                    style={{ height: "50px" }}
-                  />
+            <div className="col-md-3" style={{ width: "225px" }}>
+              <div
+                className="card m-2 p-2 rounded-4 shadow shadow-lg"
+                style={{ maxWidth: "280px" }}
+              >
+                <div className="row g-0">
+                  <h5 className="pt-3 pb-4 text-center"> Leaves Taken</h5>
+                  <div className="text-center">
+                    <img
+                      src="/assets/leave/sick.png"
+                      alt="leave"
+                      style={{ height: "50px" }}
+                    />
+                  </div>
+                  <h4 className="text-center text-secondary pt-4 pb-4">
+                    {leavesData.leavesTaken}
+                  </h4>
                 </div>
-                <h5 className="text-center text-secondary pt-4 pb-4">
-                     {leavesData.leavesTaken}
-                 
-                </h5>
               </div>
             </div>
-          </div>
-          <div className="col-md-3" style={{ width: "225px" }}>
-            <div
-              className="card m-2  p-2 rounded-4 shadow shadow-lg"
-              style={{ maxWidth: "280px" }}
-            >
-              <div className="row g-0">
-                <h5 className="pt-3 pb-3 text-center"> Leave Without Pay</h5>
-                <div className="text-center">
-                  <img src="/assets/leave/lwp.png" alt="leave" />
+            <div className="col-md-3" style={{ width: "225px" }}>
+              <div
+                className="card m-2  p-2 rounded-4 shadow shadow-lg"
+                style={{ maxWidth: "280px" }}
+              >
+                <div className="row g-0">
+                  <h5 className="pt-3 pb-3 text-center"> Leave Without Pay</h5>
+                  <div className="text-center">
+                    <img src="/assets/leave/lwp.png" alt="leave" />
+                  </div>
+                  <h4 className="text-center text-secondary pt-3 pb-3">
+                    {leavesData.leaveWithoutPay}
+                  </h4>
                 </div>
-                <h5 className="text-center text-secondary pt-3 pb-3">
-                     {leavesData.leaveWithoutPay}
-                  </h5>
               </div>
             </div>
-          </div>
-          <div className="col-md-3" style={{ width: "225px" }}>
-            <div
-              className="card m-2 p-2 rounded-4 shadow shadow-lg"
-              style={{ maxWidth: "280px" }}
-            >
-              <div className="row g-0">
-                <h5 className="pt-3 pb-4 text-center">Half Day</h5>
-                <div className="text-center">
-                  <img src="/assets/leave/earned.png" alt="leave" />
-                </div>
-                <h5 className="text-center text-secondary pt-4 pb-4">
+            <div className="col-md-3" style={{ width: "225px" }}>
+              <div
+                className="card m-2 p-2 rounded-4 shadow shadow-lg"
+                style={{ maxWidth: "280px" }}
+              >
+                <div className="row g-0">
+                  <h5 className="pt-3 pb-4 text-center">Half Day</h5>
+                  <div className="text-center">
+                    <img src="/assets/leave/earned.png" alt="leave" />
+                  </div>
+                  <h4 className="text-center text-secondary pt-4 pb-4">
                     {leavesData.totalHalfDay}
-                 
-                </h5>
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div
+                className="card m-2 p-2 rounded-4 shadow shadow-lg"
+                style={{ maxWidth: "250px" }}
+              >
+                <div className="row g-0">
+                  <div className="text-center mt-2">
+                    <img
+                      src="/assets/leave/upload.png"
+                      alt="leave"
+                      style={{ height: "55px" }}
+                    />
+                  </div>
+                  <h5 className="text-center mt-2 ">Submit your leave</h5>
+                  <h5 className="text-center  mb-3">application here</h5>
+                  <div className="text-center mb-4">
+                    <ApplyLeave onApplyLeave={handleLeave} />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div className="col-md-3">
-            <div
-              className="card m-2 p-2 rounded-4 shadow shadow-lg"
-              style={{ maxWidth: "250px" }}
+
+          <div className="container pt-5">
+            <table
+              class="table "
+              style={{
+                borderRadius: "16px",
+                overflow: "hidden",
+                boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px",
+              }}
             >
-              <div className="row g-0">
-                <div className="text-center mt-2">
-                  <img
-                    src="/assets/leave/upload.png"
-                    alt="leave"
-                    style={{ height: "55px" }}
-                  />
-                </div>
-                <h5 className="text-center mt-2 ">Submit your leave</h5>
-                <h5 className="text-center  mb-3">application here</h5>
-                <div className="text-center mb-3">
-                  <ApplyLeave onApplyLeave={handleLeave} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+              <thead class="table-secondary p-2">
+                <tr>
+                  <th style={{ padding: "20px" }} scope="col">
+                    Leave Type
+                  </th>
+                  <th style={{ padding: "20px" }} scope="col">
+                    Start Date
+                  </th>
+                  <th style={{ padding: "20px" }} scope="col">
+                    End Date
+                  </th>
+                  <th style={{ padding: "20px" }} scope="col">
+                    {" "}
+                    Description
+                  </th>
+                  <th style={{ padding: "20px" }} scope="col">
+                    Status{" "}
+                  </th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item) => (
+                  <tr key={item.id}>
+                    <td style={{ padding: "20px" }}>{item.leaveType}</td>
+                    <td>{item.startDate}</td>
+                    <td>{item.endDate}</td>
+                    <td>{item.description}</td>
 
-        <div className="container pt-5">
-          <table class="table " style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 50px'}} >
-            <thead class="table-secondary p-2">
-              <tr>
-                <th style={{padding:'20px'}} scope="col">Leave Type</th>
-                <th style={{padding:'20px'}} scope="col">Start Date</th>
-                <th style={{padding:'20px'}} scope="col">End Date</th>
-                <th style={{padding:'20px'}} scope="col"> Description</th>
-                <th style={{padding:'20px'}} scope="col">Status </th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item) => (
-                <tr key={item.id}>
-                  <td style={{padding:'20px'}}>{item.leaveType}</td>
-                  <td>{item.startDate}</td>
-                  <td>{item.endDate}</td>
-                  <td>{item.description}</td>
-
-                  <td>
-                    <button
+                    <td>
+                      {/* <button
                       type="button"
                       className={`badge rounded-pill d-inline ${
                         item.status === "Approved"
@@ -247,34 +255,48 @@ const LeaveTracker = () => {
                       style={{ minWidth: "100px" }}
                     >
                       {item.status}
-                    </button></td>
-{/* <span className={`badge rounded-pill d-inline ${
-  item.status === 'Approved' ? 'badge-success' :
-  item.status === 'Pending' ? 'badge-warning' :
-  item.status === 'rejected' ? 'badge-danger' : ''
-}`}>
-  {item.status}
-</span>                  </td> */}
-                  <td>
-                    <IconButton aria-haspopup="true" onClick={handleMenuClick}>
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={Boolean(anchorEl)}
-                      onClose={handleMenuClose}
-                    >
-                      {/* <MenuItem onClick={handleClick}>Edit</MenuItem> */}
-                      <MenuItem onClick={handleDeleteClick.bind(null, item.id)}>Cancel Leave</MenuItem>
-                                            </Menu>
-                  </td>
-                  
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div></div>
+                    </button></td> */}
+                      <span
+                        className={`badge rounded-pill d-inline ${
+                          item.status === "approved"
+                            ? "badge-success"
+                            : item.status === "Pending"
+                            ? "badge-warning"
+                            : item.status === "rejected"
+                            ? "badge-danger"
+                            : ""
+                        }`}
+                      >
+                        {item.status}
+                      </span>{" "}
+                    </td>
+                    <td>
+                      <IconButton
+                        aria-haspopup="true"
+                        onClick={handleMenuClick}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={Boolean(anchorEl)}
+                        onClose={handleMenuClose}
+                      >
+                        {/* <MenuItem onClick={handleClick}>Edit</MenuItem> */}
+                        <MenuItem
+                          onClick={handleDeleteClick.bind(null, item.id)}
+                        >
+                          Cancel Leave
+                        </MenuItem>
+                      </Menu>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </main>
     </>
   );
