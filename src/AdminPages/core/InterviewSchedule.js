@@ -66,10 +66,10 @@ const InterviewSchedule = () => {
    <>
     <Sidebar/>
     <main style={{backgroundColor:"#F0F5FD"}}>
-    <div className='p-4'>
+    <div className='p-4 mx-5  '>
         <ToastContainer/>
     <h3 className='pb-3'>Schedule Interview</h3>
-    <form>
+    <form className='bg-white  rounded p-4'>
             {/* Name and Email Fields */}
             <div className="row">
               <div className="col">
@@ -192,14 +192,12 @@ const InterviewSchedule = () => {
           </form>
           <div className=''>
           <Button
-            className="text-white w-25 p-2 mr-2"
+            className="text-white w-25 p-2 mr-2 mt-4  "
             style={{ backgroundColor: "#1B1A47" }}
             onClick={handleSubmit}
           >
             Schedule the Interview
           </Button>
-
-         
           
           </div>
     </div>

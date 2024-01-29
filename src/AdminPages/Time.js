@@ -59,6 +59,7 @@ const TimeTracker = () => {
   const [role, setRole] = useState("");
   const [taskInput, setTaskInput] = useState("");
   const [timeInput, setTimeInput] = useState("");
+  const [timeInput1,setTimeInput1]=useState("");
   const [statusInput, setStatusInput] = useState("");
   const [tasks, setTasks] = useState([]);
   const [elapsedTimes, setElapsedTimes] = useState([]);
@@ -72,7 +73,11 @@ const TimeTracker = () => {
   const inProgress="IN PROGRESS";
   const completed="COMPLETED";
   const handleTime=(e)=>{
-    setEditTime(e.target.value);
+    let enteredTime = e.target.value;
+
+    const date = new Date("2000-01-01 " + enteredTime);
+    const formattedTime = date.toLocaleTimeString("en-US", { hour12: false });
+    setEditTime(formattedTime);
   };
 
   const [EditStatus,setEditStatus]=useState("");
@@ -82,7 +87,7 @@ const TimeTracker = () => {
 
   const [editData, setEditData] = useState({
     id: null,
-    time:"",
+    actualTime:"",
     status:""
   });
   const storedUserId = localStorage.getItem("userId");
@@ -152,7 +157,7 @@ const TimeTracker = () => {
     const date = new Date("2000-01-01 " + enteredTime);
     const formattedTime = date.toLocaleTimeString("en-US", { hour12: false });
 
-    setTimeInput(formattedTime);
+    setTimeInput1(formattedTime);
   };
 
   const handleStatusInputChange = (event) => {
@@ -162,16 +167,16 @@ const TimeTracker = () => {
   const handleAddTask = (event) => {
     event.preventDefault();
 
-    if (taskInput.trim() !== "" && timeInput.trim() !== "") {
+    if (taskInput.trim() !== "" && timeInput1.trim() !== "") {
       const newTask = {
         task: taskInput,
-        time: timeInput,
+        time: timeInput1,
         status: statusInput || "In Progress",
       };
 
       setTasks((prevTasks) => [...prevTasks, newTask]);
       setTaskInput("");
-      setTimeInput("");
+      setTimeInput1("");
       setStatusInput("");
 
       setTimers((prevTimers) => [...prevTimers, false]);
@@ -253,10 +258,10 @@ const TimeTracker = () => {
     if (selectedItem) {
       setEditData({
         id: selectedItem.id,
-        time:selectedItem.time,
+        actualTime:selectedItem.actualTime,
         status:selectedItem.status,
       });
-      setEditTime(selectedItem.time);
+      setEditTime(selectedItem.actualTime);
       setEditStatus(selectedItem.status);
     
       setOpen(true);
@@ -305,20 +310,20 @@ const TimeTracker = () => {
     // setEditedRole("");
     setEditData({
       id:null,
-      time:"",
+      actualTime:"",
       status:"",
     })
   };
 
   const handleEditApiCall = () => {
     const editData = {
-     time:EditTime,
+     actualTime:EditTime,
      status:EditStatus,
     };
 
     axios
       .put(
-        `http://localhost:8080/bytesfarms/tasks/update?userId=${userId}&taskId=24${selectedItemId}`,
+        `http://localhost:8080/bytesfarms/tasks/update?userId=${userId}&taskId=${selectedItemId}`,
         editData
       )
       .then((response) => {
@@ -333,11 +338,12 @@ const TimeTracker = () => {
       });
   };
 
-  const handleStatusChange = (status) => {
+  const handleStatusChange = (actualTime,status) => {
     if (selectedTaskId) {
       
       const apiUrl = `http://localhost:8080/bytesfarms/tasks/update?userId=${userId}&taskId=${selectedTaskId}`;
       const requestBody={
+        actualTime:actualTime,
         status:status,
       }
       axios.put(apiUrl,requestBody)
@@ -348,6 +354,7 @@ const TimeTracker = () => {
             if (task.id === selectedTaskId) {
               return {
                 ...task,
+                actualTime:actualTime,
                 status: status,
               };
             } else {
@@ -471,7 +478,7 @@ const TimeTracker = () => {
                   placeholder="Expected Time"
                   id="form3"
                   className="form-control form-control-lg"
-                  value={timeInput}
+                  value={timeInput1}
                   onChange={handleTimeInputChange}
                 />
               </div>
@@ -512,6 +519,7 @@ const TimeTracker = () => {
               </Button>
             </form>
           </div>
+          {tasks.length>0 ? (
           <ul className="list-group mb-0">
             {tasks.map((task, index) => (
               <li
@@ -524,8 +532,9 @@ const TimeTracker = () => {
                 >
                   <h6>{task.task}</h6>
                 </div>
+                
                 <h6 className="text-center">{task.time}</h6>
-                <div className="text-center">
+                {/* <div className="text-center">
                   {formatTime(elapsedTimes[index])} Hrs
                 </div>
                 <button
@@ -535,7 +544,7 @@ const TimeTracker = () => {
                   }
                 >
                   {timers[index] ? "Timer Off" : "Timer On"}
-                </button>
+                </button> */}<div>
                 <button
                   type="button"
                   className={`btn ${
@@ -568,57 +577,16 @@ const TimeTracker = () => {
                 >
                   ❌
                 </button>
-                {/* <IconButton
-                  aria-haspopup="true"
-                  onClick={(event) => handleMenuClick(event, index)}
-                >
-                  <MoreVertIcon />
-                </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  keepMounted
-                  open={Boolean(anchorEl)}
-                  onClose={handleMenuClose}
-                >
-                  <MenuItem>Edit</MenuItem>
-                  <MenuItem onClick={() => handleRemoveTask(index)}>
-                    Delete
-                  </MenuItem>
-                </Menu>
-                <Dialog
-                  open={open}
-                  onClose={handleClose}
-                  className="p-5 "
-                  fullWidth
-                  maxWidth="sm"
-                >
-                  <DialogContent>
-                    <TextField
-                      id="role"
-                      select
-                      label="Role"
-                      fullWidth
-                      variant="standard"
-                      value={editedRole}
-                      onChange={(e) => setEditedRole(e.target.value)}
-                    >
-                      <MenuItem value="In Progress">In Progress</MenuItem>
-                      <MenuItem value="Completed">Completed</MenuItem>
-                    </TextField>
-                  </DialogContent>
-                  <DialogActions className="justify-content-start p-3">
-                    <Button
-                      className=" text-white w-25 p-2"
-                      style={{ backgroundColor: "#1B1A47" }}
-                      onClick={() => handleUpdate(index)}
-                    >
-                      Update
-                    </Button>
-                  </DialogActions>
-                </Dialog> */}
+                </div>
+              
               </li>
             ))}
           </ul>
+          ):(
+            <div className='d-flex justify-content-center align-items-center py-5 my-5  '>
+              <img src="/assets/task-icon.png" alt="task"/>
+            </div>
+          )}
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
           <table class="    rounded-4 table table-responsive-lg  ">
@@ -672,7 +640,7 @@ const TimeTracker = () => {
                 </Menu>
                 
                       </td>
-                      <Dialog open={open} onClose={handleClose}>
+                      <Dialog open={open} onClose={handleClose} fullWidth  maxWidth="md">
                         <DialogTitle
                           style={{ fontSize: "30px", fontWeight: "600" }}
                         >
@@ -683,7 +651,7 @@ const TimeTracker = () => {
                             autoFocus
                             margin="dense"
                             id="name"
-                            label="Title"
+                            label=""
                             type="time"
                             fullWidth
                             variant="standard"

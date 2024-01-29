@@ -103,6 +103,10 @@ const Sidebar1 = () => {
                 <FontAwesomeIcon icon={faChartBar} className="fa-fw me-3" />
                 <span>Company Policy</span>
               </Link>
+              <Link to="/onboarding-exit" className="p-2 ripple active bg">
+                <FontAwesomeIcon icon={faUsers} className="fa-fw me-1" />
+                <span>Onboarding and Exit</span>
+              </Link>
               {/* <a className="text-white text-decoration-none font-weight-500 cursor-pointer mt-auto">LOGOUT</a> */}
             </div>
             <div className="list-group list-group-flush " style={{marginTop:'325px'}}>
@@ -111,6 +115,7 @@ const Sidebar1 = () => {
                 <img src="/assets/logout-icon.png" alt='logout'/>
                 <span className="ml-1">LOG OUT</span>
               </Link>
+             
             </div>
           </div>
         </nav>

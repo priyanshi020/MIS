@@ -11,7 +11,7 @@ const LeaveTracker = () => {
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [leavesData, setLeavesData] = useState({
-    quarter: "",
+    quarter: "Jan-Mar",
     availableLeaves: 3,
     leavesTaken: 0,
     leaveWithoutPay: 0,

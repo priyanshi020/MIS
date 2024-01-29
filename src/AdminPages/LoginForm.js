@@ -72,7 +72,7 @@ export default function Mus() {
     e.preventDefault();
  
     //two emails for time being for testing and developing portal to bypass location check
-    const bypassEmails = ["kuldeep.hirwe@bytesfarms.com", "mr1759097@gmail.com"];
+    const bypassEmails = ["harsh.dubey@bytesfarms.com", "mr1759097@gmail.com"];
     if (bypassEmails.includes(email)) {
       loginUser();
     }

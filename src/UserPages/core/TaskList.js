@@ -26,7 +26,7 @@ const TaskList = () => {
   const userId = storedUserId ? parseInt(storedUserId, 10) : null;
   React.useEffect(() => {
     // Fetch data from the API when the component mounts
-    axios.get(`http://localhost:8080/bytesfarms/tasks/get?userId=${userId}`)
+    axios.get(`http://localhost:8080/bytesfarms/tasks/get?userId=${userId}&date=Today`)
       .then(response => {
         setTasks(response.data);
       })
@@ -51,29 +51,50 @@ const TaskList = () => {
     <Box sx={{ flexGrow: 1, maxWidth: 752 }}>
       <Grid container maxWidth='382px'>
         <Grid item xs={6} md={12}>
-          <Demo>
-            <Typography className='pt-3 text-bold text-center'>
+          <Demo sx={{borderRadius:'10px'}}>
+            <h5 className='pt-3 text-bold text-center'>
               Task List
-            </Typography>
-            <List dense={dense}>
+            </h5>
+            {tasks.length>0 ? (
+            <List dense={dense} sx={{ height: '250px',
+            overflowY: 'auto'}}>
               {tasks.map(task => (
-                <ListItem key={task.id} secondaryAction={
-                  <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(task.id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                }>
-                  <ListItemAvatar>
+                <ListItem key={task.id} >
+                  {/* <ListItemAvatar>
                     <Avatar>
                       <FolderIcon />
                     </Avatar>
-                  </ListItemAvatar>
+                  </ListItemAvatar> */}
                   <ListItemText
                     primary={task.taskDescription}
                     secondary={secondary ? task.taskDescription : null}
+                    sx={{
+                      borderLeft: "4px solid red", 
+                      paddingLeft: 2, 
+                     
+                    }}
                   />
+                   <button
+                  type="button"
+                  className={`btn ${
+                    task.status === "in progress"
+                      ? "btn-outline-success"
+                      : task.status === "Started"
+                      ? "btn-outline-warning"
+                      : "btn-outline-danger"
+                  }`}
+                  style={{ minWidth: "100px" }}
+                >
+                  {task.status}
+                </button>
                 </ListItem>
               ))}
             </List>
+            ):(
+            <div className='d-flex justify-content-center align-items-center   ' style={{padding:'95px'}}>
+              <img src="/assets/task-icon.png" alt="task"/>
+            </div>
+          )}
           </Demo>
         </Grid>
       </Grid>

@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Button } from "@mui/material";
 import axios from "axios";
 
 const Timer = () => {
+  // Check-in/Checkout Timer
   const [isCheckInRunning, setCheckInRunning] = useState(false);
+  const [checkInElapsedTime, setCheckInElapsedTime] = useState(0);
+
+  // Break Timer
   const [isBreakStartRunning, setBreakStartRunning] = useState(false);
-  const [elapsedTime, setElapsedTime] = useState(0);
+  const [breakElapsedTime, setBreakElapsedTime] = useState(0);
+
   const [currentDate, setCurrentDate] = useState(new Date());
   const [userId, setUserId] = useState("");
-
+  const [paused, setPaused] = useState(false);
 
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const formattedDate = currentDate.toLocaleString('en-US', options);
@@ -26,21 +30,35 @@ const Timer = () => {
   }, []);
 
   useEffect(() => {
-    let interval;
+    let checkInInterval;
+    let breakInterval;
 
-    if (isCheckInRunning || isBreakStartRunning) {
-      // Start the timer
-      interval = setInterval(() => {
-        setElapsedTime((prevTime) => prevTime + 1);
+    if (isCheckInRunning && !paused) {
+      // Start the check-in timer
+      checkInInterval = setInterval(() => {
+        setCheckInElapsedTime((prevTime) => prevTime + 1);
       }, 1000);
     } else {
-      // Stop the timer
-      clearInterval(interval);
+      // Stop the check-in timer
+      clearInterval(checkInInterval);
     }
 
-    // Cleanup the interval on component unmount or when the timer is stopped
-    return () => clearInterval(interval);
-  }, [isCheckInRunning, isBreakStartRunning]);
+    if (isBreakStartRunning && !paused) {
+      // Start the break timer
+      breakInterval = setInterval(() => {
+        setBreakElapsedTime((prevTime) => prevTime + 1);
+      }, 1000);
+    } else {
+      // Stop the break timer
+      clearInterval(breakInterval);
+    }
+
+    // Cleanup the intervals on component unmount or when the timers are stopped
+    return () => {
+      clearInterval(checkInInterval);
+      clearInterval(breakInterval);
+    };
+  }, [isCheckInRunning, isBreakStartRunning, paused]);
 
   const formatTime = (timeInSeconds) => {
     const hours = Math.floor(timeInSeconds / 3600);
@@ -121,8 +139,14 @@ const Timer = () => {
         console.log("Break end response:", response.data);
       } catch (error) {
         console.error("Break end failed:", error.message);
+      } finally {
+        // Resume the timers after the break end
+        setPaused(false);
       }
     } else {
+      // Pause the timers during break start
+      setPaused(true);
+
       // Break start API call
       try {
         const response = await axios.post(
@@ -161,18 +185,10 @@ const Timer = () => {
       <div className="row g-0">
         <h5 className="pt-4 pb-3 text-center">Attendance</h5>
         <h6 className="text-center text-secondary pt-1  ">
-  {formattedDate}
-</h6>
-<h1 className="text-center pt-3">{formatTime(elapsedTime)}Hrs</h1>
-        
-        {/* <p className="text-center text-primary pt-5">
-          {isCheckInRunning
-            ? "Yet to check out"
-            : isBreakStartRunning
-            ? "On break"
-            : ""}
-        </p> */}
-        
+          {formattedDate}
+        </h6>
+        <h1 className="text-center pt-3">{isCheckInRunning ? formatTime(checkInElapsedTime) : formatTime(breakElapsedTime)}Hrs</h1>
+
         <div
           style={{
             fontSize: "12px",
@@ -188,8 +204,8 @@ const Timer = () => {
           }}
         >
           <div className="d-flex justify-content-between">
-            <p>Break Time</p>
-            <p>45 min</p>
+            <p>{isCheckInRunning ? "Check-in Time" : "Break Time"}</p>
+            <p>{isCheckInRunning ? formatTime(checkInElapsedTime) : formatTime(breakElapsedTime)}</p>
           </div>
           <div className="d-flex justify-content-between">
             <p>Target Hours</p>
@@ -197,11 +213,11 @@ const Timer = () => {
           </div>
         </div>
 
-        <div className="d-flex   mb-5 mt-3" style={{paddingLeft:'29px'}}>
+        <div className="d-flex   mb-5 mt-3" style={{ paddingLeft: '29px' }}>
           <button
             onClick={handleCheckButtonClick}
             className={isCheckInRunning ? "checkout-button" : "checkin-button"}
-            style={{width:'155px',marginRight:'13px'}}
+            style={{ width: '155px', marginRight: '13px' }}
           >
             {isCheckInRunning ? "Check Out" : "Check In"}
           </button>
@@ -210,13 +226,13 @@ const Timer = () => {
             className={
               isBreakStartRunning ? "breakend-button" : "breakstart-button"
             }
-            style={{width:'155px'}}
+            style={{ width: '155px' }}
             disabled={!isCheckInRunning} // Disable if not checked in
           >
             {isBreakStartRunning ? "Break End" : "Break Start"}
           </button>
         </div>
-       
+
       </div>
     </div>
   );
