@@ -22,10 +22,11 @@ const TaskList = () => {
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
   const [tasks, setTasks] = React.useState([]);
-
+  const storedUserId = localStorage.getItem("userId");
+  const userId = storedUserId ? parseInt(storedUserId, 10) : null;
   React.useEffect(() => {
     // Fetch data from the API when the component mounts
-    axios.get('http://localhost:8080/bytesfarms/tasks/get?userId=3')
+    axios.get(`http://localhost:8080/bytesfarms/tasks/get?userId=${userId}`)
       .then(response => {
         setTasks(response.data);
       })

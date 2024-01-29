@@ -279,7 +279,7 @@ const Profile = () => {
                     <div class="col-sm-7">
                       {editMode1 ? (
                         <input
-                          type="text"
+                          type="number"
                           value={experience}
                           onChange={(e) => setExperience(e.target.value)}
                           style={{ width: "100%" }}
@@ -297,7 +297,7 @@ const Profile = () => {
                     <div class="col-sm-7">
                       {editMode1 ? (
                         <input
-                          type="text"
+                          type="date"
                           value={joiningDate}
                           onChange={(e) => setJoiningDate(e.target.value)}
                           style={{ width: "100%" }}
@@ -442,7 +442,7 @@ const Profile = () => {
                     <div className="col-sm-9">
                       {editMode2 ? (
                         <input
-                          type="text"
+                          type="date"
                           value={dob}
                           onChange={(e) => setDob(e.target.value)}
                           style={{ width: "100%" }}
@@ -487,7 +487,7 @@ const Profile = () => {
                     <div className="col-sm-9">
                       {editMode2 ? (
                         <input
-                          type="number"
+                          type="text"
                           value={maritalStatus}
                           onChange={(e) => setMaritalStatus(e.target.value)}
                           style={{ width: "100%" }}

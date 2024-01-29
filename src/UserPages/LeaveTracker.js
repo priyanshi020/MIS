@@ -27,24 +27,31 @@ const LeaveTracker = () => {
         const response = await axios.get(
           `http://localhost:8080/bytesfarms/leave/get?userId=${userId}&quarter=This`
         );
-
-        const leavesDataFromApi = response.data[0]; // Assuming the response is an array with a single object
-        console.log("Leaves data response:", leavesDataFromApi);
-
-        setLeavesData({
-          quarter: leavesDataFromApi.quarter,
-          availableLeaves: leavesDataFromApi.availableLeaves,
-          leavesTaken: leavesDataFromApi.leavesTaken,
-          leaveWithoutPay: leavesDataFromApi.leaveWithoutPay,
-          totalHalfDay: leavesDataFromApi.totalHalfDay,
-        });
+  
+        const leavesDataFromApi = response.data;
+  
+        if (leavesDataFromApi.length > 0) {
+          const latestLeavesData = leavesDataFromApi[leavesDataFromApi.length - 1];
+  
+          console.log("Latest Leaves data response:", latestLeavesData);
+  
+          setLeavesData({
+            quarter: latestLeavesData.quarter,
+            availableLeaves: latestLeavesData.availableLeaves,
+            leavesTaken: latestLeavesData.leavesTaken,
+            leaveWithoutPay: latestLeavesData.leaveWithoutPay,
+            totalHalfDay: latestLeavesData.totalHalfDay,
+          });
+        }
       } catch (error) {
         console.error("Error fetching leaves data:", error.message);
       }
     };
-
+  
     fetchData1();
   }, [userId]);
+  
+  
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -238,9 +245,9 @@ const LeaveTracker = () => {
                 {data.map((item) => (
                   <tr key={item.id}>
                     <td style={{ padding: "20px" }}>{item.leaveType}</td>
-                    <td>{item.startDate}</td>
-                    <td>{item.endDate}</td>
-                    <td>{item.description}</td>
+                    <td style={{ padding: "20px" }}>{item.startDate}</td>
+                    <td style={{ padding: "20px" }}>{item.endDate}</td>
+                    <td style={{ padding: "20px" }}>{item.description}</td>
 
                     <td>
                       {/* <button

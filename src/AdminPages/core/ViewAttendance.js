@@ -47,16 +47,28 @@ function ViewAttendance({ userId }) {
   useEffect(() => {
     // Filter the data based on the provided filters
     if (data) {
-      const filtered = data.filter(item =>
-        (!dayFilter || item.day.toString().toLowerCase().includes(dayFilter.toLowerCase())) &&
-        (!monthFilter || item.month.toString().toLowerCase().includes(monthFilter.toLowerCase())) &&
-        (!yearFilter || item.year.toString().toLowerCase().includes(yearFilter.toLowerCase()))
-      );
+      const filtered = data.filter((item) => {
+        const dateStr = moment(item.date).format("YYYY-MM-DD"); // Assuming item.date is the full date property
+        console.log("dateStr",dateStr);
+        // console.log("datefilter",dateFilter);
+        console.log("dateFilter",dayFilter);
 
+        return (
+          (!dayFilter ||
+            dateStr.toLowerCase().includes(dayFilter.toLowerCase())) &&
+          (!monthFilter ||
+            item.month.toString().toLowerCase().includes(monthFilter.toLowerCase())) &&
+          (!yearFilter ||
+            item.year.toString().toLowerCase().includes(yearFilter.toLowerCase()))
+            
+        );
+        console.log("dateFilter",dayFilter);
+      });
+  
       setFilteredData(filtered);
-      setCurrentPage(1); // Reset current page when filters change
     }
   }, [data, dayFilter, monthFilter, yearFilter]);
+  
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -113,7 +125,7 @@ function ViewAttendance({ userId }) {
               }}>
                 <thead className="table-secondary text-center">
                   <tr>
-                    <th style={{ padding: "20px" }}>Day</th>
+                    <th style={{ padding: "20px" }}>Date</th>
                     <th style={{ padding: "20px" }}>Month </th>
                     <th style={{ padding: "20px" }}>Year </th>
                     <th style={{ padding: "20px" }}>Check In </th>
@@ -127,7 +139,7 @@ function ViewAttendance({ userId }) {
                   <tbody className="text-center">
                     {currentItems.map((item) => (
                       <tr key={item.date}>
-                        <td className="text-center">{item.day}</td>
+                        <td className="text-center"> {moment(item.checkInTime).format("YYYY-MM-DD")}</td>
                         <td>{item.month}</td>
                         <td>{item.year}</td>
                         <td>{moment(item.checkInTime).format("HH:mm")}</td>

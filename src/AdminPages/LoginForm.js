@@ -188,6 +188,13 @@ export default function Mus() {
     setHRPopupOpen(false);
   };
  
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit(e);
+    }
+  };
+
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const earthRadius = 6371; // Radius of the Earth in kilometers
  
@@ -318,6 +325,11 @@ export default function Mus() {
                             </label>
                             <input
                               type="email"
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  handleSubmit(e);
+                                }
+                              }}
                               id="typeEmailX"
                               placeholder="Enter Your Email"
                               className={`form-control form-control-md ${
@@ -344,6 +356,11 @@ export default function Mus() {
                             <div className="position-relative mb-2 w-100">
                               <input
                                 type={showPassword ? "text" : "password"}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") {
+                                    handleSubmit(e);
+                                  }
+                                }}
                                 id="typePasswordX"
                                 placeholder="Enter Your Password"
                                 value={password}
@@ -373,6 +390,7 @@ export default function Mus() {
                         </p>
                         <button
                           onClick={handleSubmit}
+                          onKeyPress={handleKeyPress}
                           className="btn btn-dark btn-lg w-100 rounded-3"
                           type="button"
                           style={{

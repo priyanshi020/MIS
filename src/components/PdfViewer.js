@@ -205,12 +205,12 @@ const PdfViewer = ({ jobId }) => {
                             <MenuItem
                               onClick={() => handleStatusUpdate("SHORTLISTED")}
                             >
-                              Shortlisted
+                              Shortlist
                             </MenuItem>
                             <MenuItem
                               onClick={() => handleStatusUpdate("REJECTED")}
                             >
-                              Rejected
+                              Reject
                             </MenuItem>
                           </Menu>
                         </td>

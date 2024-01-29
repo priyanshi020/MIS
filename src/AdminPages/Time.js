@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useCallback} from "react";
 import Sidebar1 from "../components/Sidebar1";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
@@ -16,6 +16,8 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import axios from "axios";  
+import DialogTitle from "@mui/material/DialogTitle";
+import { TaskAltRounded } from "@mui/icons-material";
 
 
 function CustomTabPanel(props) {
@@ -64,13 +66,33 @@ const TimeTracker = () => {
   const [editedRole, setEditedRole] = useState("");
   const [value, setValue] = React.useState(0);
   const [data, setData] = useState();
+  
+  const [selectedItemId, setSelectedItemId] = useState(null);
+  const [EditTime,setEditTime]=useState("");
+  const inProgress="IN PROGRESS";
+  const completed="COMPLETED";
+  const handleTime=(e)=>{
+    setEditTime(e.target.value);
+  };
 
+  const [EditStatus,setEditStatus]=useState("");
+  const handleStatus=(e)=>{
+    setEditStatus(e.target.value);
+  }
+
+  const [editData, setEditData] = useState({
+    id: null,
+    time:"",
+    status:""
+  });
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? parseInt(storedUserId, 10) : null;
 
 
   
   useEffect(() => {
+    fetchData();
+  }, []);
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -82,8 +104,7 @@ const TimeTracker = () => {
       }
     };
 
-    fetchData();
-  }, [userId]);
+   
 
   useEffect(() => {
     const initialTimers = tasks.map(() => false);
@@ -220,16 +241,96 @@ const TimeTracker = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+    setSelectedItemId(null);
   };
 
   const handleMenuClick = (event, taskId) => {
     setAnchorEl(event.currentTarget);
-    setSelectedTaskId(taskId);
+    // setSelectedTaskId(taskId);
+    setSelectedItemId(taskId);
+    const selectedItem = data.find((task) => task.id === taskId);
+
+    if (selectedItem) {
+      setEditData({
+        id: selectedItem.id,
+        time:selectedItem.time,
+        status:selectedItem.status,
+      });
+      setEditTime(selectedItem.time);
+      setEditStatus(selectedItem.status);
+    
+      setOpen(true);
+    } else {
+      console.error("Item not found for editing.");
+    }
   };
+
+  const handleEditClick = useCallback(
+    (taskId) => () => {
+      setSelectedItemId(taskId);
+      setOpen(true);
+    },
+    [handleMenuClose]
+  );
+
+  const handleid = (task) => {
+    setSelectedItemId(task);
+  };
+
+  const handleDeleteClick = () => {
+    if (!selectedItemId) {
+      console.error("No item selected for deletion.");
+      handleMenuClose();
+      return;
+    }
+
+    const apiUrl = `http://localhost:8080/bytesfarms/tasks/delete?taskId=${selectedItemId}`;
+
+    axios
+      .delete(apiUrl)
+      .then(() => {
+        fetchData();
+      })
+      .catch((error) => {
+        console.error("Error deleting item:", error.message);
+      })
+      .finally(() => {
+        handleMenuClose();
+      });
+  };
+
 
   const handleClose = () => {
     setOpen(false);
-    setEditedRole("");
+    // setEditedRole("");
+    setEditData({
+      id:null,
+      time:"",
+      status:"",
+    })
+  };
+
+  const handleEditApiCall = () => {
+    const editData = {
+     time:EditTime,
+     status:EditStatus,
+    };
+
+    axios
+      .put(
+        `http://localhost:8080/bytesfarms/tasks/update?userId=${userId}&taskId=24${selectedItemId}`,
+        editData
+      )
+      .then((response) => {
+        fetchData();
+      })
+      .catch((error) => {
+        console.error("Error editing item:", error.message);
+      })
+      .finally(() => {
+        handleMenuClose();
+        handleClose();
+      });
   };
 
   const handleStatusChange = (status) => {
@@ -243,14 +344,14 @@ const TimeTracker = () => {
         .then(response => {
           console.log(response.data);
           // Update the local state (data) with the new status
-          const updatedData = data.map(item => {
-            if (item.id === selectedTaskId) {
+          const updatedData = data.map(task => {
+            if (task.id === selectedTaskId) {
               return {
-                ...item,
+                ...task,
                 status: status,
               };
             } else {
-              return item;
+              return task;
             }
           });
           setData(updatedData); 
@@ -544,17 +645,17 @@ const TimeTracker = () => {
               </thead>
               {data ? (
                 <tbody className="text-center">
-                  {data.map((item) => (
-                    <tr key={item.date}>
-                      <td className="text-center">{item.date}</td>
-                      <td>{item.taskDescription}</td>
-                      <td>{item.expectedTime}</td>
-                      <td>{item.actualTime}</td>
-                      <td>{item.status}</td>
+                  {data.map((task) => (
+                    <tr key={task.date}>
+                      <td className="text-center">{task.date}</td>
+                      <td>{task.taskDescription}</td>
+                      <td>{task.expectedTime}</td>
+                      <td>{task.actualTime}</td>
+                      <td>{task.status}</td>
                       <td>
                       <IconButton
                 aria-haspopup="true"
-                onClick={(event) => handleMenuClick(event, item.id)} // Pass the task ID to handleMenuClick
+                onClick={(event) => handleMenuClick(event, task.id)} // Pass the task ID to handleMenuClick
               >
                   <MoreVertIcon />
                 </IconButton>
@@ -564,13 +665,65 @@ const TimeTracker = () => {
                   open={Boolean(anchorEl)}
                   onClose={handleMenuClose}
                 >
-                   <MenuItem onClick={() => handleStatusChange('In Progress')}>In Progress</MenuItem>
-                   <MenuItem onClick={() => handleStatusChange('Completed')}>
-                    Completed
+                   <MenuItem onClick={ handleEditClick(task.id)}>Edit</MenuItem>
+                   <MenuItem onClick={ handleDeleteClick}>
+                    Delete
                   </MenuItem>
                 </Menu>
                 
                       </td>
+                      <Dialog open={open} onClose={handleClose}>
+                        <DialogTitle
+                          style={{ fontSize: "30px", fontWeight: "600" }}
+                        >
+                          Update
+                        </DialogTitle>
+                        <DialogContent>
+                          <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            label="Title"
+                            type="time"
+                            fullWidth
+                            variant="standard"
+                            name="name"
+                            value={EditTime}
+                            onChange={handleTime}
+                          />
+                        
+                         
+                          <TextField
+                id="role"
+                select
+                label="Status"
+                fullWidth
+                variant="standard"
+                value={EditStatus}
+                onChange={(e) => setEditStatus(e.target.value)}
+              >
+                <MenuItem value={inProgress}>In Progress</MenuItem>
+                <MenuItem value={completed}>Completed</MenuItem>
+              </TextField>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button
+                            onClick={handleClose}
+                            className=" text-white"
+                            style={{ backgroundColor: "#1B1A47" }}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                             className=" text-white"
+                             style={{ backgroundColor: "#1B1A47" }}
+                            onClick={handleEditApiCall}
+                          >
+                            Edit
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+
                     </tr>
                   ))}
                 </tbody>

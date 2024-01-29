@@ -18,11 +18,13 @@ import { Link } from "react-router-dom";
 
 const Sidebar = () => {
 
-  const [userName, setUserName] = useState('');
+  // const [userName, setUserName] = useState('');
   const [imageProfile,setImageProfile]=useState("");
+  const userName= localStorage.getItem('userName');
+
   useEffect(() => {
     const userId = localStorage.getItem('userId');
-    
+    const userName= localStorage.getItem('userName');
     if (userId) {
       axios.get(`http://localhost:8080/bytesfarms/user/getEmployees`)
         .then(response => {
@@ -30,7 +32,7 @@ const Sidebar = () => {
           const user = response.data.find(employee => employee.id.toString() === userId);
 
           if (user) {
-             setUserName(user.username);  // Change from 'name' to 'username'
+            //  setUserName(user.username);  // Change from 'name' to 'username'
             setImageProfile(user.image);
           } else {
             console.error('User not found');
@@ -160,7 +162,7 @@ const Sidebar = () => {
               </span> */}
             </form>
             <div className="d-flex">
-            <div className="mr-2 font-weight-bold">{userName} ADMIN</div>
+            <div className="mr-2 font-weight-bold">{userName}- ADMIN</div>
             
             <div className="position top-0 end-0 ">
               {/* <img

@@ -359,7 +359,7 @@ const Dashboard = () => {
               <input
                 type="search"
                 className="form-control rounded w-50"
-                placeholder="Search"
+                placeholder="Search by name"
                 aria-label="Search"
                 aria-describedby="search-addon"
                 value={searchTerm}
