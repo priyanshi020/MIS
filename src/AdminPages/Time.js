@@ -418,48 +418,63 @@ const TimeTracker = () => {
             <CustomTabPanel value={value} index={0}>
 
           <div className=" d-flex justify-content-start">
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl
-                sx={{ width: 180, "& .MuiInputBase-root": { height: "46px" } }}
-              >
-                <InputLabel id="demo-simple-select-label">Project</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={project}
-                  label="Age"
-                  onChange={handleProjectChange}
-                >
-                  <MenuItem value={10}>Continuum</MenuItem>
-                  <MenuItem value={20}>Nexum</MenuItem>
-                  <MenuItem value={30}>DMC</MenuItem>
-                  <MenuItem value={40}>CargoSprint</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+          <Box sx={{ minWidth: 120 }}>
+  <FormControl
+    sx={{ width: 180, "& .MuiInputBase-root": { height: "46px" } }}
+  >
+    <InputLabel id="demo-simple-select-label">Project</InputLabel>
+    <Select
+      labelId="demo-simple-select-label"
+      id="demo-simple-select"
+      value={project}
+      label="Age"
+      onChange={handleProjectChange}
+    >
+      <MenuItem value={10}>Continuum</MenuItem>
+      <MenuItem value={20}>Nexum</MenuItem>
+      <MenuItem value={30}>DMC</MenuItem>
+      <MenuItem value={40}>CargoSprint</MenuItem>
+    </Select>
+  </FormControl>
+</Box>
 
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl
-                sx={{
-                  width: 180,
-                  marginLeft: 4,
-                  "& .MuiInputBase-root": { height: "46px" },
-                }}
-              >
-                <InputLabel id="demo-simple-select-label">Role</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={role}
-                  label="Age"
-                  onChange={handleRoleChange}
-                >
-                  <MenuItem value={10}>Frontend</MenuItem>
-                  <MenuItem value={20}>Backend</MenuItem>
-                  <MenuItem value={30}>Salesforce</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+<Box sx={{ minWidth: 120 }}>
+  <FormControl
+    sx={{
+      width: 180,
+      marginLeft: 4,
+      "& .MuiInputBase-root": { height: "46px" },
+    }}
+  >
+    <InputLabel id="demo-simple-select-label">Role</InputLabel>
+    <Select
+      labelId="demo-simple-select-label"
+      id="demo-simple-select"
+      value={role}
+      label="Age"
+      onChange={handleRoleChange}
+    >
+      {project === 10 && (
+        <>
+          <MenuItem value={10}>Frontend</MenuItem>
+          <MenuItem value={20}>Backend</MenuItem>
+        </>
+      )}
+      {project === 20 && (
+        <>
+          <MenuItem value={10}>Frontend</MenuItem>
+          <MenuItem value={20}>Backend</MenuItem>
+        </>
+      )}
+      {project === 30 && (
+        <MenuItem value={30}>Salesforce</MenuItem>
+      )}
+      {project === 40 && (
+        <MenuItem value={30}>Salesforce</MenuItem>
+      )}
+    </Select>
+  </FormControl>
+</Box>
 
             {/* tasklist */}
             <form className="d-flex   ml-5 mb-5">

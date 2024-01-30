@@ -110,34 +110,55 @@ function AddUser({onApplyLeave}) {
           </TextField>
 
           <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            type="date"
-            fullWidth
-            variant="standard"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            InputProps={{
-                style: { color: "gray" , paddingTop:'7px',paddingBottom:'7px'},
-              }}
-          />
+  autoFocus
+  margin="dense"
+  id="name"
+  type="date"
+  fullWidth
+  variant="standard"
+  value={startDate}
+  onChange={(e) => setStartDate(e.target.value)}
+  InputProps={{
+    style: { color: "gray", paddingTop: '7px', paddingBottom: '7px' },
+  }}
+/>
 
 {leaveType !== "Half Day" && (
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              type="date"
-              fullWidth
-              variant="standard"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              InputProps={{
-                style: { color: "gray", paddingTop: '7px', paddingBottom: '7px' },
-              }}
-              />
-          )}
+  <TextField
+    autoFocus
+    margin="dense"
+    id="name"
+    type="date"
+    fullWidth
+    variant="standard"
+    value={endDate}
+    onChange={(e) => setEndDate(e.target.value)}
+    InputProps={{
+      style: { color: "gray", paddingTop: '7px', paddingBottom: '7px' },
+    }}
+  />
+)}
+
+{leaveType === "Half Day" && (
+  // If leaveType is "Half Day," automatically set endDate to startDate
+  <TextField
+    autoFocus
+    margin="dense"
+    id="name"
+    type="date"
+    fullWidth
+    variant="standard"
+    value={startDate}
+    onChange={(e) => {
+      setStartDate(e.target.value);
+      setEndDate(e.target.value);
+    }}
+    InputProps={{
+      style: { color: "gray", paddingTop: '7px', paddingBottom: '7px' },
+    }}
+  />
+)}
+
 
 
           <TextField

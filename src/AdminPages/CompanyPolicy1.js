@@ -47,7 +47,7 @@ const FixedHeightCard = ({
         }}
         onClick={onClickReadMore}
       >
-        <Link to='/policy' className='text-decoration-none text-white'>
+        <Link to='/policy1' className='text-decoration-none text-white'>
           {isExpanded ? 'Read Less' : 'Read More'}
         </Link>
       </Button>
@@ -115,7 +115,7 @@ const CompanyPolicy = () => {
     });
 
     // Redirect to the Policy component with the selected card's title and content
-    navigate('/policy', {
+    navigate('/policy1', {
       state: {
         title: selectedCard.title,
         content: selectedCard.content,

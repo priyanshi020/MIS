@@ -43,7 +43,9 @@ const PieChartWithCenterLabel = () => {
   const userId = storedUserId ? parseInt(storedUserId, 10) : null;
   useEffect(() => {
     // Fetch data from the API
-    axios.get(`http://localhost:8080/bytesfarms/payroll/allData?userId=${userId} &month=DECEMBER`)
+    const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long' }).toUpperCase();
+
+    axios.get(`http://localhost:8080/bytesfarms/payroll/allData?userId=${userId} &month=${currentMonth}`)
       .then(response => {
         setPayrollData(response.data[0]); // Assuming the API returns an array with a single object
       })

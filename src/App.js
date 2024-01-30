@@ -32,6 +32,7 @@ import InterviewSchedule from "./AdminPages/core/InterviewSchedule";
 import { useNavigate } from "react-router-dom";
 import Policy from "./UserPages/Policy";
 import Onboarding from "./UserPages/Onboarding";
+import Policy1 from "./AdminPages/Policy1";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [logout, setLogout] = useState(false);
@@ -94,6 +95,7 @@ function App() {
           <Route path="/user-company-policy" element={<CompanyPolicy />} />
           <Route path="/company-policy" element={<CompanyPolicy1 />} />
           <Route path="/policy" element={<Policy/>}/>
+          <Route path ='/policy1' element={<Policy1/>}/>
           <Route path="/interview-schedule" element={<InterviewSchedule />} />
           <Route path='/onboarding-exit' element={<Onboarding/>}/>
         </Routes>

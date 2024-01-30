@@ -117,7 +117,7 @@ function ApplyNow({jobPositionId}) {
               <div className="col">
                 <div data-mdb-input-init className="form-outline">
                   <label className="form-label fw-bold text-secondary" htmlFor="form6Example1">
-                    NAME
+                    NAME<span style={{ color: 'red' }}>*</span>
                   </label>
                   <input
                     type="text"
@@ -127,6 +127,7 @@ function ApplyNow({jobPositionId}) {
                     style={{ fontSize: "16px", color: "#666666" }}
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    required
                     // disabled
                   />
                 </div>
@@ -134,7 +135,7 @@ function ApplyNow({jobPositionId}) {
               <div className="col">
                 <div data-mdb-input-init className="form-outline mb-4">
                   <label className="form-label fw-bold text-secondary" htmlFor="form6Example1">
-                    EMAIL
+                    EMAIL<span style={{ color: 'red' }}>*</span>
                   </label>
                   <input
                     type="email"
@@ -144,6 +145,7 @@ function ApplyNow({jobPositionId}) {
                     style={{ fontSize: "16px", color: "#666666" }}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                     // disabled
                   />
                 </div>
@@ -167,6 +169,7 @@ function ApplyNow({jobPositionId}) {
                     style={{ fontSize: "16px", color: "#666666" }}
                     value={lastJobTitle}
                     onChange={(e) => setLastJobTitle(e.target.value)}
+
                   />
                 </div>
               </div>
@@ -198,7 +201,7 @@ function ApplyNow({jobPositionId}) {
                   EXPERIENCE
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   id="form6Example5"
                   className="form-control form-control-lg"
                   placeholder="Experience"
@@ -214,7 +217,7 @@ function ApplyNow({jobPositionId}) {
                   EXPECTED SALARY
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   id="form6Example6"
                   className="form-control form-control-lg"
                   placeholder="Expected Salary"
@@ -229,7 +232,7 @@ function ApplyNow({jobPositionId}) {
             <div className="input-group mb-4">
               <div className="input-group-prepend">
                 <span className="input-group-text" id="inputGroupFileAddon01">
-                  Upload
+                  Upload<span style={{ color: 'red' }}>*</span>
                 </span>
               </div>
               <div className="custom-file">
@@ -239,6 +242,7 @@ function ApplyNow({jobPositionId}) {
                   id="inputGroupFile01"
                   aria-describedby="inputGroupFileAddon01"
                   onChange={(e) => setFile(e.target.files[0])}
+                  required
                 />
                 <label className="custom-file-label" htmlFor="inputGroupFile01">
                   {file ? file.name : "Choose file"}

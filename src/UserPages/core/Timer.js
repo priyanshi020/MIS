@@ -204,8 +204,10 @@ const Timer = () => {
           }}
         >
           <div className="d-flex justify-content-between">
-            <p>{isCheckInRunning ? "Check-in Time" : "Break Time"}</p>
-            <p>{isCheckInRunning ? formatTime(checkInElapsedTime) : formatTime(breakElapsedTime)}</p>
+            {/* <p>{isCheckInRunning ? "Check-in Time" : "Break Time"}</p>
+            <p>{isCheckInRunning ? formatTime(checkInElapsedTime) : formatTime(breakElapsedTime)}</p> */}
+            <p>Break Time</p>
+            <p>45min</p>
           </div>
           <div className="d-flex justify-content-between">
             <p>Target Hours</p>
