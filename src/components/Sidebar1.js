@@ -105,7 +105,7 @@ const Sidebar1 = () => {
               </Link>
               <Link to="/onboarding-exit" className="p-2 ripple active bg">
                 <FontAwesomeIcon icon={faUsers} className="fa-fw me-1" />
-                <span>Onboarding and Exit</span>
+                <span> Exit Gate</span>
               </Link>
               {/* <a className="text-white text-decoration-none font-weight-500 cursor-pointer mt-auto">LOGOUT</a> */}
             </div>

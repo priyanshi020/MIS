@@ -329,33 +329,7 @@ const Dashboard = () => {
 
           <div className="container pt-5">
             <div className="d-flex align-items-center search-container mb-3">
-              {/* <Box
-      component="form"
-      sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <TextField id="outlined-basic" label="Search " variant="outlined" value={searchTerm} onChange={handleSearch}/></Box> */}
-              {/* <div className="d-flex align-items-center search-container">
-  <input
-    type="search"
-    className="form-control rounded w-50"
-    placeholder="Search"
-    aria-label="Search"
-    aria-describedby="search-addon"
-    value={searchTerm}
-    onChange={handleSearch}
-  />
-  <div className="search-icon-container">
-    <img
-      src="/assets/ic-search.png"
-      alt="icon"
-      className="search-icon"
-    />
-  </div>
-</div> */}
+         
               <input
                 type="search"
                 className="form-control rounded w-50"

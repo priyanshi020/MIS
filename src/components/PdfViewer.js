@@ -9,6 +9,9 @@ import { saveAs } from "file-saver";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const PdfViewer = ({ jobId }) => {
   const [open, setOpen] = useState(false);
   const [applications, setApplications] = useState([]);
@@ -68,6 +71,7 @@ const PdfViewer = ({ jobId }) => {
     setSelectedApplication(application);
   };
 
+
   const handleMenuClose = () => {
     setAnchorEl(null);
     setSelectedApplication(null);
@@ -93,6 +97,10 @@ const PdfViewer = ({ jobId }) => {
               prevApplications.filter((app) => app.resumeId !== resumeId)
             );
           }
+          toast.success(`Application shortlisted successfully!`, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 5000,
+          });
         })
         .catch((error) => {
           // Handle error
@@ -106,7 +114,10 @@ const PdfViewer = ({ jobId }) => {
 
   return (
     <>
+
       <div className="container">
+      <ToastContainer />
+
         <button
           variant="outlined"
           onClick={handleClickOpen}
