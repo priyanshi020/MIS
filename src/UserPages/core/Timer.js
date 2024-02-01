@@ -8,6 +8,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useTimer } from '../../TimerContext';
+
 const Timer = () => {
   const { timerState, setTimerState } = useTimer();
   const {
@@ -22,6 +23,7 @@ const Timer = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [confirmationAction, setConfirmationAction] = useState('');
+  const [breakTimerElapsedTime, setBreakTimerElapsedTime] = useState(0);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
@@ -52,6 +54,12 @@ const Timer = () => {
           ...prevState,
           breakElapsedTime: prevState.breakElapsedTime + 1,
         }));
+
+        setBreakTimerElapsedTime((prevTime) => prevTime + 1);
+      }, 1000);
+    } else if (paused) {
+      breakInterval = setInterval(() => {
+        setBreakTimerElapsedTime((prevTime) => prevTime + 1);
       }, 1000);
     } else {
       clearInterval(breakInterval);
@@ -134,6 +142,7 @@ const Timer = () => {
       );
 
       console.log('Check-out response:', response.data);
+      
       setTimerState((prevState) => ({ ...prevState, isCheckInRunning: false }));
     } catch (error) {
       console.error('Check-out failed:', error.message);
@@ -274,7 +283,7 @@ const Timer = () => {
           >
             <div className="d-flex justify-content-between">
               <p>Break Time</p>
-              <p>45min</p>
+              <p>{formatTime(breakTimerElapsedTime)}</p>
             </div>
             <div className="d-flex justify-content-between">
               <p>Target Hours</p>

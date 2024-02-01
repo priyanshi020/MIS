@@ -20,7 +20,7 @@ const Payroll = () => {
     // Fetch current month data
     const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long' }).toUpperCase();
     axios
-      .get(`http://localhost:8080/bytesfarms/payroll/generatePayslip?userId=${userId}&month=${currentMonth}`)
+      .get(`http://localhost:8080/bytesfarms/payroll/generatePayslip?userId=${userId}&month=JANUARY`)
       .then((response) => {
         const payrollDetails = response.data[0];
 

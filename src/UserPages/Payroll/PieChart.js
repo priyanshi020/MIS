@@ -45,7 +45,7 @@ const PieChartWithCenterLabel = () => {
     // Fetch data from the API
     const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long' }).toUpperCase();
 
-    axios.get(`http://localhost:8080/bytesfarms/payroll/allData?userId=${userId} &month=${currentMonth}`)
+    axios.get(`http://localhost:8080/bytesfarms/payroll/allData?userId=${userId} &month=JANUARY`)
       .then(response => {
         setPayrollData(response.data[0]); // Assuming the API returns an array with a single object
       })

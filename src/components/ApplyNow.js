@@ -232,7 +232,9 @@ function ApplyNow({jobPositionId}) {
             <div className="input-group mb-4">
               <div className="input-group-prepend">
                 <span className="input-group-text" id="inputGroupFileAddon01">
-                  Upload<span style={{ color: 'red' }}>*</span>
+                  {/* Upload */}
+                  <img src="/assets/upload-icon.png" alt="uploadIcon"/>
+                  {/* <span style={{ color: 'red' }}>*</span> */}
                 </span>
               </div>
               <div className="custom-file">
