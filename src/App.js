@@ -33,6 +33,7 @@ import { useNavigate } from "react-router-dom";
 import Policy from "./UserPages/Policy";
 import Onboarding from "./UserPages/Onboarding";
 import Policy1 from "./AdminPages/Policy1";
+import { TimerProvider } from './TimerContext';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [logout, setLogout] = useState(false);
@@ -73,6 +74,7 @@ function App() {
 
   return (
     <>
+    <TimerProvider>
         <Routes>
           <Route path="/log" element={<LoginGuest />} />
           <Route path="/" element={<LoginForm />} />
@@ -99,7 +101,7 @@ function App() {
           <Route path="/interview-schedule" element={<InterviewSchedule />} />
           <Route path='/onboarding-exit' element={<Onboarding/>}/>
         </Routes>
-      
+        </TimerProvider>
     </>
   );
 }

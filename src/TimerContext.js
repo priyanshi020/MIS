@@ -1,26 +1,20 @@
-import React, { createContext, useContext, useReducer } from "react";
+// TimerContext.js
+import React, { createContext, useContext, useState } from 'react';
 
 const TimerContext = createContext();
 
-const timerReducer = (state, action) => {
-  switch (action.type) {
-    case "SET_CHECKIN_STATE":
-      return { ...state, isCheckInRunning: action.payload };
-    case "SET_ELAPSED_TIME":
-      return { ...state, checkInElapsedTime: action.payload };
-    default:
-      return state;
-  }
-};
-
 export const TimerProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(timerReducer, {
+  const [timerState, setTimerState] = useState({
     isCheckInRunning: false,
     checkInElapsedTime: 0,
+    isBreakStartRunning: false,
+    breakElapsedTime: 0,
+    userId: '',
+    paused: false,
   });
 
   return (
-    <TimerContext.Provider value={{ state, dispatch }}>
+    <TimerContext.Provider value={{ timerState, setTimerState }}>
       {children}
     </TimerContext.Provider>
   );
@@ -29,7 +23,7 @@ export const TimerProvider = ({ children }) => {
 export const useTimer = () => {
   const context = useContext(TimerContext);
   if (!context) {
-    throw new Error("useTimer must be used within a TimerProvider");
+    throw new Error('useTimer must be used within a TimerProvider');
   }
   return context;
 };
