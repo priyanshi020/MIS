@@ -142,8 +142,7 @@ const Timer = () => {
       );
 
       console.log('Check-out response:', response.data);
-      
-      setTimerState((prevState) => ({ ...prevState, isCheckInRunning: false }));
+      setTimerState((prevState) => ({ ...prevState, isCheckInRunning: false , isBreakStartRunning: false,}));
     } catch (error) {
       console.error('Check-out failed:', error.message);
     }
