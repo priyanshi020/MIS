@@ -108,6 +108,7 @@ const Sidebar1 = () => {
                 <span> Exit Gate</span>
               </Link>
               {/* <a className="text-white text-decoration-none font-weight-500 cursor-pointer mt-auto">LOGOUT</a> */}
+              {/* logout */}
             </div>
             <div className="list-group list-group-flush " style={{marginTop:'325px'}}>
             <Link to="/" className="p-2 m-2 ripple active bg">
